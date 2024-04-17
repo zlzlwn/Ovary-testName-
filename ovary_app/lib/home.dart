@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:ovary_app/widget/body/homewidget.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -10,18 +11,7 @@ class Home extends StatelessWidget {
       appBar: AppBar(
         title: const Text('data'),
       ),
-      body: const Center(
-        child: Column(
-          children: [
-            Text(
-              '영덕 대개체',
-              style: TextStyle(
-                fontSize: 40
-              ),
-            ),
-          ],
-        ),
-      ),
+      body: HomeWidget()
     );
   }
 }

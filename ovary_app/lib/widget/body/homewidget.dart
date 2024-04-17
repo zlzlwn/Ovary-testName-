@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/route_manager.dart';
+import 'package:ovary_app/widget/appbar/bmi_quest_weight.dart';
 
 class HomeWidget extends StatelessWidget {
   @override
@@ -95,7 +97,9 @@ class HomeWidget extends StatelessWidget {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                     Get.to(const BmiQuestWeight());
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromRGBO(255, 215, 222, 1),
                     foregroundColor: Colors.white,
@@ -110,7 +114,7 @@ class HomeWidget extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                         child: Text(
-                          'PCOS 란?',
+                          '나의 BMI는?',
                           style: TextStyle(
                               fontSize: 12, fontWeight: FontWeight.bold),
                         ),
