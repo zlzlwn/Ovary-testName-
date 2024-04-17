@@ -7,7 +7,21 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Text("메인 페이지!!!"),
+      appBar: AppBar(
+        title: const Text('data'),
+      ),
+      body: const Center(
+        child: Column(
+          children: [
+            Text(
+              '영덕 대개체',
+              style: TextStyle(
+                fontSize: 40
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
