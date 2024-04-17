@@ -87,7 +87,10 @@ class BmiQuestHeightWidget extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 50, 10, 0),
                 child: ElevatedButton(
-                  onPressed: () => Get.back(), 
+                  onPressed: () {
+                    box.erase();
+                    Get.back();
+                  }, 
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(120, 50),
                     backgroundColor: Theme.of(context).colorScheme.primary
@@ -107,8 +110,6 @@ class BmiQuestHeightWidget extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(10, 50, 0, 0),
                 child: ElevatedButton(
                   onPressed: () {
-                    Get.back();
-                    Get.back();
                     box.write('hValue', hValue);
                     Get.to(BmiResult());
                   }, 
