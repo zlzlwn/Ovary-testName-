@@ -44,6 +44,7 @@ dependencies:
   speedometer_chart: ^1.0.8   # 미터기
   webview_flutter: ^4.7.0     # webview
   flutter_native_splash: ^2.4.0 # splash
+  get_storage: ^2.1.1         # sharevar 
 
 dev_dependencies:
   flutter_test:
@@ -68,8 +69,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
