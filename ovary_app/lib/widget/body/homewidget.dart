@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/route_manager.dart';
+import 'package:ovary_app/view/hospital_map.dart';
 import 'package:ovary_app/view/pcosdescription.dart';
+import 'package:ovary_app/view/period_calendar.dart';
 import 'package:ovary_app/widget/appbar/bmi_quest_weight.dart';
 import 'package:ovary_app/widget/appbar/work_video.dart';
 import 'package:ovary_app/widget/body/pcos_survey_weight.dart';
@@ -73,7 +75,7 @@ class HomeWidget extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                   child: ElevatedButton(
                     onPressed: () {
-                      
+                      Get.to(const PeriodCalender());
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color.fromRGBO(255, 215, 222, 1),
@@ -89,7 +91,7 @@ class HomeWidget extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Text(
-                            '나의 생리주기(미구현)',
+                            '나의 생리주기',
                             style: TextStyle(
                                 fontSize: 12, fontWeight: FontWeight.bold),
                           ),
@@ -185,7 +187,9 @@ class HomeWidget extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.to(const HospitalMap());
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color.fromRGBO(255, 215, 222, 1),
                       foregroundColor: Colors.white,
@@ -200,7 +204,7 @@ class HomeWidget extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Text(
-                            '병원찾기(미구현)',
+                            '병원찾기',
                             style: TextStyle(
                                 fontSize: 12, fontWeight: FontWeight.bold),
                           ),

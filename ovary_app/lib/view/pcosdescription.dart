@@ -14,7 +14,7 @@ class PcosDescription extends StatelessWidget {
             fontWeight: FontWeight.bold
           ),
         ),
-        leading: const Icon(Icons.keyboard_arrow_left_sharp),
+       
       ),
       body: Center(
         child: const Text("PcosDescription"),
