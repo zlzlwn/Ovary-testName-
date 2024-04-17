@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:ovary_app/home.dart';
 import 'package:ovary_app/widget/body/bmi_quest_weight_widget.dart';
 class BmiQuestWeight extends StatelessWidget {
@@ -7,6 +8,8 @@ class BmiQuestWeight extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final box = GetStorage();
 
     return Scaffold(
       appBar: AppBar(
@@ -18,7 +21,10 @@ class BmiQuestWeight extends StatelessWidget {
           ),
         ),
         leading: IconButton(
-          onPressed: () => Get.to(const Home()), 
+          onPressed: () {
+            box.erase();
+            Get.to(const Home());
+          }, 
           icon: const Icon(Icons.keyboard_arrow_left)
         ),
       ),
