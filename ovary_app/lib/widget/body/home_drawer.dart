@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
+import 'package:ovary_app/view/hospital_likelist.dart';
+import 'package:ovary_app/view/mypage_menu.dart';
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key});
@@ -36,7 +39,7 @@ class HomeDrawer extends StatelessWidget {
               ),
               title: Text("찜 병원보기"),
               onTap: () {
-                print('homs is clicked');
+                Get.to(HospitalLikeList());
               },
             ),
             ListTile(
@@ -45,7 +48,7 @@ class HomeDrawer extends StatelessWidget {
               ),
               title: Text("마이페이지"),
               onTap: () {
-                print('homs is clicked');
+                Get.to(MypageMenu());
               },
             ),
            
