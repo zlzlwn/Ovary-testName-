@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:ovary_app/widget/body/work_video_widget.dart';
 
 class WorkVideo extends StatelessWidget {
@@ -15,7 +16,10 @@ class WorkVideo extends StatelessWidget {
             fontWeight: FontWeight.bold
           ),
         ),
-        
+        leading: IconButton(
+          onPressed: () => Get.back(), 
+          icon: const Icon(Icons.keyboard_arrow_left)
+        ),
       ),
       body: const WorkVideoWidget(),
     );
