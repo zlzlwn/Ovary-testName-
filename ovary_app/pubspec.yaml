@@ -37,14 +37,19 @@ dependencies:
   cupertino_icons: ^1.0.6
   get: ^4.6.6
   provider: ^6.1.2
-  flutter_slidable: ^3.1.0    #slider 이용
-  http: ^1.2.1                # 통신
-  image_picker: ^1.1.0        # 갤러리 
-  table_calendar: ^3.1.1      # 달력
-  speedometer_chart: ^1.0.8   # 미터기
-  webview_flutter: ^4.7.0     # webview
+  flutter_slidable: ^3.1.0      #　slider 이용
+  http: ^1.2.1                  # 통신
+  image_picker: ^1.1.0          # 갤러리 
+  table_calendar: ^3.1.1        # 달력
+  speedometer_chart: ^1.0.8     # 미터기
+  webview_flutter: ^4.7.0       # webview
   flutter_native_splash: ^2.4.0 # splash
-  get_storage: ^2.1.1         # sharevar 
+  get_storage: ^2.1.1           # sharevar 
+  firebase_core: ^2.28.0        # Firebase 앱 초기화하고 기본 구성
+  cloud_firestore: ^4.16.0      # Firebase NoSQL 문서 데이터베이스
+  firebase_analytics: ^10.10.0  # Firebase 앱 기능 향상
+  firebase_database: ^10.5.0    # Firebase 데이터 동기화
+  firebase_storage: ^11.7.0     # Firebase 파일 업로드 및 저장 관리
 
 dev_dependencies:
   flutter_test:
