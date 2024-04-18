@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
-import 'package:ovary_app/widget/appbar/pcos_title.dart';
 import 'package:ovary_app/widget/body/pcos_result.dart';
 
 class PcosSurveySkinDark extends StatelessWidget {
@@ -8,7 +7,7 @@ class PcosSurveySkinDark extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PcosTitle();
+    //PcosTitle();
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

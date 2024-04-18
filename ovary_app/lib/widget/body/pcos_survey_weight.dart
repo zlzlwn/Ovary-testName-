@@ -8,7 +8,7 @@ class PcosSurveyWeight extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var model = VmPCOS();
+    var model = ChangeWeightSwitch();
 
     return Scaffold(
       appBar: AppBar(
@@ -55,23 +55,14 @@ class PcosSurveyWeight extends StatelessWidget {
                 ),
               ),
 
-              Switch(
-                value: model.weightValue, 
-                onChanged: (value) {
-                  model.changeWeightValue();
-                  model.weightValue = value;
-                  
-
-                  print('value ; $value');
-                },
-              ),
+              ChangeWeightSwitch(),
 
               //버튼
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 40, 10, 0),
+                    padding: const EdgeInsets.fromLTRB(0, 100, 10, 0),
                     child: ElevatedButton(
                       onPressed: () => Get.back(), 
                       style: ElevatedButton.styleFrom(
@@ -88,9 +79,9 @@ class PcosSurveyWeight extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 40, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(10, 100, 0, 0),
                     child: ElevatedButton(
-                      onPressed: () => Get.to(PcosSurveyHair()), 
+                      onPressed: () => Get.to(const PcosSurveyHair()), 
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size(120, 50),
                         backgroundColor: Theme.of(context).colorScheme.primary
