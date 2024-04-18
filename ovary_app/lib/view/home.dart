@@ -13,13 +13,13 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('data'),
+        title: const Text('앱로고 들어올 자리'),
         actions: [
           IconButton(
             onPressed: () {
               Get.to(const LogIn());
             },
-            icon: const Icon(Icons.shopping_cart),
+            icon: const Icon(Icons.login_sharp),
           ),
           
         ],

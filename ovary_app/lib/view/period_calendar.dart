@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ovary_app/widget/body/period_calendar_widget.dart';
 
 class PeriodCalender extends StatelessWidget {
   const PeriodCalender({super.key});
@@ -9,9 +10,7 @@ class PeriodCalender extends StatelessWidget {
       appBar: AppBar(
         title: Text("period_calendar"),
       ),
-      body: Center(
-        child: Text("period_calendar"),
-      ),
+      body: PeriodCalendarWidget()
     );
   }
 }

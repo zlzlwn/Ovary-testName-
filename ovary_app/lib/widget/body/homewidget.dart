@@ -32,7 +32,7 @@ class HomeWidget extends StatelessWidget {
           ),
 
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.fromLTRB(0, 30, 0, 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -63,7 +63,7 @@ class HomeWidget extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                         child: Image.asset(
-                          "images/hospital.png",
+                          "images/survey.png",
                           width: 70,
                           height: 70,
                         ),
@@ -99,7 +99,7 @@ class HomeWidget extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                           child: Image.asset(
-                            "images/hospital.png",
+                            "images/period.png",
                             width: 70,
                             height: 70,
                           ),
@@ -134,7 +134,7 @@ class HomeWidget extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                         child: Image.asset(
-                          "images/hospital.png",
+                          "images/bmi.png",
                           width: 70,
                           height: 70,
                         ),
@@ -146,49 +146,15 @@ class HomeWidget extends StatelessWidget {
             ),
           ),
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                  onPressed: () {
-
-                    Get.to(const WorkVideo());
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromRGBO(255, 215, 222, 1),
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
-                    fixedSize: Size( MediaQuery.of(context).size.width / 4,
-                      MediaQuery.of(context).size.height / 6
-                     ),
-                  ),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        child: Text(
-                          '추천운동',
-                          style: TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                        child: Image.asset(
-                          "images/hospital.png",
-                          width: 70,
-                          height: 70,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
-                  child: ElevatedButton(
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
                     onPressed: () {
-                      Get.to(const HospitalMap());
+            
+                      Get.to(const WorkVideo());
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color.fromRGBO(255, 215, 222, 1),
@@ -196,15 +162,15 @@ class HomeWidget extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5)),
                       fixedSize: Size( MediaQuery.of(context).size.width / 4,
-                      MediaQuery.of(context).size.height / 6
-                     ),
+                        MediaQuery.of(context).size.height / 6
+                       ),
                     ),
                     child: Column(
                       children: [
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Text(
-                            '병원찾기',
+                            '추천운동',
                             style: TextStyle(
                                 fontSize: 12, fontWeight: FontWeight.bold),
                           ),
@@ -212,7 +178,7 @@ class HomeWidget extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                           child: Image.asset(
-                            "images/hospital.png",
+                            "images/exercise.png",
                             width: 70,
                             height: 70,
                           ),
@@ -220,8 +186,45 @@ class HomeWidget extends StatelessWidget {
                       ],
                     ),
                   ),
-                ),
-            ],
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.to(const HospitalMap());
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color.fromRGBO(255, 215, 222, 1),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5)),
+                        fixedSize: Size( MediaQuery.of(context).size.width / 4,
+                        MediaQuery.of(context).size.height / 6
+                       ),
+                      ),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: Text(
+                              '병원찾기',
+                              style: TextStyle(
+                                  fontSize: 12, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                            child: Image.asset(
+                              "images/hospital.png",
+                              width: 70,
+                              height: 70,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ],
       ),

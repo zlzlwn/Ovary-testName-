@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ovary_app/widget/body/hospitalmap_widget.dart';
 
 class HospitalMap extends StatelessWidget {
   const HospitalMap({super.key});
@@ -9,9 +10,7 @@ class HospitalMap extends StatelessWidget {
       appBar: AppBar(
         title: Text("지도 페이지"),
       ),
-      body: Center(
-        child: Text("지도 페이지"),
-      ),
+      body: HospitalMapWidget()
     );
   }
 }
