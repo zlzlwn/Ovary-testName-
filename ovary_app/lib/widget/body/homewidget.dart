@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/route_manager.dart';
 import 'package:ovary_app/view/hospital_map.dart';
 import 'package:ovary_app/view/pcosdescription.dart';
@@ -41,12 +40,12 @@ class HomeWidget extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    Get.to(PcosSurveyWeight());
+                    Get.to(const PcosSurveyWeight());
                     
                   },
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromRGBO(245, 241, 255, 1),
-                      foregroundColor: Color.fromRGBO(139, 127, 245, 1),
+                      backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
+                      foregroundColor: const Color.fromRGBO(139, 127, 245, 1),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(13)),
                     fixedSize: Size( MediaQuery.of(context).size.width / 3.5,
@@ -55,8 +54,8 @@ class HomeWidget extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                         child: Row(
                           children: [
                             Text(
@@ -85,8 +84,8 @@ class HomeWidget extends StatelessWidget {
                       Get.to(const PeriodCalender());
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromRGBO(255, 215, 222, 1),
-                      foregroundColor: Color.fromRGBO(225, 105, 125, 1),
+                      backgroundColor: const Color.fromRGBO(255, 215, 222, 1),
+                      foregroundColor: const Color.fromRGBO(225, 105, 125, 1),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(13)),
                     fixedSize: Size( MediaQuery.of(context).size.width / 3.5,
@@ -95,8 +94,8 @@ class HomeWidget extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Text(
                             '나의 생리주기',
                             style: TextStyle(
@@ -120,8 +119,8 @@ class HomeWidget extends StatelessWidget {
                      Get.to(const BmiQuestWeight());
                   },
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromRGBO(245, 241, 255, 1),
-                      foregroundColor: Color.fromRGBO(139, 127, 245, 1),
+                      backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
+                      foregroundColor: const Color.fromRGBO(139, 127, 245, 1),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(13)),
                     fixedSize: Size( MediaQuery.of(context).size.width / 3.5,
@@ -130,8 +129,8 @@ class HomeWidget extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                         child: Text(
                           '나의 BMI는?',
                           style: TextStyle(
@@ -166,8 +165,8 @@ class HomeWidget extends StatelessWidget {
                         Get.to(const WorkVideo());
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromRGBO(245, 241, 255, 1),
-                        foregroundColor: Color.fromRGBO(139, 127, 245, 1),
+                        backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
+                        foregroundColor: const Color.fromRGBO(139, 127, 245, 1),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(13)),
                       fixedSize: Size( MediaQuery.of(context).size.width / 3.5,
@@ -176,8 +175,8 @@ class HomeWidget extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: Text(
                               '추천운동',
                               style: TextStyle(
@@ -203,8 +202,8 @@ class HomeWidget extends StatelessWidget {
                         Get.to(const HospitalMap());
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromRGBO(255, 215, 222, 1),
-                        foregroundColor: Color.fromRGBO(225, 105, 125, 1),
+                        backgroundColor: const Color.fromRGBO(255, 215, 222, 1),
+                        foregroundColor: const Color.fromRGBO(225, 105, 125, 1),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(13)),
                     fixedSize: Size( MediaQuery.of(context).size.width / 3.5,
@@ -213,8 +212,8 @@ class HomeWidget extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: Text(
                               '병원찾기',
                               style: TextStyle(
