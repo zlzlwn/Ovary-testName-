@@ -88,7 +88,7 @@ class LogInWidget extends StatelessWidget {
                   const Text('아직 계정이 없으세요?'),
                   GestureDetector(
                     onTap: () {
-                      Get.to(SignUp());
+                      Get.to(const SignUp());
                     },
                     child: Text('  회원 가입하기',
                       style: TextStyle(
@@ -104,7 +104,7 @@ class LogInWidget extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                box.write('email', idController);
+                checkLogin();
               }, 
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.purple[300],
@@ -124,6 +124,8 @@ class LogInWidget extends StatelessWidget {
   }
 
   // --- Functions ---
-
+  checkLogin() {
+    box.write('email', idController.text);
+  }
 
 } // End
