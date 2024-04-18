@@ -5,13 +5,11 @@ class PcosTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      title: const Text(
-        'PCOS 설문',
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold
-        ),
+    return const Text(
+      'PCOS 설문',
+      style: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.bold
       ),
     );
   }
