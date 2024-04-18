@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ovary_app/widget/appbar/hospital_map_appbar.dart';
 
 class HospitalMap extends StatelessWidget {
   const HospitalMap({super.key});
@@ -6,9 +7,7 @@ class HospitalMap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("지도 페이지"),
-      ),
+      appBar: HospitalMapAppbar(),
       body: Center(
         child: Text("지도 페이지"),
       ),
