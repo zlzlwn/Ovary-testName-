@@ -19,7 +19,7 @@ class SignUpWidget extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(20.0),
-              child: Image.asset('images/User2.png',
+              child: Image.asset('images/user.png',
                 width: 160,
               ),
             ),

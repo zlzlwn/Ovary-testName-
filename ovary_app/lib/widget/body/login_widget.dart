@@ -104,7 +104,7 @@ class LogInWidget extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                // box.write('email', idController);
+                box.write('email', idController);
               }, 
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.purple[300],
