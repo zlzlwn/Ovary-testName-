@@ -21,7 +21,7 @@ class WorkVideo extends StatelessWidget {
           icon: const Icon(Icons.keyboard_arrow_left)
         ),
       ),
-      body: const WorkVideoWidget(),
+      body: WorkVideoWidget(),
     );
   }
 }

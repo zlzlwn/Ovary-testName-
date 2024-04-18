@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
@@ -111,6 +112,16 @@ class BmiQuestHeightWidget extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     box.write('hValue', hValue);
+                    FirebaseFirestore.instance
+                    .collection('write')
+                    .add(
+                      {
+                        'email' : box.read('email'),
+                        'insertdate' : DateTime.now(),
+                        'weight': box.read('wValue'),
+                        'height': box.read('hValue'),
+                      }
+                    );
                     Get.to(BmiResult());
                   }, 
                   style: ElevatedButton.styleFrom(
