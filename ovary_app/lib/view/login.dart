@@ -8,7 +8,7 @@ class LogIn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("로그인페이지"),
+        title: const Text("로 그 인"),
       ),
       body: LogInWidget(),
     );
