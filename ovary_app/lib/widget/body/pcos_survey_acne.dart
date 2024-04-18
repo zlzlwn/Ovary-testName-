@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
-import 'package:ovary_app/widget/appbar/pcos_title.dart';
 import 'package:ovary_app/widget/body/pcos_survey_skindark.dart';
 
 class PcosSurveyAcne extends StatelessWidget {
@@ -8,23 +7,24 @@ class PcosSurveyAcne extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PcosTitle();
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'PCOS 설문',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+      ),
+      body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
             Text('설문'),
             Text('3/4'),
+            ElevatedButton(onPressed: () => Get.back(), child: Text('이전')),
             ElevatedButton(
-              onPressed: () => Get.back(), 
-              child: Text('이전')
-            ),
-            ElevatedButton(
-              onPressed: () => Get.to(PcosSurveySkinDark()), 
-              child: Text('다음')
-            ),
-        ],
-      ),
+                onPressed: () => Get.to(PcosSurveySkinDark()),
+                child: Text('다음')),
+          ],
+        ),
     );
   }
 }

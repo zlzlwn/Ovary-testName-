@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
-import 'package:ovary_app/widget/appbar/pcos_title.dart';
 import 'package:ovary_app/widget/body/pcos_survey_acne.dart';
 
 class PcosSurveyHair extends StatelessWidget {
@@ -8,9 +7,14 @@ class PcosSurveyHair extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PcosTitle();
-    return Center(
-      child: Column(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'PCOS 설문',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+      ),
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
             Text('설문'),
