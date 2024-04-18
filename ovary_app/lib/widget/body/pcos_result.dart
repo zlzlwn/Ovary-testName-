@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ovary_app/view/home.dart';
 import 'package:ovary_app/vm/vm_pcos.dart';
 import 'package:speedometer_chart/speedometer_chart.dart';
 
@@ -59,7 +60,7 @@ class PcosResult extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
                   child: Text(
                     '다낭성 난소 증후군\n'
-                    '발생률 ${controller.result.toStringAsFixed(2)}%로 ${controller.strResult}',
+                    '발생률 ${controller.result.toStringAsFixed(2)}% 입니다.',
                     style: const TextStyle(
                       fontSize: 20,
                     ),
@@ -67,23 +68,22 @@ class PcosResult extends StatelessWidget {
                   ),
                 ),
 
-                //병원찾기
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                  child: Text('예측율은 79.94% 입니다.'),
+                ),
+
+                //홈으로 가기
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 70, 0, 0),
                   child: ElevatedButton(
-                    onPressed: () {
-                      ////////////////////*********
-                      ///
-                      /// 병원찾기 페이지 연결해야함
-                      ///
-                      ///** */
-                    },
+                    onPressed: () => Get.to(const Home()),
                     style: ElevatedButton.styleFrom(
                         minimumSize: const Size(120, 50),
                         backgroundColor:
                             Theme.of(context).colorScheme.primary),
                     child: Text(
-                      '병원찾기',
+                      '홈으로',
                       style: TextStyle(
                         fontSize: 20,
                         color: Theme.of(context).colorScheme.onPrimary,

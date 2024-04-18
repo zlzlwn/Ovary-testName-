@@ -17,7 +17,6 @@ class ChangeSwitch extends GetxController {
   int sValue = 0;
 
   double result = 0;
-  String strResult = '';
 
   //몸무게 switch value 바꾸기
   changeWeightValue() {
@@ -63,34 +62,11 @@ class ChangeSwitch extends GetxController {
     acneValue ? aValue = 1 : aValue = 0;
     skinValue ? sValue = 1 : sValue = 0;
 
-    print(wValue);
-    print(hValue);
-    print(aValue);
-    print(sValue);
-
     var url = Uri.parse('http://localhost:8080/Flutter/Pserve/pcosPred.jsp?weight=$wValue&hair=$hValue&acne=$aValue&dark=$sValue');
     var response = await http.get(url);
     var dataConvertedJSON = json.decode(response.body);
 
     result = dataConvertedJSON['result'] * 100;
-
-    resultText();
-    update();
-  }
-
-  //결과값을 문자로 
-  resultText() {
-    if(result <= 20){
-      strResult = '매우 안전합니다.';
-    } else if (result >=21 && result <= 40) {
-      strResult = '안전합니다.';
-    } else if (result >=41 && result <= 60) {
-      strResult = '보통입니다.';
-    } else if (result >=61 && result <= 80) {
-      strResult = '다소 위험합니다. \n검사를 받아보는 것이 좋을 것 같습니다.';
-    } else {
-      strResult = '매우 위험합니다. \n병원에 가는 것을 추천드립니다.';
-    }  
 
     update();
   }
