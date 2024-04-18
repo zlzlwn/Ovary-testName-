@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class PcosDescriptionBody extends StatelessWidget {
-  const PcosDescriptionBody({super.key});
+class PcosDescriptionWidget extends StatelessWidget {
+  const PcosDescriptionWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -34,8 +34,8 @@ class HomeDrawer extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(
-                Icons.home,
-                color: Colors.red,
+                Icons.local_hospital,
+                color: Colors.black,
               ),
               title: Text("찜 병원보기"),
               onTap: () {
@@ -44,7 +44,7 @@ class HomeDrawer extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(
-                Icons.settings,
+                Icons.person_sharp,
               ),
               title: Text("마이페이지"),
               onTap: () {

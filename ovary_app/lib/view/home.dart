@@ -15,11 +15,17 @@ class Home extends StatelessWidget {
       appBar: AppBar(
         title: const Text('앱로고 들어올 자리'),
         actions: [
-          IconButton(
-            onPressed: () {
-              Get.to(const LogIn());
-            },
-            icon: const Icon(Icons.login_sharp),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+            child: IconButton(
+              onPressed: () {
+                Get.to(const LogIn());
+              },
+              icon: Image.asset(
+                 "images/user.png",
+                 width: 30,
+              ),
+            ),
           ),
           
         ],

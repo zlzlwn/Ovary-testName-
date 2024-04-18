@@ -15,24 +15,27 @@ class HomeWidget extends StatelessWidget {
       child: Column(
         children: [
           //pcos버튼
-          IconButton(
-            onPressed: () {
-              Get.to(const PcosDescription());
-            },
-            icon: ClipRRect(
-              borderRadius:
-                  BorderRadius.circular(5), //---------------왜 사진이 안깍이는지 확인필요
-              child: Image.asset(
-                "images/pcosbutton.png",
-                width: MediaQuery.of(context).size.width / 1.3,
-                height: MediaQuery.of(context).size.height / 4,
-                // 높이 조절
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+            child: IconButton(
+              onPressed: () {
+                Get.to(const PcosDescription());
+              },
+              icon: ClipRRect(
+                borderRadius:
+                    BorderRadius.circular(5), //---------------왜 사진이 안깍이는지 확인필요
+                child: Image.asset(
+                  "images/pcosbutton.png",
+                  width: MediaQuery.of(context).size.width / 1.05,
+                  height: MediaQuery.of(context).size.height / 4,
+                  // 높이 조절
+                ),
               ),
             ),
           ),
 
           Padding(
-            padding: const EdgeInsets.fromLTRB(0, 30, 0, 20),
+            padding: const EdgeInsets.fromLTRB(0, 50, 0, 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -42,48 +45,52 @@ class HomeWidget extends StatelessWidget {
                     
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromRGBO(255, 215, 222, 1),
-                    foregroundColor: Colors.white,
+                      backgroundColor: Color.fromRGBO(245, 241, 255, 1),
+                      foregroundColor: Color.fromRGBO(139, 127, 245, 1),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
-                    fixedSize: Size( MediaQuery.of(context).size.width / 4,
-                      MediaQuery.of(context).size.height / 6
+                        borderRadius: BorderRadius.circular(13)),
+                    fixedSize: Size( MediaQuery.of(context).size.width / 3.5,
+                      MediaQuery.of(context).size.height / 5.1
                      ),
                   ),
                   child: Column(
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        child: Text(
-                          'PCOS 예측',
-                          style: TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.bold),
+                        child: Row(
+                          children: [
+                            Text(
+                              'PCOS 예측',
+                              style: TextStyle(
+                                  fontSize: 17, fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                         child: Image.asset(
                           "images/survey.png",
-                          width: 70,
-                          height: 70,
+                          width: 100,
+                          height: 100,
                         ),
                       ),
                     ],
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                  padding: const EdgeInsets.fromLTRB(13, 0, 13, 0),
                   child: ElevatedButton(
                     onPressed: () {
                       Get.to(const PeriodCalender());
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color.fromRGBO(255, 215, 222, 1),
-                      foregroundColor: Colors.white,
+                      foregroundColor: Color.fromRGBO(225, 105, 125, 1),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                      fixedSize: Size( MediaQuery.of(context).size.width / 4,
-                      MediaQuery.of(context).size.height / 6
+                          borderRadius: BorderRadius.circular(13)),
+                    fixedSize: Size( MediaQuery.of(context).size.width / 3.5,
+                      MediaQuery.of(context).size.height / 5.1
                      ),
                     ),
                     child: Column(
@@ -93,15 +100,15 @@ class HomeWidget extends StatelessWidget {
                           child: Text(
                             '나의 생리주기',
                             style: TextStyle(
-                                fontSize: 12, fontWeight: FontWeight.bold),
+                                fontSize: 15.4, fontWeight: FontWeight.bold),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                           child: Image.asset(
-                            "images/period.png",
-                            width: 70,
-                            height: 70,
+                            "images/calendar.png",
+                            width: 130,
+                            height: 100,
                           ),
                         ),
                       ],
@@ -113,12 +120,12 @@ class HomeWidget extends StatelessWidget {
                      Get.to(const BmiQuestWeight());
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromRGBO(255, 215, 222, 1),
-                    foregroundColor: Colors.white,
+                      backgroundColor: Color.fromRGBO(245, 241, 255, 1),
+                      foregroundColor: Color.fromRGBO(139, 127, 245, 1),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
-                    fixedSize: Size( MediaQuery.of(context).size.width / 4,
-                      MediaQuery.of(context).size.height / 6
+                        borderRadius: BorderRadius.circular(13)),
+                    fixedSize: Size( MediaQuery.of(context).size.width / 3.5,
+                      MediaQuery.of(context).size.height / 5.1
                      ),
                   ),
                   child: Column(
@@ -128,15 +135,15 @@ class HomeWidget extends StatelessWidget {
                         child: Text(
                           '나의 BMI는?',
                           style: TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.bold),
+                              fontSize: 15, fontWeight: FontWeight.bold),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                         child: Image.asset(
                           "images/bmi.png",
-                          width: 70,
-                          height: 70,
+                          width: 100,
+                          height: 100,
                         ),
                       ),
                     ],
@@ -147,58 +154,61 @@ class HomeWidget extends StatelessWidget {
           ),
 
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                    onPressed: () {
-            
-                      Get.to(const WorkVideo());
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromRGBO(255, 215, 222, 1),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                      fixedSize: Size( MediaQuery.of(context).size.width / 4,
-                        MediaQuery.of(context).size.height / 6
-                       ),
-                    ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          child: Text(
-                            '추천운동',
-                            style: TextStyle(
-                                fontSize: 12, fontWeight: FontWeight.bold),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                  child: ElevatedButton(
+                      onPressed: () {
+                              
+                        Get.to(const WorkVideo());
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color.fromRGBO(245, 241, 255, 1),
+                        foregroundColor: Color.fromRGBO(139, 127, 245, 1),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(13)),
+                      fixedSize: Size( MediaQuery.of(context).size.width / 3.5,
+                        MediaQuery.of(context).size.height / 5.1
+                         ),
+                      ),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: Text(
+                              '추천운동',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                          child: Image.asset(
-                            "images/exercise.png",
-                            width: 70,
-                            height: 70,
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                            child: Image.asset(
+                              "images/exercise.png",
+                              width: 130,
+                              height: 100,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
+                ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                     child: ElevatedButton(
                       onPressed: () {
                         Get.to(const HospitalMap());
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color.fromRGBO(255, 215, 222, 1),
-                        foregroundColor: Colors.white,
+                        foregroundColor: Color.fromRGBO(225, 105, 125, 1),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)),
-                        fixedSize: Size( MediaQuery.of(context).size.width / 4,
-                        MediaQuery.of(context).size.height / 6
+                            borderRadius: BorderRadius.circular(13)),
+                    fixedSize: Size( MediaQuery.of(context).size.width / 3.5,
+                      MediaQuery.of(context).size.height / 5.1
                        ),
                       ),
                       child: Column(
@@ -208,21 +218,23 @@ class HomeWidget extends StatelessWidget {
                             child: Text(
                               '병원찾기',
                               style: TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.bold),
+                                  fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                             child: Image.asset(
                               "images/hospital.png",
-                              width: 70,
-                              height: 70,
+                              width: 100,
+                              height: 100,
+                              
                             ),
                           ),
                         ],
                       ),
                     ),
                   ),
+                  
               ],
             ),
           ),

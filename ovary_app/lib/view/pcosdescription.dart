@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ovary_app/widget/body/pcosdescription_body.dart';
+import 'package:ovary_app/widget/body/pcosdescription_widget.dart';
 
 class PcosDescription extends StatelessWidget {
   const PcosDescription({super.key});
@@ -17,7 +17,7 @@ class PcosDescription extends StatelessWidget {
         ),
        
       ),
-      body: PcosDescriptionBody()
+      body: PcosDescriptionWidget()
     );
   }
 }

@@ -6,7 +6,19 @@ class MypageMenuWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text("마이페이지"),
+      child: Center(
+        child: Column(
+          children: [
+            CircleAvatar(
+            backgroundImage: AssetImage('images/user.png'),
+            radius: 100,
+          ),
+            Text("사진들어갈자리"),
+            
+          ],
+          
+        ),
+      ),
     );
   }
 }
