@@ -53,7 +53,7 @@ class BmiResult extends StatelessWidget {
             width: 400,
             child: SpeedometerChart(
               value: bmi.bmi,
-              graphColor: const [Color.fromARGB(255, 68, 255, 81), Color.fromARGB(255, 255, 64, 64)],
+              graphColor: const [Color.fromARGB(255, 68, 243, 255), Color.fromARGB(255, 255, 64, 64)],
               maxValue: 40,
               minValue: 0,
             ),
