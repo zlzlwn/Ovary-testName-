@@ -243,69 +243,74 @@ final box = GetStorage();
 //FUNCTIONS
 
 
-// UPDATE 'PERIOD' USING THE 'EMAIL' BOX VALUE
+// UPDATE 'PERIOD' USING THE HARD CODED EMAIL
 updatePeriodInfo() async {
-        // Get the formatted date
-        String formattedDate = DateFormat('yyyy-MM-dd').format(chosenDate!);
+    // Get the formatted date
+    String formattedDate = DateFormat('yyyy-MM-dd').format(chosenDate!);
 
-        // Create a map to hold the period info
-        Map<String, dynamic> periodInfo = {
-            'period': [formattedDate, chosenPeriodLength, chosenCycleLength]
-        };
+    // Create a map to hold the period info
+    Map<String, dynamic> periodInfo = {
+        'period': [formattedDate, chosenPeriodLength, chosenCycleLength]
+    };
 
-        // Retrieve the email value from the box
-        String? email = box.read<String>('email');
+    // // Hardcoded email for testing purposes
+    // String email = 'chosun@naver.com';
 
-        if (email == null) {
-            print('Email not found in the box');
-            return;
-        }
 
-        try {
-            // Query Firestore to find the document that matches the email
-            QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+  // Retrieve the email value from the box
+      String? email = box.read<String>('email');
+
+      if (email == null) {
+          print('Email not found in the box');
+          return;
+      }
+
+
+    try {
+        // Query Firestore to find the document that matches the hardcoded email
+        QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+            .collection('user')
+            .where('email', isEqualTo: email)
+            .limit(1)
+            .get();
+
+        // If a document is found, update the period array
+        if (querySnapshot.docs.isNotEmpty) {
+            DocumentSnapshot document = querySnapshot.docs.first;
+            String documentId = document.id;
+
+            // Update the 'period' array in the document
+            await FirebaseFirestore.instance
                 .collection('user')
-                .where('email', isEqualTo: email)
-                .limit(1)
-                .get();
+                .doc(documentId)
+                .update({'period': periodInfo['period']});
 
-            // If a document is found, update the period array
-            if (querySnapshot.docs.isNotEmpty) {
-                DocumentSnapshot document = querySnapshot.docs.first;
-                String documentId = document.id;
-
-                // Update the 'period' array in the document
-                await FirebaseFirestore.instance
-                    .collection('user')
-                    .doc(documentId)
-                    .update({'period': periodInfo['period']});
-
-              // Show a Cupertino alert popup at the bottom of the screen
-              showCupertinoDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                      return CupertinoAlertDialog(
-                          title: Text("정보가 저장되었습니다!"),
-                          actions: [
-                              CupertinoDialogAction(
-                                  child: Text("확인"),
-                                  onPressed: () {
-                                      // Dismiss the dialog
-                                      Navigator.of(context).pop();
-                                      // Go back to the previous screen
-                                      Get.to(const PeriodCalender());
-                                  },
-                              ),
-                          ],
-                      );
-                  },
-              );
-            } else {
-              print('No document found with the specified email.');
-            }
-        } catch (error) {
-            // Handle any errors that occur during the update
-            print('Failed to update data: $error');
+            // Show a Cupertino alert popup at the bottom of the screen
+            showCupertinoDialog(
+                context: context,
+                builder: (BuildContext context) {
+                    return CupertinoAlertDialog(
+                        title: Text("정보가 저장되었습니다!"),
+                        actions: [
+                            CupertinoDialogAction(
+                                child: Text("확인"),
+                                onPressed: () {
+                                    // Dismiss the dialog
+                                    Navigator.of(context).pop();
+                                    // Go back to the previous screen
+                                    Get.to(const PeriodCalender());
+                                },
+                            ),
+                        ],
+                    );
+                },
+            );
+        } else {
+            print('No document found with the specified email.');
         }
+    } catch (error) {
+        // Handle any errors that occur during the update
+        print('Failed to update data: $error');
     }
+}
 }
