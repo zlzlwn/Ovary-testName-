@@ -11,8 +11,6 @@ class BmiQuestProvider extends ChangeNotifier {
   double get getBmi => bmi;
 
   bmiCalc() {
-    print('sdfsfd $height');
-    print('sdfsfd $weight');
     bmi = weight / ((height * 0.01) * (height * 0.01));
 
     if(bmi >= 30){

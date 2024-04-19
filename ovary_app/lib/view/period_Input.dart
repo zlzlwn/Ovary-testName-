@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
+import 'package:ovary_app/view/period_calendar.dart';
 
 class PeriodInput extends StatefulWidget {
   const PeriodInput({super.key});
@@ -15,6 +19,9 @@ class _PeriodInputState extends State<PeriodInput> {
   late DateTime? chosenDate = DateTime.now(); // Chosen date initialized to the current date
   late int chosenPeriodLength = 7; // Default period length initialized to 7 days
   late int chosenCycleLength = 28;
+
+// Get reference to GetStorage box
+final box = GetStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +110,6 @@ class _PeriodInputState extends State<PeriodInput> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Decrement button with circular pink background
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.pink[100],
@@ -129,7 +135,6 @@ class _PeriodInputState extends State<PeriodInput> {
                   ),
                 ),
                 const SizedBox(width: 10),
-                // Increment button with circular pink background
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.pink[100],
@@ -139,7 +144,9 @@ class _PeriodInputState extends State<PeriodInput> {
                     icon: const Icon(Icons.add),
                     onPressed: () {
                       setState(() {
+                        if(chosenPeriodLength < 31){
                         chosenPeriodLength++;
+                        }
                       });
                     },
                   ),
@@ -166,7 +173,6 @@ class _PeriodInputState extends State<PeriodInput> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Decrement button with circular pink background
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.pink[100],
@@ -202,7 +208,9 @@ class _PeriodInputState extends State<PeriodInput> {
                     icon: const Icon(Icons.add),
                     onPressed: () {
                       setState(() {
+                        if(chosenCycleLength < 31){
                         chosenCycleLength++;
+                        }
                       });
                     },
                   ),
@@ -212,7 +220,7 @@ class _PeriodInputState extends State<PeriodInput> {
             const SizedBox(height: 50),
             ElevatedButton(
               onPressed: () {
-                // Save action goes here
+                updatePeriodInfo();
               },
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(120, 50),
@@ -231,4 +239,73 @@ class _PeriodInputState extends State<PeriodInput> {
       ),
     );
   }
+
+//FUNCTIONS
+
+
+// UPDATE 'PERIOD' USING THE 'EMAIL' BOX VALUE
+updatePeriodInfo() async {
+        // Get the formatted date
+        String formattedDate = DateFormat('yyyy-MM-dd').format(chosenDate!);
+
+        // Create a map to hold the period info
+        Map<String, dynamic> periodInfo = {
+            'period': [formattedDate, chosenPeriodLength, chosenCycleLength]
+        };
+
+        // Retrieve the email value from the box
+        String? email = box.read<String>('email');
+
+        if (email == null) {
+            print('Email not found in the box');
+            return;
+        }
+
+        try {
+            // Query Firestore to find the document that matches the email
+            QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+                .collection('user')
+                .where('email', isEqualTo: email)
+                .limit(1)
+                .get();
+
+            // If a document is found, update the period array
+            if (querySnapshot.docs.isNotEmpty) {
+                DocumentSnapshot document = querySnapshot.docs.first;
+                String documentId = document.id;
+
+                // Update the 'period' array in the document
+                await FirebaseFirestore.instance
+                    .collection('user')
+                    .doc(documentId)
+                    .update({'period': periodInfo['period']});
+
+              // Show a Cupertino alert popup at the bottom of the screen
+              showCupertinoDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                      return CupertinoAlertDialog(
+                          title: Text("정보가 저장되었습니다!"),
+                          actions: [
+                              CupertinoDialogAction(
+                                  child: Text("확인"),
+                                  onPressed: () {
+                                      // Dismiss the dialog
+                                      Navigator.of(context).pop();
+                                      // Go back to the previous screen
+                                      Get.to(const PeriodCalender());
+                                  },
+                              ),
+                          ],
+                      );
+                  },
+              );
+            } else {
+              print('No document found with the specified email.');
+            }
+        } catch (error) {
+            // Handle any errors that occur during the update
+            print('Failed to update data: $error');
+        }
+    }
 }
