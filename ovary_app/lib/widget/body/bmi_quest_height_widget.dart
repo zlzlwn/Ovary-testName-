@@ -2,8 +2,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ovary_app/vm/vm_snackbar.dart';
 import 'package:ovary_app/widget/body/bmi_result.dart';
 
 // ignore: must_be_immutable
@@ -12,7 +13,7 @@ class BmiQuestHeightWidget extends StatelessWidget {
   BmiQuestHeightWidget({super.key});
   
   final box = GetStorage();
-
+  final VmSnackBar vmSnackBar = Get.put(VmSnackBar());
   int hValue = 0;
 
   @override
@@ -112,16 +113,7 @@ class BmiQuestHeightWidget extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     box.write('hValue', hValue);
-                    FirebaseFirestore.instance
-                    .collection('write')
-                    .add(
-                      {
-                        'email' : box.read('email'),
-                        'insertdate' : DateTime.now(),
-                        'weight': box.read('wValue'),
-                        'height': box.read('hValue'),
-                      }
-                    );
+                    updateData();
                     Get.to(BmiResult());
                   }, 
                   style: ElevatedButton.styleFrom(
@@ -142,5 +134,40 @@ class BmiQuestHeightWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  updateData() async {
+    Map<String, dynamic> myInfo = {
+      'write' : [
+        DateTime.now(),
+        box.read('wValue'),
+        box.read('hValue'),
+      ]
+    };
+
+    if(box.read('email') == null) {
+      vmSnackBar.title = '경고';
+      vmSnackBar.content = '로그인을 해주세요';
+      vmSnackBar.bgColor = Colors.red;
+      vmSnackBar.textColor = Colors.white;
+      vmSnackBar.runSnackBar();
+    } else {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('user')
+        .where('email', isEqualTo: box.read('email'))
+        .limit(1)
+        .get();
+
+      if(querySnapshot.docs.isNotEmpty) {
+        DocumentSnapshot document = querySnapshot.docs.first;
+        String documentId = document.id;
+
+
+        await FirebaseFirestore.instance
+            .collection('user')
+            .doc(documentId)
+            .update({'write' : myInfo['write']});
+      } 
+    }
   }
 }
