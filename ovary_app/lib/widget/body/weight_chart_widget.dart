@@ -17,6 +17,8 @@ class _WeightChartWidgetState extends State<WeightChartWidget> {
   List wData = [];
   List dData = [];
 
+  List bData = [];
+
   @override
   void initState() {
     super.initState();
@@ -25,39 +27,68 @@ class _WeightChartWidgetState extends State<WeightChartWidget> {
 
   @override
   Widget build(BuildContext context) {
+
     return Center(
       child: dData.isNotEmpty
-          ? SizedBox(
-              width: 380,
-              height: 400,
-              child: SfCartesianChart(
-                legend: const Legend(isVisible: true),
-                tooltipBehavior: TooltipBehavior(enable: true),
-                series: [
-                  LineSeries<BmiModel, dynamic>(
-                    dataSource: List.generate(
-                      dData.length,
-                      (index) => BmiModel(
-                        date: dData[index],
-                        weight: wData[index],
-                        height: hData[index],
+          ? Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
+                child: Text('최근 7일간의 나의 체중과 BMI 변화를 보여드립니다.'),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
+                child: SizedBox(
+                    width: 380,
+                    height: 400,
+                    child: SfCartesianChart(
+                      legend: const Legend(isVisible: true),
+                      tooltipBehavior: TooltipBehavior(enable: true),
+                      series: [
+                        ColumnSeries<BmiModel, dynamic>(
+                          dataSource: List.generate(
+                            dData.length,
+                            (index) => BmiModel(
+                              date: dData[index],
+                              weight: wData[index],
+                              height: hData[index],
+                            ),
+                          ),
+                          color: Colors.green[300],
+                          xValueMapper: (BmiModel model, _) => model.date,
+                          yValueMapper: (BmiModel model, _) => model.weight,
+                          name: '몸무게(kg)',
+                          dataLabelSettings:
+                          const DataLabelSettings(isVisible: true),
+                        ),
+                        LineSeries<BmiModel, dynamic>(
+                          dataSource: List.generate(
+                            dData.length,
+                            (index) => BmiModel(
+                              date: dData[index],
+                              weight: wData[index],
+                              height: hData[index],
+                            ),
+                          ),
+                          color: Colors.red,
+                          xValueMapper: (BmiModel model, _) => model.date,
+                          yValueMapper: (BmiModel model, _) => double.parse((model.weight / ((model.height*0.01)* (model.height*0.01))).toStringAsFixed(1)),
+                          name: 'BMI',
+                          dataLabelSettings:
+                          const DataLabelSettings(isVisible: true),
+                        ),
+                      ],
+                      primaryXAxis: const CategoryAxis(
+                        title: AxisTitle(text: '날짜'),
+                      ),
+                      primaryYAxis: const NumericAxis(
+                        title: AxisTitle(text: '몸무게'),
                       ),
                     ),
-                    color: Colors.red[300],
-                    xValueMapper: (BmiModel model, _) => model.date,
-                    yValueMapper: (BmiModel model, _) => model.weight,
-                    dataLabelSettings:
-                    const DataLabelSettings(isVisible: true),
-                  )
-                ],
-                primaryXAxis: const CategoryAxis(
-                  title: AxisTitle(text: '날짜'),
-                ),
-                primaryYAxis: const NumericAxis(
-                  title: AxisTitle(text: '몸무게'),
-                ),
+                  ),
               ),
-            )
+            ],
+          )
           : const CircularProgressIndicator(),
     );
   }
@@ -88,6 +119,10 @@ class _WeightChartWidgetState extends State<WeightChartWidget> {
       }
       setState(() {}); // 데이터가 업데이트 되었음을 알려줌
     }
+  }
+
+  bmi() {
+  
   }
 }
 

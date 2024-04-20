@@ -67,6 +67,7 @@ class HomeDrawer extends StatelessWidget {
                   buttonDialog();
                 } else {
                   print(box.read('email'));
+                  Get.back();
                   Get.to(const WeightChart());
                 }
               },
