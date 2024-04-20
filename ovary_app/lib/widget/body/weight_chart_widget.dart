@@ -120,9 +120,5 @@ class _WeightChartWidgetState extends State<WeightChartWidget> {
       setState(() {}); // 데이터가 업데이트 되었음을 알려줌
     }
   }
-
-  bmi() {
-  
-  }
 }
 

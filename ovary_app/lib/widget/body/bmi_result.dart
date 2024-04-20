@@ -43,7 +43,6 @@ class BmiResult extends StatelessWidget {
     bmi.weight = wValue;
 
     bmi.bmiCalc();
-    box.erase();
 
     return Column(
       children: [

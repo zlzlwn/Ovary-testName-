@@ -9,8 +9,6 @@ class BmiQuestWeight extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final box = GetStorage();
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -22,7 +20,6 @@ class BmiQuestWeight extends StatelessWidget {
         ),
         leading: IconButton(
           onPressed: () {
-            box.erase();
             Get.to(const Home());
           }, 
           icon: const Icon(Icons.keyboard_arrow_left)
