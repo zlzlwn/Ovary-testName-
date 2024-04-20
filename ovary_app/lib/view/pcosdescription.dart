@@ -15,9 +15,8 @@ class PcosDescription extends StatelessWidget {
             fontWeight: FontWeight.bold
           ),
         ),
-       
       ),
-      body: PcosDescriptionWidget()
+      body: const PcosDescriptionWidget()
     );
   }
 }
