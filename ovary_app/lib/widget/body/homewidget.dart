@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:ovary_app/view/hospital_map.dart';
 import 'package:ovary_app/view/pcosdescription.dart';
-import 'package:ovary_app/view/period_Input.dart';
+import 'package:ovary_app/view/period_calendar.dart';
 import 'package:ovary_app/widget/appbar/bmi_quest_weight.dart';
 import 'package:ovary_app/widget/appbar/work_video.dart';
 import 'package:ovary_app/widget/body/pcos_survey_weight.dart';
@@ -80,7 +80,7 @@ class HomeWidget extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(13, 0, 13, 0),
                   child: ElevatedButton(
                     onPressed: () {
-                      Get.to(const PeriodInput());
+                      Get.to(const PeriodCalender());
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromRGBO(255, 215, 222, 1),
