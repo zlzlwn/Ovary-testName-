@@ -14,6 +14,7 @@ class WeightChart extends StatelessWidget {
             fontSize: 25
           ),
         ),
+        backgroundColor: Colors.pink[100],
       ),
       body: const WeightChartWidget(),
     );

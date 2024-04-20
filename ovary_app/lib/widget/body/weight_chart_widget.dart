@@ -61,7 +61,7 @@ class _WeightChartWidgetState extends State<WeightChartWidget> {
                           dataLabelSettings:
                           const DataLabelSettings(isVisible: true),
                         ),
-                        LineSeries<BmiModel, dynamic>(
+                        ScatterSeries<BmiModel, dynamic>(
                           dataSource: List.generate(
                             dData.length,
                             (index) => BmiModel(
@@ -82,7 +82,7 @@ class _WeightChartWidgetState extends State<WeightChartWidget> {
                         title: AxisTitle(text: '날짜'),
                       ),
                       primaryYAxis: const NumericAxis(
-                        title: AxisTitle(text: '몸무게'),
+                        title: AxisTitle(text: '몸무게, BMI'),
                       ),
                     ),
                   ),
@@ -94,12 +94,13 @@ class _WeightChartWidgetState extends State<WeightChartWidget> {
   }
 
   //firebase에서 데이터 가져오기
-  getData() async {
+  getData({String? tags}) async {
     String email = box.read('email');
 
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('write')
         .where('email', isEqualTo: email)
+        .orderBy('seq', descending: true)
         .limit(7)
         .get();
 
@@ -117,8 +118,28 @@ class _WeightChartWidgetState extends State<WeightChartWidget> {
         hData.add(dataList[i]['height']);
         dData.add(dataList[i]['date']);
       }
+
+      if (querySnapshot.docs.isNotEmpty) {
+        final List<Map<String, dynamic>> dataList = querySnapshot.docs
+            .map((doc) => {
+                  'height': doc['height'],
+                  'weight': doc['weight'],
+                  'date': doc['insertdate'],
+                })
+            .toList();
+
+        for (int i = 0; i < dataList.length; i++) {
+          wData.add(dataList[i]['weight']);
+          hData.add(dataList[i]['height']);
+          dData.add(dataList[i]['date']);
+        }
+      }
+
       setState(() {}); // 데이터가 업데이트 되었음을 알려줌
-    }
+ //   }
   }
 }
+}
 
+class DateFormat {
+}
