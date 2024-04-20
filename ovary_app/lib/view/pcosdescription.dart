@@ -15,7 +15,6 @@ class PcosDescription extends StatelessWidget {
             fontWeight: FontWeight.bold
           ),
         ),
-        backgroundColor: Colors.pink[200],
       ),
       body: const PcosDescriptionWidget()
     );

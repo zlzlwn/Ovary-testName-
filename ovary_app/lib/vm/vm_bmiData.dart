@@ -15,16 +15,33 @@ class VmBmiData extends GetxController {
     String email = box.read('email');
 
     //Firestore 인스턴스 생성
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     //user 컬렉셔에서 이메일이 로그인한 이메일인 문서 select
-    QuerySnapshot querySnapshot = await firestore
-    .collection('user')
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+    .collection('write')
     .where('email', isEqualTo: email)
+    .orderBy('insertdate')
+    .limit(7)
     .get();
 
-    for(QueryDocumentSnapshot doc in querySnapshot.docs) {
-      print(doc.data());
+    if(querySnapshot.docs.isNotEmpty) {
+      final List<Map<String, dynamic>> dataList = querySnapshot.docs
+          .map((doc) => {
+            'height' : doc['height'] ,
+            'weight' : doc['weight'] ,
+          })
+          .toList();
+
+    // 데이터가 7개 미만인 사람일 경우는?  
+    for(int i = 0; i < dataList.length; i++){
+      wdata.add(dataList[i]['weight']);
+      hdata.add(dataList[i]['height']);
+    }
+
+
+      print(wdata);
+      print(hdata);
+
     }
 
     update();

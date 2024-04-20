@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:ovary_app/view/hospital_likelist.dart';
 import 'package:ovary_app/view/mypage_menu.dart';
+import 'package:ovary_app/widget/body/weight_chart_widget.dart';
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key});
@@ -51,7 +52,15 @@ class HomeDrawer extends StatelessWidget {
                 Get.to(MypageMenu());
               },
             ),
-           
+            ListTile(
+              leading: const Icon(
+                Icons.bar_chart_rounded,
+              ),
+              title: const Text("나의 체중 변화"),
+              onTap: () {
+                Get.to(const WeightChartWidget());
+              },
+            ),
           ],
         ),
       );
