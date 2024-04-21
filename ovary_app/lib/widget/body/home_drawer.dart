@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import 'package:ovary_app/view/hospital_likelist.dart';
 import 'package:ovary_app/view/mypage_menu.dart';
+import 'package:ovary_app/vm/mypage_update_vm.dart';
 
 class HomeDrawer extends StatelessWidget {
-  const HomeDrawer({super.key});
+   HomeDrawer({super.key});
+final MypageUpdateVM mypageUpdateVM = Get.put(MypageUpdateVM());
 
   @override
   Widget build(BuildContext context) {
@@ -12,14 +15,16 @@ class HomeDrawer extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const UserAccountsDrawerHeader(
+             UserAccountsDrawerHeader(
               currentAccountPicture: 
-              Text("유저 사진 들어올 자리"),
-              // CircleAvatar(
-              //   backgroundImage: AssetImage('images/turtle.jpeg'),
-              // ),
+               CircleAvatar(
+                backgroundImage:
+                NetworkImage(mypageUpdateVM.imagepath),
+                    
+                radius: 100,
+              ),
               accountName: Text(
-                "김땡땡님(db Nickname들어올자리)",
+                mypageUpdateVM.nickname,
                 style: TextStyle(
                   color: Colors.black
                 ),

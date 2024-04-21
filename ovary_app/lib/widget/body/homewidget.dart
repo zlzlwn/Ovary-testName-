@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:http/http.dart';
 import 'package:ovary_app/view/hospital_map.dart';
+import 'package:ovary_app/view/login.dart';
 import 'package:ovary_app/view/pcosdescription.dart';
 import 'package:ovary_app/view/period_Input.dart';
 import 'package:ovary_app/widget/appbar/bmi_quest_weight.dart';
@@ -10,6 +13,7 @@ import 'package:ovary_app/widget/body/pcos_survey_weight.dart';
 class HomeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final box = GetStorage();
     return Center(
       child: Column(
         children: [
@@ -39,7 +43,10 @@ class HomeWidget extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    Get.to(const PcosSurveyWeight());
+                    box.read('email')==null
+                    ? loginDialog(context)
+                    :  Get.to(const PcosSurveyWeight());
+                   
                     
                   },
                   style: ElevatedButton.styleFrom(
@@ -80,7 +87,10 @@ class HomeWidget extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(13, 0, 13, 0),
                   child: ElevatedButton(
                     onPressed: () {
-                      Get.to(const PeriodInput());
+                       box.read('email')==null
+                    ? loginDialog(context)
+                    :  Get.to(const PeriodInput());
+                      
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromRGBO(255, 215, 222, 1),
@@ -115,7 +125,10 @@ class HomeWidget extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Get.to(const BmiQuestWeight());
+                      box.read('email')==null
+                    ? loginDialog(context)
+                    :  Get.to(const BmiQuestWeight());
+                    
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
@@ -160,8 +173,10 @@ class HomeWidget extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                   child: ElevatedButton(
                       onPressed: () {
-                              
-                        Get.to(const WorkVideo());
+                        box.read('email')==null
+                    ? loginDialog(context)
+                    :  Get.to(const WorkVideo());
+                        
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
@@ -239,5 +254,37 @@ class HomeWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+  loginDialog(context){
+    
+    showDialog(
+  context: context,
+  builder: (BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Colors.white, // 배경색을 흰색으로 설정
+      content: Text(
+        '로그인이 필요한 서비스입니다.',
+        style: TextStyle(
+          color: Colors.black, 
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Get.back();
+            Get.to(LogIn());
+          },
+          child: Text(
+            '확인',
+            style: TextStyle(
+              
+            ),
+          ),
+        ),
+      ],
+    );
+  },
+);
+
   }
 }

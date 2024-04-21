@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:ovary_app/view/mypage_update.dart';
 import 'package:ovary_app/view/period_Input.dart';
 
 class MypageMenuWidget extends StatelessWidget {
-  const MypageMenuWidget({super.key});
-
+   MypageMenuWidget({super.key});
+final box = GetStorage();
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -80,7 +81,9 @@ class MypageMenuWidget extends StatelessWidget {
                   padding: const EdgeInsets.all(7.0),
                   child: ElevatedButton(
                   onPressed: () {
-                    
+                    box.remove("email");
+                    print(box.read('email'));
+                    Get.back();
                   }, 
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromRGBO(139, 127, 245, 1),
