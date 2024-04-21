@@ -44,11 +44,11 @@ class HomeWidget extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    Get.to(const PcosSurveyWeight());
-                    // print(box.read('email'));
-                    // box.read('email')==null
-                    // ? loginDialog(context)
-                    // :  Get.to(const PcosSurveyWeight());
+                    // Get.to(const PcosSurveyWeight());
+                    print(box.read('email'));
+                    box.read('email')==null
+                    ? loginDialog(context)
+                    :  Get.to(const PcosSurveyWeight());
                    
                     
                   },
@@ -90,11 +90,11 @@ class HomeWidget extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(13, 0, 13, 0),
                   child: ElevatedButton(
                     onPressed: () {
-                      Get.to(const PeriodInput());
-                    //   print(box.read('email'));
-                    //    box.read('email')==null
-                    // ? loginDialog(context)
-                    // :  Get.to(const PeriodInput());
+                      // Get.to(const PeriodInput());
+                      print(box.read('email'));
+                       box.read('email')==null
+                    ? loginDialog(context)
+                    :  Get.to(const PeriodInput());
                       
                     },
                     style: ElevatedButton.styleFrom(
@@ -130,10 +130,10 @@ class HomeWidget extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Get.to(const BmiQuestWeight());
-                    //   box.read('email')==null
-                    // ? loginDialog(context)
-                    // :  Get.to(const BmiQuestWeight());
+                    // Get.to(const BmiQuestWeight());
+                      box.read('email')==null
+                    ? loginDialog(context)
+                    :  Get.to(const BmiQuestWeight());
                     
                   },
                   style: ElevatedButton.styleFrom(
@@ -179,10 +179,10 @@ class HomeWidget extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                   child: ElevatedButton(
                       onPressed: () {
-                        Get.to(const WorkVideo());
-                    //     box.read('email')==null
-                    // ? loginDialog(context)
-                    // :  Get.to(const WorkVideo());
+                        // Get.to(const WorkVideo());
+                        box.read('email')==null
+                    ? loginDialog(context)
+                    :  Get.to(const WorkVideo());
                         
                       },
                       style: ElevatedButton.styleFrom(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:ovary_app/view/hospital_likelist.dart';
 import 'package:ovary_app/view/mypage_menu.dart';
 import 'package:ovary_app/vm/mypage_update_vm.dart';
@@ -8,9 +9,12 @@ import 'package:ovary_app/vm/mypage_update_vm.dart';
 class HomeDrawer extends StatelessWidget {
    HomeDrawer({super.key});
 final MypageUpdateVM mypageUpdateVM = Get.put(MypageUpdateVM());
-
+final box = GetStorage();
   @override
   Widget build(BuildContext context) {
+    final mypageUpdateVMFunction = MypageUpdateVM();
+    mypageUpdateVMFunction.loadingUserInfoAction();
+    print("값 들어오는지 확인${mypageUpdateVM.imagepath}");
     return Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -53,7 +57,12 @@ final MypageUpdateVM mypageUpdateVM = Get.put(MypageUpdateVM());
               ),
               title: Text("마이페이지"),
               onTap: () {
-                Get.to(MypageMenu());
+                    
+                print(box.read('email'));
+                    box.read('email')==null
+                    ? mypageUpdateVMFunction.loginDialog(context)
+                    :  Get.to(MypageMenu());
+                
               },
             ),
            
@@ -61,4 +70,5 @@ final MypageUpdateVM mypageUpdateVM = Get.put(MypageUpdateVM());
         ),
       );
   }
+  
 }
