@@ -1,25 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ovary_app/view/mypage_update.dart';
 import 'package:ovary_app/view/period_Input.dart';
+import 'package:ovary_app/vm/mypage_update_vm.dart';
 
 class MypageMenuWidget extends StatelessWidget {
    MypageMenuWidget({super.key});
 final box = GetStorage();
+  final MypageUpdateVM mypageUpdateVM = Get.put(MypageUpdateVM());
+  final mypageUpdateVMFunction = MypageUpdateVM();
+
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Center(
         child: Column(
           children: [
-            const CircleAvatar(
-              backgroundImage: AssetImage('images/user.png'),
-              radius: 100,
-            ),
-            const Text("사진들어갈자리"),
+             CircleAvatar(
+                    backgroundImage: NetworkImage(mypageUpdateVM.imagepath),
+                    radius: 100,
+                  ),
+             Padding(
+               padding: const EdgeInsets.all(15.0),
+               child: Text(
+                "${mypageUpdateVM.nickname}님 환영합니다!",
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold
+                ),
+                ),
+             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
               child: ElevatedButton(
                   onPressed: () {
                     Get.to(MypageUpdate());
@@ -73,7 +87,7 @@ final box = GetStorage();
                   )),
             ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0, 275, 0, 0),
+            padding: const EdgeInsets.fromLTRB(0, 230, 0, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -82,7 +96,7 @@ final box = GetStorage();
                   child: ElevatedButton(
                   onPressed: () {
                     box.remove("email");
-                    print(box.read('email'));
+                    Get.back();
                     Get.back();
                   }, 
                   style: ElevatedButton.styleFrom(
