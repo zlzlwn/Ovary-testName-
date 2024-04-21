@@ -9,7 +9,7 @@ class WeightChart extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          '체중변화',
+          '나의 체중 변화',
           style: TextStyle(
             fontSize: 25
           ),
