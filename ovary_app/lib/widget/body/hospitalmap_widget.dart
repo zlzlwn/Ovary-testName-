@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+// import 'package:flutter_google_places/flutter_google_places.dart' as loc;
+// import 'package:google_api_headers/google_api_headers.dart' as header;
+// import 'package:google_maps_webservice/places.dart' as places;
 
 class HospitalMapWidget extends StatefulWidget {
   const HospitalMapWidget({super.key});
@@ -12,15 +15,74 @@ class HospitalMapWidget extends StatefulWidget {
 class _HospitalMapWidgetState extends State<HospitalMapWidget> {
   Location location = Location();
   final Map<String, Marker> _markers = {};
-// 3d37.4944858
-// 4d127.030066
+
   double latitude = 0;
   double longitude = 0;
   GoogleMapController? _controller;
   final CameraPosition _kGooglePlex = const CameraPosition(
-    target: LatLng(37.4944858, 127.030066),
-    zoom: 14,
+    target: LatLng(33.298037, 44.2879251),
+    zoom: 10,
   );
+Future<void> _handleSearch() async {
+    places.Prediction? p = await loc.PlacesAutocomplete.show(
+        context: context,
+        apiKey: 'your map key',
+        onError: onError,// call the onError function below
+        mode: loc.Mode.overlay,
+        language: 'en',//you can set any language for search
+        strictbounds: false,
+        types: [],
+        decoration: InputDecoration(
+            hintText: 'search',
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: const BorderSide(color: Colors.white))),
+        components: []// you can determine search for just one country
+);
+
+    displayPrediction(p!, homeScaffoldKey.currentState);
+  }
+
+  void onError(places.PlacesAutocompleteResponse response) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'Message',
+        message: response.errorMessage!,
+        contentType: ContentType.failure,
+      ),
+    ));
+  }
+
+  Future<void> displayPrediction(
+      places.Prediction p, ScaffoldState? currentState) async {
+    places.GoogleMapsPlaces _places = places.GoogleMapsPlaces(
+        apiKey: kGoogleApiKey,
+        apiHeaders: await const header.GoogleApiHeaders().getHeaders());
+    places.PlacesDetailsResponse detail =
+        await _places.getDetailsByPlaceId(p.placeId!);
+// detail will get place details that user chose from Prediction search
+    final lat = detail.result.geometry!.location.lat;
+    final lng = detail.result.geometry!.location.lng;
+    _markers.clear(); //clear old marker and set new one
+    final marker = Marker(
+      markerId: const MarkerId('deliveryMarker'),
+      position: LatLng(lat, lng),
+      infoWindow: const InfoWindow(
+        title: '',
+      ),
+    );
+    setState(() {
+      _markers['myLocation'] = marker;
+      _controller?.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(target: LatLng(lat, lng), zoom: 15),
+        ),
+      );
+    });
+  }
   getCurrentLocation() async {
     bool serviceEnabled;
     PermissionStatus permissionGranted;
@@ -64,7 +126,6 @@ class _HospitalMapWidgetState extends State<HospitalMapWidget> {
   @override
   void initState() {
     getCurrentLocation();
-
     super.initState();
   }
 
