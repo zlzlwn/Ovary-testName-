@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ovary_app/model/users.dart';
 import 'package:ovary_app/view/home.dart';
 import 'package:ovary_app/view/signup.dart';
+import 'package:ovary_app/vm/database_handler.dart';
 import 'package:ovary_app/vm/login_vm.dart';
 
 class LogInWidget extends StatelessWidget {
@@ -131,6 +133,7 @@ class LogInWidget extends StatelessWidget {
   }
 
   // --- Functions ---
+  //log인 시 textfield에 입력된 id값으로 db에 있는 id값을 찾는 함수
   loginAction(LoginGetX controller) async{
     controller.id = idController.text.trim();
     controller.password = passwordController.text.trim();
@@ -152,9 +155,16 @@ class LogInWidget extends StatelessWidget {
     if(list.isEmpty) {
       print('다시 입력');
     }else {
+      final email = controller.id; // 입력한 이메일 값 가져오기
+
+    // SQLite 데이터베이스에 사용자 정보 저장
+    final databaseHandler = DatabaseHandler();
+    final user = Users(email: email);
+    await databaseHandler.insertUsers(user);
       checkLogin();
       Get.to(const Home());
       print(box.read('email'));
+      
     }
   }
 
