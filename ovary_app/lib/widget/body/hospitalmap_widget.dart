@@ -23,10 +23,12 @@ class _HospitalMapWidgetState extends State<HospitalMapWidget> {
     target: LatLng(33.298037, 44.2879251),
     zoom: 10,
   );
-Future<void> _handleSearch() async {
+
+  /* search functions--------------------------------------
+ Future<void> _handleSearch() async {
     places.Prediction? p = await loc.PlacesAutocomplete.show(
         context: context,
-        apiKey: 'your map key',
+        apiKey: 'your map key,
         onError: onError,// call the onError function below
         mode: loc.Mode.overlay,
         language: 'en',//you can set any language for search
@@ -83,6 +85,7 @@ Future<void> _handleSearch() async {
       );
     });
   }
+  -------------------------------------------*/
   getCurrentLocation() async {
     bool serviceEnabled;
     PermissionStatus permissionGranted;
@@ -132,33 +135,45 @@ Future<void> _handleSearch() async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 10),
-        width: double.infinity,
-        height: double.infinity,
-        child: GoogleMap(
-          mapType: MapType.normal,
-          myLocationEnabled: true,
-          initialCameraPosition: _kGooglePlex,
-          markers: _markers.values.toSet(),
-          onTap: (LatLng latlng) {
-            latitude = latlng.latitude;
-            longitude = latlng.longitude;
-            final marker = Marker(
-              markerId: const MarkerId('myLocation'),
-              position: LatLng(latitude, longitude),
-              infoWindow: const InfoWindow(
-                title: 'AppLocalizations.of(context).will_deliver_here',
-              ),
-            );
-            setState(() {
-              _markers['myLocation'] = marker;
-            });
-          },
-          onMapCreated: (GoogleMapController controller) {
-            _controller = controller;
-          },
+      body: Stack(
+        children :[Container(
+          margin: const EdgeInsets.symmetric(horizontal: 10),
+          width: double.infinity,
+          height: double.infinity,
+          child: GoogleMap(
+            mapType: MapType.normal,
+            myLocationEnabled: true,
+            initialCameraPosition: _kGooglePlex,
+            markers: _markers.values.toSet(),
+            onTap: (LatLng latlng) {
+              latitude = latlng.latitude;
+              longitude = latlng.longitude;
+              final marker = Marker(
+                markerId: const MarkerId('myLocation'),
+                position: LatLng(latitude, longitude),
+                infoWindow: const InfoWindow(
+                  title: 'AppLocalizations.of(context).will_deliver_here',
+                ),
+              );
+              setState(() {
+                _markers['myLocation'] = marker;
+              });
+            },
+            onMapCreated: (GoogleMapController controller) {
+              _controller = controller;
+            },
+          ),
         ),
+        Positioned(
+            left: 10,// you can change place of search bar any where on the map
+            child: ElevatedButton(
+                // onPressed: _handleSearch,
+                onPressed: () {
+                  //
+                },
+                child: Text('search')),
+          ),
+        ]
       ),
     );
   }
