@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ovary_app/view/hospital_likelist.dart';
+import 'package:ovary_app/view/login.dart';
 import 'package:ovary_app/view/mypage_menu.dart';
 import 'package:ovary_app/vm/mypage_update_vm.dart';
 
@@ -75,16 +77,21 @@ class HomeDrawer extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            UserAccountsDrawerHeader(
-              accountName: Text(
-                "로그인이 필요합니다",
-                style: TextStyle(color: Colors.black),
-              ),
-              accountEmail: Text(""),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(40),
-                  bottomRight: Radius.circular(40),
+            GestureDetector(
+              onTap: () {
+                Get.to(LogIn());
+              },
+              child: UserAccountsDrawerHeader(
+                accountName: Text(
+                  "로그인이 필요합니다",
+                  style: TextStyle(color: Colors.black),
+                ),
+                accountEmail: Text(""),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(40),
+                    bottomRight: Radius.circular(40),
+                  ),
                 ),
               ),
             ),
