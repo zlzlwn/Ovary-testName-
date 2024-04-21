@@ -22,11 +22,6 @@ class MypageUpdateWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     serchInfo();
     loadingUserInfoAction();
-//     mypageUpdateVMFunction.loadingUserInfoAction();
-//     mypageUpdateVMFunction.loadingUserInfoAction().then((_) {
-//   serchInfo();
-// });
-    // serchInfo();
     return Center(
       child: GetBuilder<MypageUpdateVM>(
         builder: (controller) {
