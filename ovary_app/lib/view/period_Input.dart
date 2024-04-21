@@ -20,8 +20,8 @@ class _PeriodInputState extends State<PeriodInput> {
   late int chosenPeriodLength = 7; // Default period length initialized to 7 days
   late int chosenCycleLength = 28;
 
-// Get reference to GetStorage box
-final box = GetStorage();
+  // Get reference to GetStorage box
+  final box = GetStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -144,8 +144,8 @@ final box = GetStorage();
                     icon: const Icon(Icons.add),
                     onPressed: () {
                       setState(() {
-                        if(chosenPeriodLength < 31){
-                        chosenPeriodLength++;
+                        if (chosenPeriodLength < 31) {
+                          chosenPeriodLength++;
                         }
                       });
                     },
@@ -208,8 +208,8 @@ final box = GetStorage();
                     icon: const Icon(Icons.add),
                     onPressed: () {
                       setState(() {
-                        if(chosenCycleLength < 31){
-                        chosenCycleLength++;
+                        if (chosenCycleLength < 31) {
+                          chosenCycleLength++;
                         }
                       });
                     },
@@ -220,11 +220,11 @@ final box = GetStorage();
             const SizedBox(height: 50),
             ElevatedButton(
               onPressed: () {
-                updatePeriodInfo();
+                insertPeriodInfo();
               },
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(120, 50),
-                backgroundColor: Colors.pink[300]
+                backgroundColor: Colors.pink[300],
               ),
               child: Text(
                 '저장하기',
@@ -240,64 +240,72 @@ final box = GetStorage();
     );
   }
 
-//FUNCTIONS
+  // FUNCTIONS
 
-
-// UPDATE 'PERIOD' USING THE HARD CODED EMAIL
-updatePeriodInfo() async {
-    // Get the formatted date
+  insertPeriodInfo() async {
+    // Format the chosen date
     String formattedDate = DateFormat('yyyy-MM-dd').format(chosenDate!);
 
-    // Create a map to hold the period info
-    Map<String, dynamic> periodInfo = {
-        'period': [formattedDate, chosenPeriodLength, chosenCycleLength]
-    };
+    // Retrieve the email from GetStorage
+    String? email = box.read<String>('email');
 
-    // // Hardcoded email for testing purposes
-    // String email = 'chosun@naver.com';
-
-
-  // Retrieve the email value from the box
-      String? email = box.read<String>('email');
-
-      if (email == null) {
-          print('Email not found in the box');
-          return;
-      }
-
+    // Validate the existence of the email
+    if (email == null) {
+        print('Email not found in the GetStorage box');
+        return;
+    }
 
     try {
-        // Query Firestore to find the document that matches the hardcoded email
+        // Query Firestore to find the document with the specified email
         QuerySnapshot querySnapshot = await FirebaseFirestore.instance
             .collection('user')
             .where('email', isEqualTo: email)
             .limit(1)
             .get();
 
-        // If a document is found, update the period array
+        // Check if a document is found
         if (querySnapshot.docs.isNotEmpty) {
             DocumentSnapshot document = querySnapshot.docs.first;
             String documentId = document.id;
 
-            // Update the 'period' array in the document
+            // Retrieve the existing data from the document
+            Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
+
+            // Get the 'period' map from data or initialize it as an empty map
+            Map<String, dynamic>? periodMap = data?['period'] as Map<String, dynamic>? ?? {};
+
+            // Create the new array for the period info
+            List<dynamic> newPeriodInfo = [
+                formattedDate,
+                chosenPeriodLength,
+                chosenCycleLength,
+            ];
+
+            // Create a timestamp as the key for the period array
+            DateTime dateTime = DateTime.now();
+
+            // Add the new array using the timestamp as the key in the 'period' map
+            periodMap[dateTime.toString()] = newPeriodInfo;
+
+            // Update the document with the modified 'period' map
             await FirebaseFirestore.instance
                 .collection('user')
                 .doc(documentId)
-                .update({'period': periodInfo['period']});
+                .update({'period': periodMap});
 
-            // Show a Cupertino alert popup at the bottom of the screen
+            // Show a confirmation alert dialog to the user
             showCupertinoDialog(
                 context: context,
                 builder: (BuildContext context) {
                     return CupertinoAlertDialog(
-                        title: Text("정보가 저장되었습니다!"),
+                        title: const Text("정보가 저장되었습니다!"),
                         actions: [
                             CupertinoDialogAction(
-                                child: Text("확인"),
+                                child: const Text("확인"),
                                 onPressed: () {
                                     // Dismiss the dialog
                                     Navigator.of(context).pop();
-                                    // Go back to the previous screen
+                                    // Navigate to the Home screen
                                     Get.to(const PeriodCalender());
                                 },
                             ),
@@ -311,6 +319,26 @@ updatePeriodInfo() async {
     } catch (error) {
         // Handle any errors that occur during the update
         print('Failed to update data: $error');
+
+        // Optionally, show an error alert to the user
+        showCupertinoDialog(
+            context: context,
+            builder: (BuildContext context) {
+                return CupertinoAlertDialog(
+                    title: const Text("데이터 업데이트 실패"),
+                    content: Text("오류가 발생했습니다: $error"),
+                    actions: [
+                        CupertinoDialogAction(
+                            child: const Text("확인"),
+                            onPressed: () {
+                                Navigator.of(context).pop();
+                            },
+                        ),
+                    ],
+                );
+            },
+        );
     }
 }
+
 }
