@@ -50,6 +50,7 @@ dependencies:
   firebase_analytics: ^10.10.0  # Firebase 앱 기능 향상
   firebase_database: ^10.5.0    # Firebase 데이터 동기화
   firebase_storage: ^11.7.0     # Firebase 파일 업로드 및 저장 관리
+  syncfusion_flutter_charts: ^25.1.40 # chart
   fl_chart: ^0.67.0             # 생리주기 차트
   google_maps_flutter: ^2.6.1   # 구글맵
   location: ^6.0.1              # 현재위치

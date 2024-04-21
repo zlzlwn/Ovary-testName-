@@ -16,8 +16,14 @@ class BmiQuestHeightWidget extends StatelessWidget {
   final VmSnackBar vmSnackBar = Get.put(VmSnackBar());
   int hValue = 0;
 
+  DateTime now = DateTime.now();
+  late String formattedDate;
+
   @override
   Widget build(BuildContext context) {
+
+    formattedDate = now.toString().substring(0, 10); // 처음부터 10번째 문자까지 자름
+
     return Center(
       child: Column(
         children: [
@@ -90,7 +96,6 @@ class BmiQuestHeightWidget extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(0, 50, 10, 0),
                 child: ElevatedButton(
                   onPressed: () {
-                    box.erase();
                     Get.back();
                   }, 
                   style: ElevatedButton.styleFrom(
@@ -113,7 +118,7 @@ class BmiQuestHeightWidget extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     box.write('hValue', hValue);
-                    updateData();
+                    insertData();
                     Get.to(BmiResult());
                   }, 
                   style: ElevatedButton.styleFrom(
@@ -136,38 +141,42 @@ class BmiQuestHeightWidget extends StatelessWidget {
     );
   }
 
-  updateData() async {
-    Map<String, dynamic> myInfo = {
-      'write' : [
-        DateTime.now(),
-        box.read('wValue'),
-        box.read('hValue'),
-      ]
-    };
-
-    if(box.read('email') == null) {
-      vmSnackBar.title = '경고';
-      vmSnackBar.content = '로그인을 해주세요';
-      vmSnackBar.bgColor = Colors.red;
-      vmSnackBar.textColor = Colors.white;
-      vmSnackBar.runSnackBar();
-    } else {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('user')
-        .where('email', isEqualTo: box.read('email'))
-        .limit(1)
-        .get();
-
-      if(querySnapshot.docs.isNotEmpty) {
-        DocumentSnapshot document = querySnapshot.docs.first;
-        String documentId = document.id;
+  insertData() async {
+    // Map<String, dynamic> myInfo = {
+    //   'write' : [
+    //     formattedDate,
+    //     box.read('wValue'),
+    //     box.read('hValue'),
+    //   ]
+    // };
 
 
-        await FirebaseFirestore.instance
-            .collection('user')
-            .doc(documentId)
-            .update({'write' : myInfo['write']});
-      } 
-    }
+      // //로그인한 email과 같은 user를 가져옴
+      // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      //   .collection('user')
+      //   .where('email', isEqualTo: box.read('email'))
+      //   .limit(1)
+      //   .get();
+
+      // if(querySnapshot.docs.isNotEmpty) {
+      //  // DocumentSnapshot document = querySnapshot.docs.first;
+      //   //String documentId = document.id;
+
+
+      //   await FirebaseFirestore.instance
+      //       .collection('user')
+      //       .doc(documentId)
+      //       .update({'write' : myInfo['write']});
+      // } 
+
+      FirebaseFirestore.instance
+      .collection('write')
+      .add({
+        'email' : box.read('email'),
+        'height' : box.read('hValue'),
+        'insertdate' : formattedDate,
+        'weight' : box.read('wValue')
+      });
+
   }
 }
