@@ -161,6 +161,17 @@ class LogInWidget extends StatelessWidget {
     final databaseHandler = DatabaseHandler();
     final user = Users(email: email);
     await databaseHandler.insertUsers(user);
+
+    //db에서 정보 가져오기
+        final users = await databaseHandler.queryUsers();
+
+         for (final user in users) {
+          print("sqlite 저장값 불러오기");
+      print('Email: ${user.email}');
+      print("sqlite 저장값 불러오기");
+      print('Email: ${user.email}');
+    }
+
       checkLogin();
       Get.to(const Home());
       print(box.read('email'));

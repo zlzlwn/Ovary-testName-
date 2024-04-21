@@ -19,7 +19,8 @@ class Home extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
               onPressed: () {
-                Get.to(const LogIn());
+                
+                Get.to( LogIn());
               },
               icon: Image.asset(
                  "images/user.png",
