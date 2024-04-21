@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/route_manager.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:ovary_app/view/mypage_update.dart';
 import 'package:ovary_app/vm/mypage_update_vm.dart';
-import 'package:ovary_app/widget/body/stftwst.dart';
 
 class MypageUpdateWidget extends StatelessWidget {
   MypageUpdateWidget({super.key});
@@ -15,42 +12,46 @@ class MypageUpdateWidget extends StatelessWidget {
   final TextEditingController password1Controller = TextEditingController();
   final TextEditingController password2Controller = TextEditingController();
 
+//값 사용
   final MypageUpdateVM mypageUpdateVM = Get.put(MypageUpdateVM());
+  //함수사용
+  final mypageUpdateVMFunction = MypageUpdateVM();
   final box = GetStorage();
 
   @override
   Widget build(BuildContext context) {
+    serchInfo();
+    loadingUserInfoAction();
+//     mypageUpdateVMFunction.loadingUserInfoAction();
+//     mypageUpdateVMFunction.loadingUserInfoAction().then((_) {
+//   serchInfo();
+// });
+    // serchInfo();
     return Center(
       child: GetBuilder<MypageUpdateVM>(
         builder: (controller) {
-          //view model에서 값을 받아오기 위해 사용
-          testAction();
           return Column(
             children: [
               CircleAvatar(
-                backgroundImage: NetworkImage(mypageUpdateVM.imagepath)
+                backgroundImage: NetworkImage(controller.imagepath),
+                radius: 100,
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 50, 20, 10),
                 child: TextField(
                   controller: nicknameController,
                   decoration: const InputDecoration(
-                      labelText: '닉네임들어갈 자리 (수정불가)',
-                      border: OutlineInputBorder()),
+                      labelText: '닉네임', border: OutlineInputBorder()),
                   readOnly: true,
                   keyboardType: TextInputType.text,
                 ),
-              ),
-              Center(
-                child: aa(),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                 child: TextField(
                   controller: emailController,
                   decoration: const InputDecoration(
-                      labelText: '이메일들어갈 자리 (수정불가)',
-                      border: OutlineInputBorder()),
+                      labelText: '이메일', border: OutlineInputBorder()),
                   keyboardType: TextInputType.text,
                 ),
               ),
@@ -77,7 +78,11 @@ class MypageUpdateWidget extends StatelessWidget {
                 padding: const EdgeInsets.all(20.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    checkpassword();
+                    
+                    
+                     checkpassword();
+                     updateAction();
+                    // mypageUpdateVMFunction.updateAction();
                     Get.back();
                   },
                   style: ElevatedButton.styleFrom(
@@ -101,23 +106,34 @@ class MypageUpdateWidget extends StatelessWidget {
     );
   }
 
+serchInfo(){
+  print("-----------------------");
+  print("-----------------------");
+  print("-----------------------");
+  print(mypageUpdateVM.nickname);
+  print(mypageUpdateVM.email);
+   nicknameController.text=mypageUpdateVM.nickname; 
+   emailController.text=mypageUpdateVM.email; 
+}
   checkpassword() {
     if (password1Controller.text == password2Controller.text) {
       print("일치");
       //비밀번호 값 vm에 저장
-      mypageUpdateVM.password = password1Controller.text;
+      mypageUpdateVM.password1 = password1Controller.text;
+      mypageUpdateVM.password2 = password2Controller.text;
     } else {
       print("불일치");
     }
   }
 
-  testAction() async {
+  loadingUserInfoAction() async {
+    print("바뀌기 전 값${mypageUpdateVM.imagepath}");
     final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('user')
         .where('email', isEqualTo: box.read('email'))
         .get();
-    //firebase에서 받아온 데이터가 있으면 실행
     if (querySnapshot.docs.isNotEmpty) {
+      //firebase에서 받아온 데이터를 list로 변환
       final List<Map<String, dynamic>> dataList1 = querySnapshot.docs
           .map((doc) => {
                 'email': doc['email'],
@@ -125,22 +141,62 @@ class MypageUpdateWidget extends StatelessWidget {
                 'profile': doc['profile'],
               })
           .toList();
+      //받아온 list데이터를 풀어서 뷰 모델에 저장함
       String email = dataList1[0]['email'];
       String nickname = dataList1[0]['nickname'];
       String profile = dataList1[0]['profile'];
-      print(email);
+      //vm의 변수에 할당
       mypageUpdateVM.email = email;
       mypageUpdateVM.nickname = nickname;
-      mypageUpdateVM.imagepath = profile;
-      print("vm에 잘 들어가는지 확인");
-      print(mypageUpdateVM.email);
-      print(mypageUpdateVM.nickname);
-      print(mypageUpdateVM.imagepath);
-      nicknameController.text = mypageUpdateVM.nickname;
-      emailController.text = mypageUpdateVM.email;
+      mypageUpdateVM.imagepath = await profile;
+
+      print("-------------------------------------------");
+      print("바뀐 후  값${mypageUpdateVM.imagepath}");
+      mypageUpdateVM.show();
+      //변수 바꾸고 나서 텍스트 필드에 변수 할당
+      nicknameController.text = await mypageUpdateVM.nickname;
+      emailController.text = await mypageUpdateVM.email;
     } else {
       // 데이터가 없는 경우
-      print('No data found');
+      print('데이터 없음');
     }
   }
+
+  updateAction() async {
+    final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('user')
+        .where('email', isEqualTo: box.read('email'))
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final DocumentSnapshot document = querySnapshot.docs[0]; // 첫 번째 문서 사용
+      final Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+
+      mypageUpdateVM.email = data['email'];
+      mypageUpdateVM.nickname = data['nickname'];
+      mypageUpdateVM.imagepath = data['profile'];
+
+      // 업데이트 작업 수행
+      await FirebaseFirestore.instance
+          .collection('user')
+          .doc(document.id) // 문서 ID 사용
+          .update({
+        'email': mypageUpdateVM.email,
+        'password': mypageUpdateVM.password1,
+        // 프로필 필드가 있으면 업데이트
+        if (mypageUpdateVM.imagepath != null)
+          'profile': mypageUpdateVM.imagepath,
+        // 다른 필드 업데이트
+      }).then((_) {
+        print("업데이트 성공");
+        Get.back();
+      }).catchError((error) {
+        print("업데이트 실패: $error");
+      });
+    } else {
+      // 데이터가 없는 경우
+      print('데이터 없음');
+    }
+  }
+  
 }

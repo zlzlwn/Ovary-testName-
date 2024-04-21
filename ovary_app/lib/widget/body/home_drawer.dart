@@ -5,6 +5,13 @@ import 'package:get_storage/get_storage.dart';
 import 'package:ovary_app/view/hospital_likelist.dart';
 import 'package:ovary_app/view/login.dart';
 import 'package:ovary_app/view/mypage_menu.dart';
+
+import 'package:ovary_app/vm/mypage_update_vm.dart';
+
+class HomeDrawer extends StatelessWidget {
+   HomeDrawer({super.key});
+final MypageUpdateVM mypageUpdateVM = Get.put(MypageUpdateVM());
+=======
 import 'package:ovary_app/widget/appbar/weight_chart.dart';
 
 class HomeDrawer extends StatelessWidget {
@@ -12,20 +19,23 @@ class HomeDrawer extends StatelessWidget {
 
   final box = GetStorage();
 
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const UserAccountsDrawerHeader(
+             UserAccountsDrawerHeader(
               currentAccountPicture: 
-              Text("유저 사진 들어올 자리"),
-              // CircleAvatar(
-              //   backgroundImage: AssetImage('images/turtle.jpeg'),
-              // ),
+               CircleAvatar(
+                backgroundImage:
+                NetworkImage(mypageUpdateVM.imagepath),
+                    
+                radius: 100,
+              ),
               accountName: Text(
-                "김땡땡님(db Nickname들어올자리)",
+                mypageUpdateVM.nickname,
                 style: TextStyle(
                   color: Colors.black
                 ),
