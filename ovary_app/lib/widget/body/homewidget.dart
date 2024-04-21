@@ -9,11 +9,12 @@ import 'package:ovary_app/view/period_Input.dart';
 import 'package:ovary_app/widget/appbar/bmi_quest_weight.dart';
 import 'package:ovary_app/widget/appbar/work_video.dart';
 import 'package:ovary_app/widget/body/pcos_survey_weight.dart';
+import 'package:provider/provider.dart';
 
 class HomeWidget extends StatelessWidget {
+    final box = GetStorage();
   @override
   Widget build(BuildContext context) {
-    final box = GetStorage();
     return Center(
       child: Column(
         children: [
@@ -43,9 +44,11 @@ class HomeWidget extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    box.read('email')==null
-                    ? loginDialog(context)
-                    :  Get.to(const PcosSurveyWeight());
+                    Get.to(const PcosSurveyWeight());
+                    // print(box.read('email'));
+                    // box.read('email')==null
+                    // ? loginDialog(context)
+                    // :  Get.to(const PcosSurveyWeight());
                    
                     
                   },
@@ -87,9 +90,11 @@ class HomeWidget extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(13, 0, 13, 0),
                   child: ElevatedButton(
                     onPressed: () {
-                       box.read('email')==null
-                    ? loginDialog(context)
-                    :  Get.to(const PeriodInput());
+                      Get.to(const PeriodInput());
+                    //   print(box.read('email'));
+                    //    box.read('email')==null
+                    // ? loginDialog(context)
+                    // :  Get.to(const PeriodInput());
                       
                     },
                     style: ElevatedButton.styleFrom(
@@ -125,9 +130,10 @@ class HomeWidget extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                      box.read('email')==null
-                    ? loginDialog(context)
-                    :  Get.to(const BmiQuestWeight());
+                    Get.to(const BmiQuestWeight());
+                    //   box.read('email')==null
+                    // ? loginDialog(context)
+                    // :  Get.to(const BmiQuestWeight());
                     
                   },
                   style: ElevatedButton.styleFrom(
@@ -173,9 +179,10 @@ class HomeWidget extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                   child: ElevatedButton(
                       onPressed: () {
-                        box.read('email')==null
-                    ? loginDialog(context)
-                    :  Get.to(const WorkVideo());
+                        Get.to(const WorkVideo());
+                    //     box.read('email')==null
+                    // ? loginDialog(context)
+                    // :  Get.to(const WorkVideo());
                         
                       },
                       style: ElevatedButton.styleFrom(
@@ -256,6 +263,7 @@ class HomeWidget extends StatelessWidget {
     );
   }
   loginDialog(context){
+    print(box.read('email'));
     
     showDialog(
   context: context,
