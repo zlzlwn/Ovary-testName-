@@ -10,7 +10,7 @@ class DatabaseHandler {
       join(path, 'user.db'),
       onCreate: (db, version) async {
         //테이블 만들기(초기 구동시에만 작동
-        await db.execute(//사진은 blob으로 가져와야 한다!
+        await db.execute(
             "create table users (id integer primary key autoincrement, email text");
       },
       version: 1,
