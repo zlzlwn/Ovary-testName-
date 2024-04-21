@@ -11,6 +11,7 @@ class MypageUpdateVM extends GetxController {
   String password1 = "";
   String password2 = "";
   String imagepath = "";
+  
 
     final box = GetStorage();
  show() async {
