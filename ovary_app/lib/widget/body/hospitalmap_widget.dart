@@ -25,7 +25,7 @@ class _HospitalMapWidgetState extends State<HospitalMapWidget> {
   );
 
   /* search functions--------------------------------------
- Future<void> _handleSearch() async {
+  Future<void> _handleSearch() async {
     places.Prediction? p = await loc.PlacesAutocomplete.show(
         context: context,
         apiKey: 'your map key,
@@ -166,12 +166,31 @@ class _HospitalMapWidgetState extends State<HospitalMapWidget> {
         ),
         Positioned(
             left: 10,// you can change place of search bar any where on the map
-            child: ElevatedButton(
-                // onPressed: _handleSearch,
-                onPressed: () {
-                  //
-                },
-                child: Text('search')),
+            child: TextField(
+                        textInputAction: TextInputAction.search,
+                        decoration: InputDecoration(
+                          hintText: "장소, 버스, 지하철, 주소 검색",
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                          suffixIcon: IconButton(
+                            icon: Icon(Icons.search),
+                            onPressed: () {
+                              // searchAndNavigate();
+                            }, 
+                            iconSize: 30.0,
+                          )
+                        ),
+                        onChanged: (val) {
+                          setState(() {
+                            // searchAddr = val;
+                            // searchCtg = val;
+                          }
+                        );
+                      },
+                      onSubmitted: (term) {
+                        // searchAndNavigate();
+                      },
+                    ),
           ),
         ]
       ),
