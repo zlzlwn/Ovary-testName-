@@ -2,8 +2,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ovary_app/vm/vm_snackbar.dart';
 import 'package:ovary_app/widget/body/bmi_result.dart';
 
 // ignore: must_be_immutable
@@ -12,11 +13,17 @@ class BmiQuestHeightWidget extends StatelessWidget {
   BmiQuestHeightWidget({super.key});
   
   final box = GetStorage();
-
+  final VmSnackBar vmSnackBar = Get.put(VmSnackBar());
   int hValue = 0;
+
+  DateTime now = DateTime.now();
+  late String formattedDate;
 
   @override
   Widget build(BuildContext context) {
+
+    formattedDate = now.toString().substring(0, 10); // 처음부터 10번째 문자까지 자름
+
     return Center(
       child: Column(
         children: [
@@ -89,7 +96,6 @@ class BmiQuestHeightWidget extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(0, 50, 10, 0),
                 child: ElevatedButton(
                   onPressed: () {
-                    box.erase();
                     Get.back();
                   }, 
                   style: ElevatedButton.styleFrom(
@@ -112,16 +118,7 @@ class BmiQuestHeightWidget extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     box.write('hValue', hValue);
-                    FirebaseFirestore.instance
-                    .collection('write')
-                    .add(
-                      {
-                        'email' : box.read('email'),
-                        'insertdate' : DateTime.now(),
-                        'weight': box.read('wValue'),
-                        'height': box.read('hValue'),
-                      }
-                    );
+                    insertData();
                     Get.to(BmiResult());
                   }, 
                   style: ElevatedButton.styleFrom(
@@ -142,5 +139,44 @@ class BmiQuestHeightWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  insertData() async {
+    // Map<String, dynamic> myInfo = {
+    //   'write' : [
+    //     formattedDate,
+    //     box.read('wValue'),
+    //     box.read('hValue'),
+    //   ]
+    // };
+
+
+      // //로그인한 email과 같은 user를 가져옴
+      // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      //   .collection('user')
+      //   .where('email', isEqualTo: box.read('email'))
+      //   .limit(1)
+      //   .get();
+
+      // if(querySnapshot.docs.isNotEmpty) {
+      //  // DocumentSnapshot document = querySnapshot.docs.first;
+      //   //String documentId = document.id;
+
+
+      //   await FirebaseFirestore.instance
+      //       .collection('user')
+      //       .doc(documentId)
+      //       .update({'write' : myInfo['write']});
+      // } 
+
+      FirebaseFirestore.instance
+      .collection('write')
+      .add({
+        'email' : box.read('email'),
+        'height' : box.read('hValue'),
+        'insertdate' : formattedDate,
+        'weight' : box.read('wValue')
+      });
+
   }
 }

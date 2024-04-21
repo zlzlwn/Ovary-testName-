@@ -6,7 +6,7 @@ class PcosDescriptionAppbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text("PcosDescriptionAppbar"),
+      title: const Text("PCOS란?"),
     );
   }
 }
