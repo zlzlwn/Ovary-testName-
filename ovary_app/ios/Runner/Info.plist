@@ -69,5 +69,24 @@
     <true/>
     <key>UIApplicationSupportsIndirectInputEvents</key>
     <true/>
+	 <key>NSLocationUsageDescription</key>
+	<string>Older devices need location.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>need access to your location </string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>need access to your location</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>need access to your location</string>
+	<key>id.flutter.embedded_view_preview</key>
+	<true/>
+	<key>MinimumOSVersion</key>
+	<string>14.0</string>
+
+	<key>NSCameraUsageDescription</key>
+	<string>Used to demonstrate image picker plugin</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Used to capture audio for image picker plugin</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Used to demonstrate image picker plugin</string>
 </dict>
 </plist>
