@@ -17,7 +17,7 @@ class Home extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Image.asset('images/appNamePurple.png',
-          width: 200,
+          width: 180,
         ),
         actions: [
           Padding(

@@ -44,7 +44,7 @@ class _periodCycleChartState extends State<periodCycleChart> {
               padding: const EdgeInsets.fromLTRB(9, 0, 15, 0),
               child: BarChart(
                 _mainBarData(),
-                swapAnimationDuration: const Duration(milliseconds: 250),
+                swapAnimationDuration: const Duration(milliseconds: 900),
               ),
             ),
           ),
