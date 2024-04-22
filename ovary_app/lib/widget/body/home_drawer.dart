@@ -170,7 +170,6 @@ class HomeDrawer extends StatelessWidget {
 
 
     loadingUserInfoAction() async {
-    print("바뀌기 전 값${mypageUpdateVM.imagepath}");
     final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('user')
         .where('email', isEqualTo: box.read('email'))
@@ -189,13 +188,8 @@ class HomeDrawer extends StatelessWidget {
       mypageUpdateVM.nickname = dataList1[0]['nickname'];
       mypageUpdateVM.imagepath = dataList1[0]['profile'];
 
-      print("-------------------------------------------");
-      print("바뀐 후  값${mypageUpdateVM.imagepath}");
       mypageUpdateVM.show();
       //변수 바꾸고 나서 텍스트 필드에 변수 할당
-      print("email값 확인 ${mypageUpdateVM.email}");
-      print("nickname 확인 ${mypageUpdateVM.nickname}");
-      print("imagepath 확인 ${mypageUpdateVM.imagepath}");
     } else {
       // 데이터가 없는 경우
       print('데이터 없음');

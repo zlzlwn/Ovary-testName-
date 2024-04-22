@@ -19,7 +19,6 @@ class MypageUpdateVM extends GetxController {
  }
 
 loadingUserInfoAction() async {
-    print("바뀌기 전 값${imagepath}");
     final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('user')
         .where('email', isEqualTo: box.read('email'))
@@ -40,10 +39,6 @@ loadingUserInfoAction() async {
       
 
 
-      print("-----------------유저 이름 들어오는지 확인--------------------------");
-      print("바뀐 후  값${email}");
-      print("바뀐 후  값${nickname}");
-      print("바뀐 후  값${imagepath}");
       update();
       //변수 바꾸고 나서 텍스트 필드에 변수 할당
      
@@ -80,7 +75,6 @@ loadingUserInfoAction() async {
           'profile': imagepath,
         // 다른 필드 업데이트
       }).then((_) {
-        print("업데이트 성공");
         Get.back();
       }).catchError((error) {
         print("업데이트 실패: $error");
@@ -92,7 +86,6 @@ loadingUserInfoAction() async {
   }
 
   loginDialog(context){
-    print(box.read('email'));
     
     showDialog(
   context: context,
