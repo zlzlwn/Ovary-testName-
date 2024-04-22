@@ -34,7 +34,7 @@ class _WeightChartWidgetState extends State<WeightChartWidget> {
             children: [
               const Padding(
                 padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
-                child: Text('최근 7일간의 나의 체중과 BMI 변화를 보여드립니다.'),
+                child: Text('나의 체중과 BMI 변화를 보여드립니다. (7일간)'),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
@@ -61,7 +61,7 @@ class _WeightChartWidgetState extends State<WeightChartWidget> {
                           dataLabelSettings:
                           const DataLabelSettings(isVisible: true),
                         ),
-                        ScatterSeries<BmiModel, dynamic>(
+                        LineSeries<BmiModel, dynamic>(
                           dataSource: List.generate(
                             dData.length,
                             (index) => BmiModel(
@@ -100,24 +100,9 @@ class _WeightChartWidgetState extends State<WeightChartWidget> {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('write')
         .where('email', isEqualTo: email)
-        .orderBy('seq', descending: true)
+        .orderBy('insertdate', descending: true) //내림차순
         .limit(7)
         .get();
-
-    if (querySnapshot.docs.isNotEmpty) {
-      final List<Map<String, dynamic>> dataList = querySnapshot.docs
-          .map((doc) => {
-                'height': doc['height'],
-                'weight': doc['weight'],
-                'date': doc['insertdate'],
-              })
-          .toList();
-
-      for (int i = 0; i < dataList.length; i++) {
-        wData.add(dataList[i]['weight']);
-        hData.add(dataList[i]['height']);
-        dData.add(dataList[i]['date']);
-      }
 
       if (querySnapshot.docs.isNotEmpty) {
         final List<Map<String, dynamic>> dataList = querySnapshot.docs
@@ -136,10 +121,6 @@ class _WeightChartWidgetState extends State<WeightChartWidget> {
       }
 
       setState(() {}); // 데이터가 업데이트 되었음을 알려줌
- //   }
   }
 }
-}
 
-class DateFormat {
-}
