@@ -28,12 +28,9 @@ class DatabaseHandler {
   }
 
   //이메일 입력-----@@@@@@@@
-  Future<int> insertUsers(Users user) async {
-    int result = 0;
+  Future<void> insertUsers(Users user ) async {
     final Database db = await initializeDB();
-    result =
-        await db.rawInsert('insert into users(email) values (?)', [user.email]);
-    return result;
+    await db.rawInsert('insert into users(email) values (?)', [user.email]);
   }
 
   //간편비밀번호 값 입력
@@ -93,30 +90,5 @@ class DatabaseHandler {
 
     return maps.isNotEmpty ? 1 : 0; // password 값이 null이 아니면 1, null이면 0
   }
-
-
-  //로그인 시 입력한 id값이 sqlite에 있는지 
-  Future<int> checkEmailInfo(String email) async {
-    int result = 0;
-    final Database db = await initializeDB();
-    List<Map<String, dynamic>> queryResult = await db.rawQuery("SELECT COUNT(email) AS count FROM users WHERE email = ?", [email]);
-    if (queryResult.isNotEmpty) {
-      result = queryResult.first['count'] as int;
-    }
-    print('checkEmail : $result');
-    return result;
-  }
-
-  //로그인 시 해당 email에 입력한 pw값이 sqlite에 있는지 
-  Future<int> checkPwInfo(String email) async {
-  int result = 0;
-  final Database db = await initializeDB();
-  List<Map<String, dynamic>> queryResult = await db.rawQuery("SELECT COUNT(pw) AS count FROM users WHERE email = ?", [email]);
-  if (queryResult.isNotEmpty) {
-    result = queryResult.first['count'] as int;
-  }
-  print('checkpw : $result');
-  return result;
-}
 
 }
