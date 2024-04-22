@@ -34,7 +34,7 @@ class _WeightChartWidgetState extends State<WeightChartWidget> {
             children: [
               const Padding(
                 padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
-                child: Text('최근 7일간의 나의 체중과 BMI 변화를 보여드립니다.'),
+                child: Text('나의 체중과 BMI 변화를 보여드립니다. (7일간)'),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
@@ -82,7 +82,7 @@ class _WeightChartWidgetState extends State<WeightChartWidget> {
                         title: AxisTitle(text: '날짜'),
                       ),
                       primaryYAxis: const NumericAxis(
-                        title: AxisTitle(text: '몸무게'),
+                        title: AxisTitle(text: '몸무게, BMI'),
                       ),
                     ),
                   ),
@@ -94,31 +94,33 @@ class _WeightChartWidgetState extends State<WeightChartWidget> {
   }
 
   //firebase에서 데이터 가져오기
-  getData() async {
+  getData({String? tags}) async {
     String email = box.read('email');
 
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('write')
         .where('email', isEqualTo: email)
+        .orderBy('insertdate', descending: true) //내림차순
         .limit(7)
         .get();
 
-    if (querySnapshot.docs.isNotEmpty) {
-      final List<Map<String, dynamic>> dataList = querySnapshot.docs
-          .map((doc) => {
-                'height': doc['height'],
-                'weight': doc['weight'],
-                'date': doc['insertdate'],
-              })
-          .toList();
+      if (querySnapshot.docs.isNotEmpty) {
+        final List<Map<String, dynamic>> dataList = querySnapshot.docs
+            .map((doc) => {
+                  'height': doc['height'],
+                  'weight': doc['weight'],
+                  'date': doc['insertdate'],
+                })
+            .toList();
 
-      for (int i = 0; i < dataList.length; i++) {
-        wData.add(dataList[i]['weight']);
-        hData.add(dataList[i]['height']);
-        dData.add(dataList[i]['date']);
+        for (int i = 0; i < dataList.length; i++) {
+          wData.add(dataList[i]['weight']);
+          hData.add(dataList[i]['height']);
+          dData.add(dataList[i]['date']);
+        }
       }
+
       setState(() {}); // 데이터가 업데이트 되었음을 알려줌
-    }
   }
 }
 
