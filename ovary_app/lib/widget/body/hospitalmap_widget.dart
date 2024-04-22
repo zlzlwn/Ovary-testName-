@@ -18,12 +18,13 @@ class HospitalMapWidget extends StatefulWidget {
 class _HospitalMapWidgetState extends State<HospitalMapWidget> {
   Location location = Location();
   final Map<String, Marker> _markers = {};
-
+// 3d37.4944858
+// 4d127.030066
   double latitude = 0;
   double longitude = 0;
   GoogleMapController? _controller;
   final CameraPosition _kGooglePlex = const CameraPosition(
-    target: LatLng(37.532600, 127.024612),
+    target: LatLng(37.4944858, 127.030066), // 더조은 강남아카데미 주소.
     zoom: 15,
   );
 
@@ -75,6 +76,38 @@ class _HospitalMapWidgetState extends State<HospitalMapWidget> {
 
   @override
   Widget build(BuildContext context) {
+    List<Map<String, dynamic>> places = [
+      {
+        'name': '나를위한산부인과의원',
+        'latitude': 37.4955366,
+        'longitude': 127.0293521,
+      },
+      {
+        'name': '다움산부인과',
+        'latitude': 37.4978931,
+        'longitude': 127.0286404,
+      },
+      {
+        'name': '애플산부인과의원 강남점',
+        'latitude': 37.4979626,
+        'longitude': 127.0264302,
+      },
+      {
+        'name': '쉬즈웰산부인과',
+        'latitude': 37.4999834,
+        'longitude': 127.0259797,
+      },
+      {
+        'name': '유로진여성의원',
+        'latitude': 37.4993781,
+        'longitude': 127.0310839,
+      },
+      {
+        'name': '강남리즈산부인과',
+        'latitude': 37.5008952,
+        'longitude': 127.0266227,
+      },
+    ];
     return Scaffold(
       body: Stack(
         children :[
@@ -82,21 +115,19 @@ class _HospitalMapWidgetState extends State<HospitalMapWidget> {
           mapType: MapType.normal,
           myLocationEnabled: true,
           initialCameraPosition: _kGooglePlex,
-          markers: _markers.values.toSet(),
-          onTap: (LatLng latlng) {
-            latitude = latlng.latitude;
-            longitude = latlng.longitude;
-            final marker = Marker(
-              markerId: const MarkerId('myLocation'),
-              position: LatLng(latitude, longitude),
-              infoWindow: const InfoWindow(
-                title: 'AppLocalizations.of(context).will_deliver_here',
-              ),
-            );
-            setState(() {
-              _markers['myLocation'] = marker;
-            });
-          },
+          markers: Set<Marker>.of(places.map((place) {
+              return Marker(
+                markerId: MarkerId(place['name']),
+                position: LatLng(place['latitude'], place['longitude']),
+                infoWindow: InfoWindow(title: place['name']),
+                // onTap: () {
+                //   Navigator.push(
+                //       context,
+                //       CupertinoPageRoute(
+                //           builder: (context) => MarkerDetailScreen()));
+                // },
+              );
+            })),
           onMapCreated: (GoogleMapController controller) {
             _controller = controller;
           },
