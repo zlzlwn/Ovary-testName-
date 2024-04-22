@@ -5,6 +5,7 @@ import 'package:ovary_app/view/hospital_map.dart';
 import 'package:ovary_app/view/login.dart';
 import 'package:ovary_app/view/pcosdescription.dart';
 import 'package:ovary_app/view/period_Input.dart';
+import 'package:ovary_app/view/period_calendar.dart';
 import 'package:ovary_app/widget/appbar/bmi_quest_weight.dart';
 import 'package:ovary_app/widget/appbar/work_video.dart';
 import 'package:ovary_app/widget/body/pcos_survey_weight.dart';
@@ -92,7 +93,7 @@ class HomeWidget extends StatelessWidget {
                       print(box.read('email'));
                        box.read('email')==null
                     ? loginDialog(context)
-                    :  Get.to(const PeriodInput());
+                    :  Get.to(const PeriodCalender());
                       
                     },
                     style: ElevatedButton.styleFrom(

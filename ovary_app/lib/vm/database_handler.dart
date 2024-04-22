@@ -65,7 +65,7 @@ Future<String?> getUserPassword(String email) async {
 
   return null;
 }
-  //로그인할때 db에 email 데이터가 있는지 없는지 확인하는 함수
+  //로그인할때 db에 email 데이터가 있는지 없는지 확인하는 함수-> 로그인 페이지 간편 로그인 시에 활용!
 Future<bool> hasEmailData() async {
   final db = await initializeDB();
   List<Map<String, dynamic>> maps = await db.query(
