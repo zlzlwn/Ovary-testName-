@@ -21,131 +21,133 @@ class LogInWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: GetBuilder<LoginGetX>(
-        builder: (controller) {
-          return Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset('images/OneDayLogoPurple.png',
-                  width: 300,
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 20, 8, 8),
-                  child: TextField(
-                    controller: idController,
-                    decoration: const InputDecoration(
-                      labelText: '아이디를 입력 하세요',
-                      border: OutlineInputBorder() 
+    return SingleChildScrollView(
+      child: Center(
+        child: GetBuilder<LoginGetX>(
+          builder: (controller) {
+            return Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  Image.asset('images/OneDayLogoPurple.png',
+                    width: 300,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 20, 8, 8),
+                    child: TextField(
+                      controller: idController,
+                      decoration: const InputDecoration(
+                        labelText: '아이디를 입력 하세요',
+                        border: OutlineInputBorder() 
+                      ),
+                      keyboardType: TextInputType.text,
                     ),
-                    keyboardType: TextInputType.text,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          // Get.to(const SignUp());
-                        },
-                        child: Text('  아이디 찾기',
-                          style: TextStyle(
-                            color: Color(0xff8b7ff5),
-                            fontWeight: FontWeight.bold
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            // Get.to(const SignUp());
+                          },
+                          child: const Text('  아이디 찾기',
+                            style: TextStyle(
+                              color: Color(0xff8b7ff5),
+                              fontWeight: FontWeight.bold
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: passwordController,
-                    decoration: const InputDecoration(
-                      labelText: '비밀번호를 입력 하세요',
-                      border: OutlineInputBorder() 
+                      ],
                     ),
-                    keyboardType: TextInputType.text,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          // Get.to(const SignUp());
-                        },
-                        child: Text('비밀번호 찾기',
-                          style: TextStyle(
-                            color: Color(0xff8b7ff5),
-                            fontWeight: FontWeight.bold
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        labelText: '비밀번호를 입력 하세요',
+                        border: OutlineInputBorder() 
+                      ),
+                      keyboardType: TextInputType.visiblePassword,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            // Get.to(const SignUp());
+                          },
+                          child: const Text('비밀번호 찾기',
+                            style: TextStyle(
+                              color: Color(0xff8b7ff5),
+                              fontWeight: FontWeight.bold
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text('아직 계정이 없으세요?'),
-                      GestureDetector(
-                        onTap: () {
-                          Get.to(const SignUp());
-                        },
-                        child: Text('  회원 가입하기',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('아직 계정이 없으세요?'),
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(const SignUp());
+                          },
+                          child: const Text('  회원 가입하기',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
-                  child: GestureDetector(
-                    onTap: () => Get.to(const SimpleLoginWidget()),
-                    child: Text('간편 로그인하기',
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                    child: GestureDetector(
+                      onTap: () => Get.to(const SimpleLogIn()),
+                      child: const Text('간편 로그인하기',
+                        style: TextStyle(
+                          color: Color(0xff8b7ff5),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      loginAction(controller);
+                    }, 
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xff8b7ff5),
+                      foregroundColor: Colors.white
+                    ),
+                    child: const Text('로그인',
                       style: TextStyle(
-                        color: Color(0xff8b7ff5),
-                        fontWeight: FontWeight.bold,
-                      ),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold
+                      ),  
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    loginAction(controller);
-                  }, 
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xff8b7ff5),
-                    foregroundColor: Colors.white
-                  ),
-                  child: const Text('로그인',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold
-                    ),  
-                  ),
-                ),
-              ],
-            ),
-          );
-        }
+                ],
+              ),
+            );
+          }
+        ),
       ),
     );
   }
