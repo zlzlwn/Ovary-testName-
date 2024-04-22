@@ -5,12 +5,13 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ovary_app/view/login.dart';
 
-class MypageUpdateVM extends GetxController{
+class MypageUpdateVM extends GetxController {
   String nickname = "";
   String email = "";
   String password1 = "";
   String password2 = "";
   String imagepath = "";
+  
 
     final box = GetStorage();
  show() async {
