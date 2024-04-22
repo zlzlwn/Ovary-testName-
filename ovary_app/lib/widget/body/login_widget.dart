@@ -164,7 +164,7 @@ class LogInWidget extends StatelessWidget {
       
 
       //db에서 정보 가져오기
-      final users = await databaseHandler.queryUsers();
+      // final users = await databaseHandler.queryUsers();
 
       checkLogin();
 
