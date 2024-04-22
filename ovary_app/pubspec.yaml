@@ -55,6 +55,7 @@ dependencies:
   google_maps_flutter: ^2.6.1   # 구글맵
   location: ^6.0.1              # 현재위치
   permission_handler: ^11.3.1   # 권한설정
+  percent_indicator: ^4.2.3     # percentage bar
 
   # flutter_google_places: ^0.3.0 # 구글맵 검색
   # google_maps_webservice: ^0.0.19 # 구글맵 검색
