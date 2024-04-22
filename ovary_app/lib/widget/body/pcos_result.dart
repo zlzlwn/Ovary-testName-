@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ovary_app/view/home.dart';
+import 'package:ovary_app/view/hospital_map.dart';
 import 'package:ovary_app/vm/vm_pcos.dart';
-import 'package:speedometer_chart/speedometer_chart.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class PcosResult extends StatelessWidget {
   const PcosResult({super.key});
@@ -12,6 +12,8 @@ class PcosResult extends StatelessWidget {
 
     // ignore: unused_local_variable
     final ChangeSwitch controller = Get.put(ChangeSwitch());
+    double checkValue = 0;
+    double cValue = 0;
 
     return Scaffold(
       appBar: AppBar(
@@ -19,6 +21,7 @@ class PcosResult extends StatelessWidget {
           'PCOS 진단 예측결과',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
+        backgroundColor: Colors.purple[100],
         leading: Padding(
           padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
           child: IconButton(
@@ -35,29 +38,44 @@ class PcosResult extends StatelessWidget {
       ),
       body: Center(child: GetBuilder<ChangeSwitch>(
         builder: (controller) {
+
+          checkValue = double.parse(controller.result.toStringAsFixed(2)) * 0.01;
+          cValue = double.parse(controller.result.toStringAsFixed(2));
+
           return controller.result == ''
           ? const Center(child: CircularProgressIndicator(),)
           : Center(
             child: Column(
               children: [
-                
-                //speend meter chart
+
+                //percentage bar
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
-                  child: SizedBox(
-                    width: 380,
-                    child: SpeedometerChart(
-                      value: controller.result,
-                      graphColor: const [Color.fromARGB(255, 68, 243, 255), Color.fromARGB(255, 255, 64, 64)],
-                      maxValue: 100,
-                      minValue: 0,
+                  padding: const EdgeInsets.fromLTRB(0, 120, 0, 0),
+                  child: CircularPercentIndicator(
+                    radius: 100.0,
+                    lineWidth: 30.0, // 굵기
+                    animation: true,
+                    percent: checkValue,
+                    center: Text(
+                      "${controller.result.toStringAsFixed(2)}%",
                     ),
+                    footer: const Text(
+                      "PCOS 예측 결과",
+                    ),
+                    circularStrokeCap:
+                    CircularStrokeCap.round, // 프로그래스 끝 부분 둥글게
+                    progressColor: 
+                      cValue >= 80 ? Colors.red
+                      : cValue >= 60 ? Colors.orange
+                      : cValue >= 40 ? Colors.yellow[600] 
+                      : cValue >= 20 ? Colors.blue[300] : Colors.green[300]
                   ),
                 ),
 
+
                 //결과 문구 
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                  padding: const EdgeInsets.fromLTRB(0, 60, 0, 0),
                   child: Text(
                     '다낭성 난소 증후군\n'
                     '발생률 ${controller.result.toStringAsFixed(2)}% 입니다.',
@@ -68,27 +86,61 @@ class PcosResult extends StatelessWidget {
                   ),
                 ),
 
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
-                  child: Text('예측율은 79.94% 입니다.'),
-                ),
 
                 //홈으로 가기
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 70, 0, 0),
-                  child: ElevatedButton(
-                    onPressed: () => Get.to(const Home()),
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(120, 50),
-                        backgroundColor:
-                            const Color(0xff8b7ff5)),
-                    child: Text(
-                      '홈으로',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Theme.of(context).colorScheme.onPrimary,
+                  padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                        child: ElevatedButton(
+                          onPressed: () { 
+                            Get.back();
+                            Get.back();
+                            Get.back();
+                            Get.back();
+                            Get.back();
+                          },
+                          style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(120, 50),
+                              backgroundColor:
+                                  const Color(0xff8b7ff5)),
+                          child: Text(
+                            '홈으로',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Get.back();
+                            Get.back();
+                            Get.back();
+                            Get.back();
+                            Get.back();
+                            Get.to(const HospitalMap());
+                          },
+                          style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(120, 50),
+                              backgroundColor:
+                                  const Color(0xff8b7ff5)),
+                          child: Text(
+                            '병원찾기',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],

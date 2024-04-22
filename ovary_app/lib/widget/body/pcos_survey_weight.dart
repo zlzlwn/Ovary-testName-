@@ -18,6 +18,7 @@ class PcosSurveyWeight extends StatelessWidget {
           'PCOS 설문',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
+        backgroundColor: Colors.purple[100],
         leading: 
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
