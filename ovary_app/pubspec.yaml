@@ -65,6 +65,15 @@ dependencies:
 
   sqflite: ^2.3.3               # sqlite
 
+flutter_native_splash:
+  android: false
+  ios: true
+  web : false
+
+  color: "#8B7FF5"
+  # background image: "images/dark.png"
+  image: "images/OneDayLogoWhite.png"
+
 
 dev_dependencies:
   flutter_test:
