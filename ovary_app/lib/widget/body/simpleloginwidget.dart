@@ -38,6 +38,8 @@ class _SimpleLoginWidgetState extends State<SimpleLoginWidget> {
   _passwordString = _password.join().toString(); // 리스트를 문자열로 변환
 
   final databaseHandler = DatabaseHandler();
+  print("박스 이메일값 확인");
+  print(box.read('email'));
 String? storedPassword = await databaseHandler.getUserPassword(box.read('email'));
   if (storedPassword == _passwordString) {
     Get.back();

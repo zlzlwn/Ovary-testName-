@@ -125,7 +125,7 @@ final box = GetStorage();
                   child: ElevatedButton(
   onPressed: () async {
     final databaseHandler = DatabaseHandler();
-    await databaseHandler.clearDatabase(); // 데이터베이스 전체 삭제
+    // await databaseHandler.clearDatabase(); // 데이터베이스 전체 삭제
     box.remove("email"); // GetStorage에서 email 삭제
     Get.back();
     Get.back();

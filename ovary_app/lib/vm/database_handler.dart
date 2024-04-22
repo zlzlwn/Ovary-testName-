@@ -77,11 +77,14 @@ Future<bool> hasEmailData() async {
 
   return maps.isNotEmpty;
 }
-//로그아웃시에 db에 있는 데이터를 다 삭제함
+//로그아웃시에 db에 있는 데이터를 다 삭제함-> 필요없음 
 Future<void> clearDatabase() async {
   final db = await initializeDB();
   await db.execute('DELETE FROM users');
 }
+
+
+//비밀번호값에 맞는 아이디값 뱉는 
 }
 
 
