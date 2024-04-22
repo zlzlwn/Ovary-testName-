@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:http/http.dart';
 import 'package:ovary_app/view/hospital_map.dart';
 import 'package:ovary_app/view/login.dart';
 import 'package:ovary_app/view/pcosdescription.dart';
@@ -9,7 +8,6 @@ import 'package:ovary_app/view/period_Input.dart';
 import 'package:ovary_app/widget/appbar/bmi_quest_weight.dart';
 import 'package:ovary_app/widget/appbar/work_video.dart';
 import 'package:ovary_app/widget/body/pcos_survey_weight.dart';
-import 'package:provider/provider.dart';
 
 class HomeWidget extends StatelessWidget {
     final box = GetStorage();
@@ -263,14 +261,14 @@ class HomeWidget extends StatelessWidget {
     );
   }
   loginDialog(context){
-    print(box.read('email'));
+    // print(box.read('email'));
     
     showDialog(
   context: context,
   builder: (BuildContext context) {
     return AlertDialog(
       backgroundColor: Colors.white, // 배경색을 흰색으로 설정
-      content: Text(
+      content: const Text(
         '로그인이 필요한 서비스입니다.',
         style: TextStyle(
           color: Colors.black, 
@@ -282,7 +280,7 @@ class HomeWidget extends StatelessWidget {
             Get.back();
             Get.to(LogIn());
           },
-          child: Text(
+          child: const Text(
             '확인',
             style: TextStyle(
               
