@@ -74,6 +74,12 @@ class ChangeSwitch extends GetxController {
     
     insertResult(result);
 
+    //스위치 value false로 초기화
+    weightValue = false;
+    hairValue = false;
+    acneValue = false;
+    skinValue = false;
+
     update();
   }
 
