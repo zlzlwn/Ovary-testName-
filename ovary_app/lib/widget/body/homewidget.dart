@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:http/http.dart';
 import 'package:ovary_app/view/hospital_map.dart';
 import 'package:ovary_app/view/login.dart';
 import 'package:ovary_app/view/pcosdescription.dart';
-import 'package:ovary_app/view/period_Input.dart';
+import 'package:ovary_app/view/period_calendar.dart';
 import 'package:ovary_app/widget/appbar/bmi_quest_weight.dart';
 import 'package:ovary_app/widget/appbar/work_video.dart';
 import 'package:ovary_app/widget/body/pcos_survey_weight.dart';
-import 'package:provider/provider.dart';
 
 class HomeWidget extends StatelessWidget {
     final box = GetStorage();
@@ -92,7 +90,7 @@ class HomeWidget extends StatelessWidget {
                       // Get.to(const PeriodInput());
                        box.read('email')==null
                     ? loginDialog(context)
-                    :  Get.to(const PeriodInput());
+                    :  Get.to(const PeriodCalender());
                       
                     },
                     style: ElevatedButton.styleFrom(
@@ -261,7 +259,6 @@ class HomeWidget extends StatelessWidget {
     );
   }
   loginDialog(context){
-    print(box.read('email'));
     
     showDialog(
   context: context,

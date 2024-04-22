@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:ovary_app/vm/database_handler.dart';
 import 'package:ovary_app/vm/login_vm.dart';
 import 'package:ovary_app/widget/body/login_widget.dart';
-import 'package:ovary_app/widget/body/simpleloginwidget.dart';
 
 class LogIn extends StatelessWidget {
   LogIn({super.key});

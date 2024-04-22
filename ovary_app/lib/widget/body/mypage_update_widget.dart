@@ -7,6 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ovary_app/vm/mypage_update_vm.dart';
 import 'package:ovary_app/vm/signup_vm.dart';
+import 'package:ovary_app/widget/image_widget/image_widget.dart';
 
 class MypageUpdateWidget extends StatelessWidget {
   MypageUpdateWidget({super.key});
@@ -38,42 +39,40 @@ class MypageUpdateWidget extends StatelessWidget {
         builder: (controller) {
           return Column(
             children: [
-              SizedBox(
-                //sizebox는 width,height의 최소값으로 계산한다!
-                //MediaQuery 코드 필수임 (핸드폰마다의 크기를 계산한다)
-                width: MediaQuery.of(context).size.width,
-                // /2 하는 이유는 핸드폰 전체에 대한 비율이기때문에 /2 안하면 핸드폰 화면 밖으로 넘어가 버림
-                height: MediaQuery.of(context).size.width / 2,
-                child: Center(
-                  child: imageFile == null
-                      ? CircleAvatar(
-                          backgroundImage: NetworkImage(controller.imagepath),
-                          radius: 100,
-                        )
-                      : Image.file(File(imageFile!.path) //null들어갈수도 있어서 ! 붙임
-                          ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    getImageFromDevice(ImageSource.gallery);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromRGBO(139, 127, 245, 1),
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                    fixedSize: Size(MediaQuery.of(context).size.width / 2,
-                        MediaQuery.of(context).size.height / 17),
-                  ),
-                  child: const Text(
-                    'Gallery에서 사진 불러오기',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                  ),
-                ),
-              ),
+              ImageWidget(),
+              // SizedBox(
+              //   width: MediaQuery.of(context).size.width,
+              //   height: MediaQuery.of(context).size.width / 2,
+              //   child: Center(
+              //     child: imageFile == null
+              //         ? CircleAvatar(
+              //             backgroundImage: NetworkImage(controller.imagepath),
+              //             radius: 100,
+              //           )
+              //         : Image.file(File(imageFile!.path) //null들어갈수도 있어서 ! 붙임
+              //             ),
+              //   ),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.all(10.0),
+              //   child: ElevatedButton(
+              //     onPressed: () {
+              //       getImageFromDevice(ImageSource.gallery);
+              //     },
+              //     style: ElevatedButton.styleFrom(
+              //       backgroundColor: const Color.fromRGBO(139, 127, 245, 1),
+              //       foregroundColor: Colors.white,
+              //       shape: RoundedRectangleBorder(
+              //           borderRadius: BorderRadius.circular(15)),
+              //       fixedSize: Size(MediaQuery.of(context).size.width / 2,
+              //           MediaQuery.of(context).size.height / 17),
+              //     ),
+              //     child: const Text(
+              //       'Gallery에서 사진 불러오기',
+              //       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              //     ),
+              //   ),
+              // ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 50, 20, 10),
                 child: TextField(

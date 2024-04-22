@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ovary_app/model/users.dart';
@@ -10,7 +9,6 @@ import 'package:ovary_app/view/sim_pass_insert.dart';
 import 'package:ovary_app/view/simple_login.dart';
 import 'package:ovary_app/vm/database_handler.dart';
 import 'package:ovary_app/vm/login_vm.dart';
-import 'package:ovary_app/widget/body/simpleloginwidget.dart';
 
 class LogInWidget extends StatelessWidget {
   LogInWidget({super.key});
@@ -181,7 +179,7 @@ class LogInWidget extends StatelessWidget {
       await databaseHandler.insertUsers(user);
 
       //db에서 정보 가져오기
-      final users = await databaseHandler.queryUsers();
+      // final users = await databaseHandler.queryUsers();
 
       checkLogin();
 

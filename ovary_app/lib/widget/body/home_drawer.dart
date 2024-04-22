@@ -22,7 +22,7 @@ class HomeDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //이미지를 로딩한후에 드로우어를 빌드하기위해 FutureBuilder사용! 내가 무슨 부귀영화를 누리려고 stl로 했나...
+    //이미지를 로딩한후에 드로우어를 빌드하기위해 FutureBuilder사용! 
     return FutureBuilder(
       future: mypageUpdateVM.loadingUserInfoAction(), 
      builder: (context, snapshot) {
