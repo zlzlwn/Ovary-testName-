@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ovary_app/model/users.dart';
+import 'package:ovary_app/view/find_password.dart';
 import 'package:ovary_app/view/home.dart';
 import 'package:ovary_app/view/signup.dart';
 import 'package:ovary_app/view/simple_login.dart';
@@ -33,31 +34,12 @@ class LogInWidget extends StatelessWidget {
                   width: 300,
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 20, 8, 8),
+                  padding: const EdgeInsets.fromLTRB(8, 20, 8, 20),
                   child: TextField(
                     controller: idController,
                     decoration: const InputDecoration(
                         labelText: '아이디를 입력 하세요', border: OutlineInputBorder()),
                     keyboardType: TextInputType.text,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          // Get.to(const SignUp());
-                        },
-                        child: const Text(
-                          '  아이디 찾기',
-                          style: TextStyle(
-                              color: Color(0xff8b7ff5),
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
                   ),
                 ),
                 Padding(
@@ -78,7 +60,7 @@ class LogInWidget extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          // Get.to(const SignUp());
+                          Get.to(const FindPassword());
                         },
                         child: const Text(
                           '비밀번호 찾기',
