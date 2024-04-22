@@ -21,5 +21,29 @@ class SignUpGetX extends GetxController{
     }
   }
 
-  var emailCheckResult = RxString(''); // 이메일 정규식
+  // final idReadOnly = false.obs;
+
+  // void setIdReadOnly(bool value) {
+
+  //   if(value == true) {
+  //     idReadOnly.value = value;
+  //   }
+
+  // }
+  // var emailCheckResult = RxString(''); // 이메일 정규식
+
+  // class SignUpController extends GetxController {
+  // }
 }
+
+class SignUpController extends GetxController {
+  var idReadOnly = false.obs;
+  
+  void setIdReadOnly(bool value) {
+    idReadOnly.value = value;
+  }
+
+
+
+}
+

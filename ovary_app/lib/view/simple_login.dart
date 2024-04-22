@@ -26,8 +26,10 @@ class LogIn extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
+            
             return 
-                LogInWidget();
+                SimpleLoginWidget();
+                
           }
         },
       ),

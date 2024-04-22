@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ovary_app/model/users.dart';
@@ -7,6 +8,7 @@ import 'package:ovary_app/view/home.dart';
 import 'package:ovary_app/view/signup.dart';
 import 'package:ovary_app/vm/database_handler.dart';
 import 'package:ovary_app/vm/login_vm.dart';
+import 'package:ovary_app/widget/body/simpleloginwidget.dart';
 
 class LogInWidget extends StatelessWidget {
   LogInWidget({super.key});
@@ -27,28 +29,11 @@ class LogInWidget extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('어 느 날',
-                  style: TextStyle(
-                    color: Colors.purple[300],
-                    fontSize: 30,
-                    fontWeight: FontWeight.w900
-                  ),
-                ),
-                const SizedBox(
-                  height: 25,
-                ),
-                Text('One Day',
-                  style: TextStyle(
-                    color: Colors.purple[300],
-                    fontSize: 40,
-                    fontWeight: FontWeight.w900
-                  ),
-                ),
-                const SizedBox(
-                  height: 80,
+                Image.asset('images/OneDayLogoPurple.png',
+                  width: 300,
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.fromLTRB(8, 20, 8, 8),
                   child: TextField(
                     controller: idController,
                     decoration: const InputDecoration(
@@ -58,12 +43,22 @@ class LogInWidget extends StatelessWidget {
                     keyboardType: TextInputType.text,
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text('아이디 찾기'),
+                      GestureDetector(
+                        onTap: () {
+                          // Get.to(const SignUp());
+                        },
+                        child: Text('  아이디 찾기',
+                          style: TextStyle(
+                            color: Color(0xff8b7ff5),
+                            fontWeight: FontWeight.bold
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -78,12 +73,22 @@ class LogInWidget extends StatelessWidget {
                     keyboardType: TextInputType.text,
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text('비밀번호 찾기'),
+                      GestureDetector(
+                        onTap: () {
+                          // Get.to(const SignUp());
+                        },
+                        child: Text('비밀번호 찾기',
+                          style: TextStyle(
+                            color: Color(0xff8b7ff5),
+                            fontWeight: FontWeight.bold
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -99,22 +104,35 @@ class LogInWidget extends StatelessWidget {
                         },
                         child: Text('  회원 가입하기',
                           style: TextStyle(
-                            color: Colors.purple[300],
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold
                           ),
                         ),
                       ),
                     ],
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                  child: GestureDetector(
+                    onTap: () => Get.to(const SimpleLoginWidget()),
+                    child: Text('간편 로그인하기',
+                      style: TextStyle(
+                        color: Color(0xff8b7ff5),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
                 const SizedBox(
-                  height: 50,
+                  height: 30,
                 ),
                 ElevatedButton(
                   onPressed: () {
                     loginAction(controller);
                   }, 
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.purple[300],
+                    backgroundColor: Color(0xff8b7ff5),
                     foregroundColor: Colors.white
                   ),
                   child: const Text('로그인',
