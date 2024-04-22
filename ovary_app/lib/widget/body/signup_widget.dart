@@ -14,6 +14,10 @@ class SignUpWidget extends StatelessWidget {
   final TextEditingController passwordController2 = TextEditingController();
   final TextEditingController nicknameController = TextEditingController();
 
+  // 중복 확인후 중복이 없으면 readOnly로 바꿔주기
+  // final signUpController = Get.put(SignUpController());
+  // final SignUpController signUpController2 = SignUpController(); // 직접 생성
+
   final SignUpGetX signUpGetX = Get.put(SignUpGetX());
 
     // Gallery에서 사진 가져오기
@@ -67,6 +71,7 @@ class SignUpWidget extends StatelessWidget {
                     width: MediaQuery.of(context).size.width / 1.46,
                     child: TextField(
                       controller: idController,
+                      // readOnly: signUpController.idReadOnly.value,
                       decoration: const InputDecoration(
                         labelText: '아이디를 입력 하세요',
                         border: OutlineInputBorder() 
@@ -78,7 +83,7 @@ class SignUpWidget extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
                     child: ElevatedButton(
                       onPressed: () {
-                        emailCheck();
+                        emailCheck(context);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
@@ -203,9 +208,43 @@ class SignUpWidget extends StatelessWidget {
   // }
   // // setState(() {});
   // }
+  
+  bool isValidEmail(String email) {
+    // 이메일 주소의 유효성을 검사하는 정규식
+    // 해당 정규식은 일반적인 이메일 주소 형식을 검증합니다.
+    String pattern =
+        r'^[a-z0-9._]+@[a-z]+\.[a-z]{2,3}$';
+    RegExp regex = RegExp(pattern);
+    return regex.hasMatch(email);
+  }
 
-  emailCheck() {
-    
+  void emailCheck(BuildContext context) {
+  String email = idController.text;
+  if (isValidEmail(email)) {
+    // 이메일이 유효한 경우 중복 확인 로직 실행
+    // 여기에 중복 확인 로직을 추가하세요
+    // signUpGetX.setIdReadOnly(true);
+    //     isIdReadOnly = true;
+  } else {
+    // 이메일이 유효하지 않은 경우 사용자에게 다이얼로그 표시
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('유효하지 않은 이메일'),
+        content: const Text('올바른 이메일 주소를 입력해주세요.\n예 : oneday@oneday.com'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('확인'),
+          ),
+        ],
+      ),
+    );
+    // 이메일을 다시 입력하도록 입력 필드를 초기화
+    idController.clear();
+    }
   }
 
   passwordCheck() {

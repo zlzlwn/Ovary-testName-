@@ -13,7 +13,9 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('앱로고 들어올 자리'),
+        title: Image.asset('images/appNamePurple.png',
+          width: 200,
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
