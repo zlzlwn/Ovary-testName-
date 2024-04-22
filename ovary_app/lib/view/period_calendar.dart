@@ -3,17 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+// ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 import 'package:ovary_app/view/cycle_history.dart';
 import 'package:ovary_app/view/home.dart';
 import 'package:ovary_app/view/period_Input.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+
 class PeriodCalender extends StatefulWidget {
-    const PeriodCalender({super.key});
-    @override
-    State<PeriodCalender> createState() => _PeriodCalenderState();
+  const PeriodCalender({super.key});
+  @override
+  State<PeriodCalender> createState() => _PeriodCalenderState();
 }
+
 
 class _PeriodCalenderState extends State<PeriodCalender> {
     // Properties
@@ -24,7 +27,7 @@ class _PeriodCalenderState extends State<PeriodCalender> {
     int periodLength = 7; // Default period length
     int cycleLength = 28; // Default cycle length 
     DateTime? nextPeriodDay; // predicted period start day 
-    
+
 
 String formatNextPeriodDay(DateTime? nextPeriodDay) {
   if (nextPeriodDay != null) {
@@ -53,20 +56,19 @@ void initState() {
 @override
 Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            title: const Text('나의 생리주기 캘린더'),
-            backgroundColor: Colors.pink[100],
-            actions: [
-                IconButton(
-                    onPressed: () {
-                      Get.to(() => const PeriodInput());
-                    },
-                    icon: const Icon(Icons.edit)
-                )
-            ],
+      appBar: AppBar(
+          title: const Text('나의 생리주기 캘린더'),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Get.to(() => const PeriodInput());
+                },
+              icon: const Icon(Icons.edit)
+            )
+          ],
         ),
-    body: Column(
-      children: [
+      body: Column(
+        children: [
         const SizedBox(height: 50),
         TableCalendar(
             firstDay: DateTime.utc(2010, 10, 16),
@@ -81,56 +83,52 @@ Widget build(BuildContext context) {
             outsideDaysVisible: false,
             rangeStartDecoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.pinkAccent.withOpacity(0.8),
+                color: const Color(0xff8b7ff5).withOpacity(1),
             ),
-            rangeHighlightColor: Colors.pink.withOpacity(0),
+            rangeHighlightColor: Color(0xff8b7ff5).withOpacity(0),
             rangeEndDecoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.pinkAccent.withOpacity(0.8),
+                color: const Color(0xff8b7ff5).withOpacity(1),
             ),
             withinRangeDecoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.pink.withOpacity(0.2),
+                color:const Color(0xff8b7ff5).withOpacity(0.2),
             ),
             todayDecoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.blueAccent,
+                color:  Color.fromARGB(255, 245, 190, 106),
             ),
             ),
-
             onFormatChanged: (format) {
-                if (_calendarFormat != format) {
-                    _calendarFormat = format;
-                    setState(() {});
-                }
+              if (_calendarFormat != format) {
+                  _calendarFormat = format;
+                  setState(() {});
+              }
             },
-            // onPageChanged: _onPageChanged,
+              // onPageChanged: _onPageChanged,
           ),
-
           const SizedBox(height: 20),
           Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-
               // Legend for the start and end of the period
               Container(
-                  width: 20,
-                  height: 20,
-                  decoration: BoxDecoration(
-                  color: Colors.pinkAccent.withOpacity(0.8),
-                  shape: BoxShape.circle,
-                  ),
+                width: 20,
+                height: 20,
+                decoration: BoxDecoration(
+                color: const Color(0xff8b7ff5).withOpacity(1),
+                shape: BoxShape.circle,
+                ),
               ),
               const SizedBox(width: 8),
               const Text('생리 시작/끝 날짜', style: TextStyle(fontSize: 16)),
               const SizedBox(width: 20),
-
               // Legend for today's date
               Container(
                   width: 20,
                   height: 20,
                   decoration: const  BoxDecoration(
-                  color: Colors.blueAccent,
+                  color: Color.fromARGB(255, 245, 190, 106),
                   shape: BoxShape.circle,
                   ),
                 ),
@@ -138,27 +136,54 @@ Widget build(BuildContext context) {
               const Text('오늘날짜', style: TextStyle(fontSize: 16)),
             ],
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 50),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                padding:  const EdgeInsets.all(8.0),
-                child: Text('생리 시작날짜:  ${formatFocusedDay(_focusedDay)} ',style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),
-                  ),
-                Padding(
-                padding:  const EdgeInsets.all(8.0),
-                child: Text('생리 기간 :   $periodLength 일',style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),
-                  ),
-                Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('다음 생리 예정일:  ${formatNextPeriodDay(nextPeriodDay)}',style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                  Image.asset('images/periodStart.png', width: 40,),
+                  Padding(
+                  padding:  const EdgeInsets.all(8.0),
+                  child: Text('생리 시작날짜:  ${formatFocusedDay(_focusedDay)} ',style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),
+                    ),
+                  ],
                 ),
+                Padding(
+                padding: const EdgeInsets.fromLTRB(80, 0, 0, 0),
+                child: Row(
+                  children: [
+                    Image.asset('images/periodLength.png',width: 40),
+                    Padding(
+                    padding:  const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: Text('생리 기간 :   $periodLength 일',style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                padding: const EdgeInsets.fromLTRB(80, 0, 0, 0),
+                child: Row(
+                  children: [
+                    Image.asset('images/nextPeriod.png',width: 40),
+                    Padding(
+                    padding:  const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: Text('다음 생리 예정일 :  ${formatNextPeriodDay(nextPeriodDay)}',style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Color(0xff8b7ff5))),
+                      ),
+                    ],
+                  ),
+                ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Text(
+                //     '다음 생리 예정일: ${calculateDDay(nextPeriodDay)}',
+                //     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                //   ),
+                // ),
               ],
             ),
-          
-          const SizedBox(height: 30),
-          const SizedBox(height: 20),
+          const SizedBox(height: 80),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -166,7 +191,7 @@ Widget build(BuildContext context) {
               onPressed: () => Get.to(const Home()),
               style: ElevatedButton.styleFrom(
                     minimumSize: const Size(120, 50),
-                    backgroundColor: Colors.pink[300],
+                    backgroundColor: const Color(0xff8b7ff5),
                   ), 
               child: Text(
                 '홈으로',
@@ -181,7 +206,7 @@ Widget build(BuildContext context) {
               onPressed: () => Get.to(const periodCycleChart()),
               style: ElevatedButton.styleFrom(
                     minimumSize: const Size(120, 50),
-                    backgroundColor: Colors.pink[300],
+                    backgroundColor: const Color(0xff8b7ff5),
                   ), 
               child: Text(
                 '생리주기 기록보기',
@@ -199,65 +224,75 @@ Widget build(BuildContext context) {
 }
 
 
-    // ---Functions---
 
-    // // Handle page change (Change of Months)
-    // void _onPageChanged(DateTime focusedDay) {
-    //   // Calculate the days difference between the new focused day and the previous focused day
-    //   int daysDifference = focusedDay.difference(_focusedDay).inDays;
+// ---Functions---
 
-    //   // Adjust rangeStart and rangeEnd based on the cycle length and days difference
-    //   if (_rangeStart != null) {
-    //       // Calculate the new range start based on the days difference and cycle length
-    //       _rangeStart = focusedDay.add(Duration(days: daysDifference));
+// Handle page change (Change of Months)
 
-    //       // Calculate the new range end based on the new range start and period length
-    //       _rangeEnd = _rangeStart!.add(Duration(days: periodLength - 1));
-    //   } else {
-    //       // If there is no range start, initialize it with the new focused day
-    //       _rangeStart = focusedDay;
-    //       _rangeEnd = focusedDay.add(Duration(days: periodLength - 1));
-    //   }
+_onPageChanged(){
 
-    //   // Update the focused day
-    //   _focusedDay = focusedDay;
-
-    //   // Trigger a state update to refresh the UI
-    //   setState(() {});
-    // }
+}
 
 
 
-  _showNoDataDialogue(){
-    showCupertinoDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: const Text("생리주기를 입력해주세요!"),
-          actions: [
-            CupertinoDialogAction(
-              child: const Text("확인"),
-              onPressed: () {
-                // Dismiss the dialog
-                Navigator.of(context).pop();
-                // Go back to the previous screen
-                Get.to(const PeriodInput());
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 
 
+
+
+
+
+
+_showNoDataDialogue(){
+  showCupertinoDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return CupertinoAlertDialog(
+        title: const Text("생리주기를 입력해주세요!"),
+        actions: [
+          CupertinoDialogAction(
+            child: const Text("확인"),
+            onPressed: () {
+              // Dismiss the dialog
+              Navigator.of(context).pop();
+              // Go back to the previous screen
+              Get.to(const PeriodInput());
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+
+
+//CALCULATE THE NEXT PERIOD DATE
 predictPeriodDate(){
-nextPeriodDay = _rangeStart!.add(Duration(days: cycleLength));
+// next period day: period cycle +- 7 days. 
+nextPeriodDay = _rangeStart!.add(Duration(days: cycleLength + 7));
 
 print(nextPeriodDay);
 
 setState(() {});
 }
+
+
+//CALCULATE D-DAY FROM CURRENT DATE
+String calculateDDay(DateTime? nextPeriodDay) {
+  if (nextPeriodDay != null) {
+    // Calculate the difference in days
+    int dDay = DateTime.now().difference(nextPeriodDay).inDays;
+    // Check if it's positive or negative
+    if (dDay >= 0) {
+      return 'D-$dDay';
+    } else {
+      return 'D$dDay';
+    }
+  } else {
+    return '';
+  }
+}
+
 
 
 retrievePeriodData() async {
@@ -270,6 +305,7 @@ retrievePeriodData() async {
       return;
   }
 
+
   try {
       // Query Firestore to find the document with the specified email
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -277,51 +313,41 @@ retrievePeriodData() async {
           .where('email', isEqualTo: email)
           .limit(1)
           .get();
-
     if (querySnapshot.docs.isNotEmpty) {
         // Document found for the specified email
         DocumentSnapshot document = querySnapshot.docs.first;
         final data = document.data() as Map<String, dynamic>?;
-
-      // Check if the 'period' map exists
-      if (data != null && data.containsKey('period')) {
-          Map<String, dynamic> periodMap = data['period'] as Map<String, dynamic>;
-
+        // Check if the 'period' map exists
+    if (data != null && data.containsKey('period')) {
+        Map<String, dynamic> periodMap = data['period'] as Map<String, dynamic>;
         // Get all keys from periodMap and sort them in descending order
         List<String> keys = periodMap.keys.toList();
         keys.sort((a, b) => b.compareTo(a));
-
-        if (keys.isNotEmpty) {
-            // Get the latest key (first in the sorted list)
-            String latestKey = keys.first;
-
-            // Retrieve the latest period data array using the latest key
-            List<dynamic>? latestPeriodData = periodMap[latestKey];
-
-            if (latestPeriodData != null && latestPeriodData.length >= 3) {
-                // Retrieve formatted date, period length, and cycle length
-                String formattedDate = latestPeriodData[0] as String;
-                periodLength = latestPeriodData[1] as int;
-                cycleLength = latestPeriodData[2] as int;
-
-                // Convert formatted date to DateTime
-                _rangeStart = DateFormat('yyyy-MM-dd').parse(formattedDate);
-                _rangeEnd = _rangeStart!.add(Duration(days: periodLength - 1));
-
-                // Set the focused day to _rangeStart
-                _focusedDay = _rangeStart!;
-
-                //Calculate next period date: 
-                predictPeriodDate();
-                // Refresh the state to reflect the changes
-                setState(() {});
-
-                print('Latest period data retrieved and state updated');
-            } else {
-                // Handle case where period data is invalid or not present
-                _showNoDataDialogue();
-                print('No valid period data found for the latest key');
-            }
+    if (keys.isNotEmpty) {
+        // Get the latest key (first in the sorted list)
+        String latestKey = keys.first;
+        // Retrieve the latest period data array using the latest key
+        List<dynamic>? latestPeriodData = periodMap[latestKey];
+    if (latestPeriodData != null && latestPeriodData.length >= 3) {
+        // Retrieve formatted date, period length, and cycle length
+        String formattedDate = latestPeriodData[0] as String;
+        periodLength = latestPeriodData[1] as int;
+        cycleLength = latestPeriodData[2] as int;
+        // Convert formatted date to DateTime
+        _rangeStart = DateFormat('yyyy-MM-dd').parse(formattedDate);
+        _rangeEnd = _rangeStart!.add(Duration(days: periodLength - 1));
+        // Set the focused day to _rangeStart
+        _focusedDay = _rangeStart!;
+        //Calculate next period date: 
+        predictPeriodDate();
+        // Refresh the state to reflect the changes
+        setState(() {});
+            print('Latest period data retrieved and state updated');
+          } else {
+              // Handle case where period data is invalid or not present
+              _showNoDataDialogue();
+              print('No valid period data found for the latest key');
+          }
         } else {
             // Handle case where there are no keys in the 'period' map
             _showNoDataDialogue();
@@ -332,14 +358,21 @@ retrievePeriodData() async {
           _showNoDataDialogue();
           print('No period data found in the specified document');
       }
-  } else {
-      // Handle case where no document is found for the specified email
-      _showNoDataDialogue();
-      print('No document found with the specified email');
-  }
-  } catch (error) {
-      print('Error retrieving data: $error');
-  }
+      } else {
+          // Handle case where no document is found for the specified email
+          _showNoDataDialogue();
+          print('No document found with the specified email');
+      }
+    } catch (error) {
+        print('Error retrieving data: $error');
+    }
 }
+
+
+
+
+
+
+
 
 }//END
