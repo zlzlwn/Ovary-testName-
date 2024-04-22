@@ -33,7 +33,6 @@ class _PeriodInputState extends State<PeriodInput> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('생리주기 입력하기'),
-        backgroundColor: Colors.pink[100],
       ),
       body: Center(
         child: Column(
@@ -112,7 +111,7 @@ class _PeriodInputState extends State<PeriodInput> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.pink[100],
+                    color: const Color(0xff8b7ff5).withOpacity(0.5),
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(
@@ -137,7 +136,7 @@ class _PeriodInputState extends State<PeriodInput> {
                 const SizedBox(width: 10),
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.pink[100],
+                    color: const Color(0xff8b7ff5).withOpacity(0.5),
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(
@@ -175,7 +174,7 @@ class _PeriodInputState extends State<PeriodInput> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.pink[100],
+                    color: const Color(0xff8b7ff5).withOpacity(0.5),
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(
@@ -201,7 +200,7 @@ class _PeriodInputState extends State<PeriodInput> {
                 // Increment button with circular pink background
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.pink[100],
+                    color:const Color(0xff8b7ff5).withOpacity(0.5),
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(
@@ -224,7 +223,7 @@ class _PeriodInputState extends State<PeriodInput> {
               },
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(120, 50),
-                backgroundColor: Colors.pink[300],
+                backgroundColor:Color(0xff8b7ff5),
               ),
               child: Text(
                 '저장하기',

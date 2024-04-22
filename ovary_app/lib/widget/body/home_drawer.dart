@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
+
+import 'package:ovary_app/view/cycle_history.dart';
+
 import 'package:get_storage/get_storage.dart';
+
 import 'package:ovary_app/view/hospital_likelist.dart';
 import 'package:ovary_app/view/login.dart';
 import 'package:ovary_app/view/mypage_menu.dart';
@@ -115,6 +119,15 @@ class HomeDrawer extends StatelessWidget {
                 box.read('email') == null
                     ? mypageUpdateVM.loginDialog(context)
                     : Get.to(MypageMenu());
+              },
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.water_drop,
+              ),
+              title: const Text("나의 생리주기 차트"),
+              onTap: () {
+                Get.to(const periodCycleChart());
               },
             ),
           ],

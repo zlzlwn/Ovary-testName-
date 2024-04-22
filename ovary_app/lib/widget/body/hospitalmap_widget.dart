@@ -1,6 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+
+import '../../view/marker_detail_screen.dart';
+// import 'package:flutter_google_places/flutter_google_places.dart' as loc;
+// import 'package:google_api_headers/google_api_headers.dart' as header;
+// import 'package:google_maps_webservice/places.dart' as places;
 
 class HospitalMapWidget extends StatefulWidget {
   const HospitalMapWidget({super.key});
@@ -12,15 +18,15 @@ class HospitalMapWidget extends StatefulWidget {
 class _HospitalMapWidgetState extends State<HospitalMapWidget> {
   Location location = Location();
   final Map<String, Marker> _markers = {};
-// 3d37.4944858
-// 4d127.030066
+
   double latitude = 0;
   double longitude = 0;
   GoogleMapController? _controller;
   final CameraPosition _kGooglePlex = const CameraPosition(
-    target: LatLng(37.4944858, 127.030066),
-    zoom: 14,
+    target: LatLng(37.532600, 127.024612),
+    zoom: 15,
   );
+
   getCurrentLocation() async {
     bool serviceEnabled;
     PermissionStatus permissionGranted;
@@ -64,18 +70,15 @@ class _HospitalMapWidgetState extends State<HospitalMapWidget> {
   @override
   void initState() {
     getCurrentLocation();
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 10),
-        width: double.infinity,
-        height: double.infinity,
-        child: GoogleMap(
+      body: Stack(
+        children :[
+          GoogleMap(
           mapType: MapType.normal,
           myLocationEnabled: true,
           initialCameraPosition: _kGooglePlex,
@@ -98,6 +101,45 @@ class _HospitalMapWidgetState extends State<HospitalMapWidget> {
             _controller = controller;
           },
         ),
+        Positioned(
+            top: 10,
+            child: CupertinoButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                        builder: (context) => MarkerDetailScreen()));
+              },
+              child: Container(
+                width: MediaQuery.of(context).size.width - 21,
+                height: 44,
+                decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(8))),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16.0),
+                      child: Text(
+                        '위치 검색',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 13.0),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ]
       ),
     );
   }
