@@ -19,44 +19,44 @@ class HospitalMapWidget extends StatefulWidget {
 class _HospitalMapWidgetState extends State<HospitalMapWidget> {
   Location location = Location();
   final Map<String, Marker> _markers = {};
-      List<Map<String, dynamic>> places = [
-      {
-        'name': '나를위한산부인과의원',
-        'tel': '02-539-5004',
-        'latitude': 37.4955366,
-        'longitude': 127.0293521,
-      },
-      {
-        'name': '다움산부인과',
-        'tel': '02-555-5799',
-        'latitude': 37.4978931,
-        'longitude': 127.0286404,
-      },
-      {
-        'name': '애플산부인과의원 강남점',
-        'tel': '02-530-8500',
-        'latitude': 37.4979626,
-        'longitude': 127.0264302,
-      },
-      {
-        'name': '쉬즈웰산부인과',
-        'tel': '02-564-2211',
-        'latitude': 37.4999834,
-        'longitude': 127.0259797,
-      },
-      {
-        'name': '유로진여성의원',
-        'tel': '02-555-7633',
-        'latitude': 37.4993781,
-        'longitude': 127.0310839,
-      },
-      {
-        'name': '강남리즈산부인과',
-        'tel': '02-558-5538',
-        'latitude': 37.5008952,
-        'longitude': 127.0266227,
-      },
-    ];
+  List<Map<String, dynamic>> places = [
+    {
+      'name': '나를위한산부인과의원',
+      'tel': '02-539-5004',
+      'latitude': 37.4955366,
+      'longitude': 127.0293521,
+    },
+    {
+      'name': '다움산부인과',
+      'tel': '02-555-5799',
+      'latitude': 37.4978931,
+      'longitude': 127.0286404,
+    },
+    {
+      'name': '애플산부인과의원 강남점',
+      'tel': '02-530-8500',
+      'latitude': 37.4979626,
+      'longitude': 127.0264302,
+    },
+    {
+      'name': '쉬즈웰산부인과',
+      'tel': '02-564-2211',
+      'latitude': 37.4999834,
+      'longitude': 127.0259797,
+    },
+    {
+      'name': '유로진여성의원',
+      'tel': '02-555-7633',
+      'latitude': 37.4993781,
+      'longitude': 127.0310839,
+    },
+    {
+      'name': '강남리즈산부인과',
+      'tel': '02-558-5538',
+      'latitude': 37.5008952,
+      'longitude': 127.0266227,
+    },
+  ];
 // 3d37.4944858
 // 4d127.030066
   double latitude = 0;
@@ -116,69 +116,68 @@ class _HospitalMapWidgetState extends State<HospitalMapWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children :[
-          GoogleMap(
+      body: Stack(children: [
+        GoogleMap(
           mapType: MapType.normal,
           myLocationEnabled: true,
           initialCameraPosition: _kGooglePlex,
           markers: Set<Marker>.of(places.map((place) {
-              return Marker(
-                markerId: MarkerId(place['name']),
-                position: LatLng(place['latitude'], place['longitude']),
-                infoWindow: InfoWindow(title: place['name']),
-                // infoWindow: InfoWindow(title: place['name'] +  "\n" + place['tel']),
-                onTap: () {
-                  showHospitalInfo(place['name'], place['tel']);
-                },
-              );
-            })),
+            return Marker(
+              markerId: MarkerId(place['name']),
+              position: LatLng(place['latitude'], place['longitude']),
+              infoWindow: InfoWindow(title: place['name']),
+              // infoWindow: InfoWindow(title: place['name'] +  "\n" + place['tel']),
+              onTap: () {
+                showHospitalInfo(place['name'], place['tel']);
+              },
+            );
+          })),
           onMapCreated: (GoogleMapController controller) {
             _controller = controller;
           },
         ),
         Positioned(
-            top: 10,
-            child: CupertinoButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                        builder: (context) => MarkerDetailScreen()));
-              },
-              child: Container(
-                width: MediaQuery.of(context).size.width - 21,
-                height: 44,
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(8))),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16.0),
-                      child: Text(
-                        '위치 검색',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.grey,
-                        ),
+          top: 10,
+          child: CupertinoButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                      builder: (context) => MarkerDetailScreen()));
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width - 21,
+              height: 44,
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(8))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: Text(
+                      '위치 검색',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey,
                       ),
                     ),
-                    const Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 13.0),
-                    ),
-                  ],
-                ),
+                  ),
+                  const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 13.0),
+                  ),
+                ],
               ),
             ),
           ),
-        ]
-      ),
+        ),
+      ]),
     );
   }
+
 // Functions  ---------
   showHospitalInfo(String name, String tel) {
     Get.bottomSheet(
@@ -187,28 +186,45 @@ class _HospitalMapWidgetState extends State<HospitalMapWidget> {
         color: Theme.of(context).colorScheme.primaryContainer,
         child: Center(
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                name,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 5
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Image.asset(
+                      "images/hospital.png",
+                      width: 80,
+                    
+                    ),
+                  ),
+                  Column(
+                    // mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        style: const TextStyle(
+                            color: Colors.pink,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 5),
+                      ),
+                      Text(
+                        tel,
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 5),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              Text(
-                tel,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 5
-                ),
-              ),
-              SizedBox(
-                height: 10,
+              const SizedBox(
+                height: 20,
               ),
               ElevatedButton(
                 onPressed: () => Get.back(),
