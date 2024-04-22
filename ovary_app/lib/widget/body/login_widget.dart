@@ -7,6 +7,7 @@ import 'package:ovary_app/model/users.dart';
 import 'package:ovary_app/view/find_password.dart';
 import 'package:ovary_app/view/home.dart';
 import 'package:ovary_app/view/signup.dart';
+import 'package:ovary_app/view/sim_pass_insert.dart';
 import 'package:ovary_app/view/simple_login.dart';
 import 'package:ovary_app/vm/database_handler.dart';
 import 'package:ovary_app/vm/login_vm.dart';
@@ -97,10 +98,8 @@ class LogInWidget extends StatelessWidget {
                     onTap: () async {
                       final databaseHandler = DatabaseHandler();
                       bool hasEmail = await databaseHandler.hasEmailData();
-                        print(hasEmail);
-                      hasEmail 
-                      ? Get.to(SimpleLogIn()) 
-                      : print('이메일 값이 없습니다.');
+                      print(hasEmail);
+                      hasEmail ? Get.to(SimpleLogIn()) : print('이메일 값이 없습니다.');
                     },
                     child: const Text(
                       '간편 로그인하기',
@@ -150,13 +149,15 @@ class LogInWidget extends StatelessWidget {
     final loginData = await loginCheck; // Future를 해결하여 데이터를 가져옵니다.
     final list = loginData.docs; // QuerySnapshot을 List로 변환합니다.
     print(list);
-
+//-----------------------------sqlite 입력부분
     if (list.isEmpty) {
       print('다시 입력');
+
+      //firebase  로그인 성공시
     } else {
       final email = controller.id; // 입력한 이메일 값 가져오기
 
-      // SQLite 데이터베이스에 사용자 정보 저장
+      // SQLite 데이터베이스에 사용자 정보 저장---- 이메일값이 같은 값이 있으면 insert 안시키게 변경필요!
       final databaseHandler = DatabaseHandler();
       final user = Users(email: email);
       await databaseHandler.insertUsers(user);
@@ -164,20 +165,22 @@ class LogInWidget extends StatelessWidget {
       //db에서 정보 가져오기
       final users = await databaseHandler.queryUsers();
 
-      for (final user in users) {
-        print("sqlite 저장값 불러오기");
-        print('Email: ${user.email}');
-        print("sqlite 저장값 불러오기");
-        print('Email: ${user.email}');
-      }
-
       checkLogin();
-      Get.to(const Home());
-      print(box.read('email'));
+
+      checkPasswordBoolValue(databaseHandler);
     }
   }
 
   checkLogin() {
     box.write('email', idController.text);
+  }
+
+  checkPasswordBoolValue(databaseHandler) async {
+    //sqlite에 간편 비밀번호 값이 있으면 home으로 이동, 없으면 simplepasswordinsert화면으로 이동!
+    print("패스워드 불값 확인${databaseHandler.hasPassword().toString()}");
+
+    int result = await databaseHandler.hasPassword();
+    print("패스워드 불값 확인: $result");
+    result == 0 ? Get.to(SimplePasswordInssert()) : Get.to(const Home());
   }
 } // End
