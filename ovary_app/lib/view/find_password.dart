@@ -10,7 +10,7 @@ class FindPassword extends StatelessWidget {
       appBar: AppBar(
         title: const Text('본인 인증')
       ),
-      body: const FindPasswordWidget(),
+      body: FindPasswordWidget(),
     );
   }
 }
