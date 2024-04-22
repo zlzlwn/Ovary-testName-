@@ -1,9 +1,11 @@
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ovary_app/view/home.dart';
+import 'package:ovary_app/view/period_Input.dart';
 
 // ignore: camel_case_types
 class periodCycleChart extends StatefulWidget {
@@ -32,7 +34,6 @@ class _periodCycleChartState extends State<periodCycleChart> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(' 올해 나의 생리주기'),
-        backgroundColor: Colors.pink[100],
       ),
       body: Column(
         children: [
@@ -65,7 +66,7 @@ class _periodCycleChartState extends State<periodCycleChart> {
               onPressed: () => Get.to(const Home()),
               style: ElevatedButton.styleFrom(
                     minimumSize: const Size(120, 50),
-                    backgroundColor: Colors.pink[300],
+                    backgroundColor: Color(0xff8b7ff5),
                   ), 
               child: Text(
                 '홈으로',
@@ -136,7 +137,7 @@ class _periodCycleChartState extends State<periodCycleChart> {
   // Generate the bar chart data based on cycleLengths
   List<BarChartGroupData> _showingGroups() {
     return List.generate(12, (i) {
-      return _makeGroupData(i, cycleLengths[i], barColor: Colors.pink);
+      return _makeGroupData(i, cycleLengths[i], barColor: Color(0xff8b7ff5));
     });
   }
 
@@ -190,56 +191,91 @@ class _periodCycleChartState extends State<periodCycleChart> {
 //FUNCTIONS 
 
 findCycleAverage() {
-    // Calculate the sum of all cycle lengths
-    double sum = cycleLengths.reduce((value, element) => value + element);
+  // Count the number of months with available data
+  int monthsWithData = cycleLengths.where((length) => length > 0).length;
 
-    // Calculate the average cycle length
-    cycleLengthAverage = sum / 12;
+  // Calculate the sum of all cycle lengths
+  double sum = cycleLengths.reduce((value, element) => value + element);
 
-    print(cycleLengthAverage);
-    // Call setState to update the UI and show the calculated average
-    setState(() {});
+  // Calculate the average cycle length
+  if (monthsWithData > 0) {
+    cycleLengthAverage = sum / monthsWithData;
+  } else {
+    cycleLengthAverage = 0.0; // Avoid division by zero
+  }
+
+  // Call setState to update the UI and show the calculated average
+  setState(() {});
 }
 
 
-// Fetch data from Firebase
-  Future<void> fetchDataFromFirebase() async {
-    // Get email from GetStorage
-    final box = GetStorage();
-    String? email = box.read<String>('email');
-    
-    if (email == null) {
-      print('Email not found in GetStorage box');
-      return;
-    }
+Future<void> fetchDataFromFirebase() async {
+  // Get email from GetStorage
+  final box = GetStorage();
+  String? email = box.read<String>('email');
 
-    try {
-      // Query Firestore to find the document with the specified email
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('user')
-          .where('email', isEqualTo: email)
-          .limit(1)
-          .get();
-
-      // Check if a document is found
-      if (querySnapshot.docs.isNotEmpty) {
-        DocumentSnapshot document = querySnapshot.docs.first;
-        Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
-
-        // Get the 'period' map from data
-        Map<String, dynamic>? periodMap = data?['period'] as Map<String, dynamic>?;
-
-        if (periodMap != null) {
-          // Process the periodMap to extract cycle lengths and their corresponding months
-          processPeriodData(periodMap);
-        }
-      } else {
-        print('No document found with the specified email.');
-      }
-    } catch (error) {
-      print('Failed to fetch data from Firebase: $error');
-    }
+  if (email == null) {
+    print('Email not found in GetStorage box');
+    return;
   }
+
+  try {
+    // Query Firestore to find the document with the specified email
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('user')
+        .where('email', isEqualTo: email)
+        .limit(1)
+        .get();
+
+    // Check if a document is found
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot document = querySnapshot.docs.first;
+      Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
+
+      // Get the 'period' map from data
+      Map<String, dynamic>? periodMap = data?['period'] as Map<String, dynamic>?;
+
+      if (periodMap != null) {
+        // Process the periodMap to extract cycle lengths and their corresponding months
+        processPeriodData(periodMap);
+      } else {
+        // Show dialog when 'period' map is empty
+        _showNoDataDialog();
+        print('No period data found in the specified document.');
+      }
+    } else {
+      // Show dialog when no document is found
+      _showNoDataDialog();
+      print('No document found with the specified email.');
+    }
+  } catch (error) {
+    print('Failed to fetch data from Firebase: $error');
+  }
+}
+
+// Function to display a dialog when there is no data
+_showNoDataDialog() {
+  showCupertinoDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return CupertinoAlertDialog(
+        title: const Text("생리주기를 입력해주세요!"),
+        actions: [
+          CupertinoDialogAction(
+            child: const Text("확인"),
+            onPressed: () {
+              // Dismiss the dialog
+              Navigator.of(context).pop();
+              // Go back to the previous screen
+              Get.to(const PeriodInput());
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
 
 
   // Process the period map data
@@ -269,7 +305,6 @@ processPeriodData(Map<String, dynamic> periodMap) {
     // Now that cycleLengths has been populated, calculate the average
     findCycleAverage();
 }
-
 
 
 } //END

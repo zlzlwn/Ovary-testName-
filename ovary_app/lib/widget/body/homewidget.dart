@@ -104,8 +104,8 @@ class HomeWidget extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                           child: Image.asset(
-                            "images/calendar.png",
-                            width: 130,
+                            "images/calendarr.png",
+                            width: 300,
                             height: 100,
                           ),
                         ),
@@ -139,7 +139,7 @@ class HomeWidget extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                         child: Image.asset(
-                          "images/bmi.png",
+                          "images/bmii.png",
                           width: 100,
                           height: 100,
                         ),
@@ -185,7 +185,7 @@ class HomeWidget extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                             child: Image.asset(
-                              "images/exercise.png",
+                              "images/workout.png",
                               width: 130,
                               height: 100,
                             ),
