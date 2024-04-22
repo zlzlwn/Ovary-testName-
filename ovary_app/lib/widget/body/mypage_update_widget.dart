@@ -166,18 +166,12 @@ class MypageUpdateWidget extends StatelessWidget {
   }
 
   serchInfo() {
-    print("-----------------------");
-    print("-----------------------");
-    print("-----------------------");
-    print(mypageUpdateVM.nickname);
-    print(mypageUpdateVM.email);
     nicknameController.text = mypageUpdateVM.nickname;
     emailController.text = mypageUpdateVM.email;
   }
 
   checkpassword() {
     if (passwordController1.text == passwordController2.text) {
-      print("일치");
       //비밀번호 값 vm에 저장
       mypageUpdateVM.password1 = passwordController1.text;
       mypageUpdateVM.password2 = passwordController2.text;
@@ -187,7 +181,6 @@ class MypageUpdateWidget extends StatelessWidget {
   }
 
   loadingUserInfoAction() async {
-    print("바뀌기 전 값${mypageUpdateVM.imagepath}");
     final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('user')
         .where('email', isEqualTo: box.read('email'))
@@ -211,8 +204,6 @@ class MypageUpdateWidget extends StatelessWidget {
       mypageUpdateVM.nickname = nickname;
       mypageUpdateVM.imagepath = await profile;
 
-      print("-------------------------------------------");
-      print("바뀐 후  값${mypageUpdateVM.imagepath}");
       mypageUpdateVM.show();
       //변수 바꾸고 나서 텍스트 필드에 변수 할당
       nicknameController.text = await mypageUpdateVM.nickname;
@@ -237,7 +228,6 @@ class MypageUpdateWidget extends StatelessWidget {
       mypageUpdateVM.nickname = data['nickname'];
       mypageUpdateVM.imagepath = data['profile'];
       mypageUpdateVM.nickname = nicknameController.text;
-      print(mypageUpdateVM.nickname);
       // 업데이트 작업 수행
       await FirebaseFirestore.instance
           .collection('user')
@@ -251,7 +241,6 @@ class MypageUpdateWidget extends StatelessWidget {
           'profile': mypageUpdateVM.imagepath,
         // 다른 필드 업데이트
       }).then((_) {
-        print("업데이트 성공");
         Get.back();
       }).catchError((error) {
         print("업데이트 실패: $error");
