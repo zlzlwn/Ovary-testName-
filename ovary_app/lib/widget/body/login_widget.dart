@@ -6,6 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:ovary_app/model/users.dart';
 import 'package:ovary_app/view/home.dart';
 import 'package:ovary_app/view/signup.dart';
+import 'package:ovary_app/view/simple_login.dart';
 import 'package:ovary_app/vm/database_handler.dart';
 import 'package:ovary_app/vm/login_vm.dart';
 import 'package:ovary_app/widget/body/simpleloginwidget.dart';
@@ -116,7 +117,7 @@ class LogInWidget extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
                     child: GestureDetector(
-                      onTap: () => Get.to(const SimpleLogIn()),
+                      onTap: () => Get.to( SimpleLogIn()),
                       child: const Text('간편 로그인하기',
                         style: TextStyle(
                           color: Color(0xff8b7ff5),

@@ -5,8 +5,8 @@ import 'package:ovary_app/vm/login_vm.dart';
 import 'package:ovary_app/widget/body/login_widget.dart';
 import 'package:ovary_app/widget/body/simpleloginwidget.dart';
 
-class LogIn extends StatelessWidget {
-  LogIn({super.key});
+class SimpleLogIn extends StatelessWidget {
+  SimpleLogIn({super.key});
 
   @override
   Widget build(BuildContext context) {
