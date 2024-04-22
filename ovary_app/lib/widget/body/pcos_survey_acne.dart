@@ -80,7 +80,6 @@ class PcosSurveyAcne extends StatelessWidget {
                       onChanged: (value) {
                         controller.acneValue = value;
                         controller.changeAcneValue();
-                        print('다모증체크값 ; ${controller.hairValue}');
                       },
                     ),
                     const Padding(
@@ -105,15 +104,16 @@ class PcosSurveyAcne extends StatelessWidget {
                         onPressed: () => Get.back(),
                         style: ElevatedButton.styleFrom(
                             minimumSize: const Size(120, 50),
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary),
+                            backgroundColor:  const Color(0xff8b7ff5),
+                        ),   
                         child: Text(
                           '이전',
                           style: TextStyle(
                             fontSize: 20,
                             color: Theme.of(context).colorScheme.onPrimary,
                           ),
-                        )),
+                        ),
+                  ),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 100, 0, 0),
@@ -121,8 +121,7 @@ class PcosSurveyAcne extends StatelessWidget {
                         onPressed: () => Get.to(const PcosSurveySkinDark()),
                         style: ElevatedButton.styleFrom(
                             minimumSize: const Size(120, 50),
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary),
+                            backgroundColor:const Color(0xff8b7ff5)),
                         child: Text(
                           '다음',
                           style: TextStyle(

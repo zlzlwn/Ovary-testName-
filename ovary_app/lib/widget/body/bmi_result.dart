@@ -53,7 +53,7 @@ class BmiResult extends StatelessWidget {
             child: SpeedometerChart(
               value: bmi.bmi,
               graphColor: const [Color.fromARGB(255, 68, 243, 255), Color.fromARGB(255, 255, 64, 64)],
-              maxValue: 40,
+              maxValue: 60,
               minValue: 0,
             ),
           ),
@@ -79,7 +79,7 @@ class BmiResult extends StatelessWidget {
             }, 
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(120, 50),
-              backgroundColor: Theme.of(context).colorScheme.primary
+              backgroundColor: const Color(0xff8b7ff5)
             ),
             child: Text(
               '홈으로',

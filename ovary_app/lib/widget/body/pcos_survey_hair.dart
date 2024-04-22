@@ -105,7 +105,7 @@ class PcosSurveyHair extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                             minimumSize: const Size(120, 50),
                             backgroundColor:
-                                Theme.of(context).colorScheme.primary),
+                                const Color(0xff8b7ff5)),
                         child: Text(
                           '이전',
                           style: TextStyle(
@@ -121,7 +121,7 @@ class PcosSurveyHair extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                             minimumSize: const Size(120, 50),
                             backgroundColor:
-                                Theme.of(context).colorScheme.primary),
+                                const Color(0xff8b7ff5)),
                         child: Text(
                           '다음',
                           style: TextStyle(
