@@ -100,7 +100,7 @@ class BmiQuestHeightWidget extends StatelessWidget {
                   }, 
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(120, 50),
-                    backgroundColor: Theme.of(context).colorScheme.primary
+                    backgroundColor: const Color(0xff8b7ff5)
                   ),
                   child: Text(
                     '이전',
@@ -123,7 +123,7 @@ class BmiQuestHeightWidget extends StatelessWidget {
                   }, 
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(120, 50),
-                    backgroundColor: Theme.of(context).colorScheme.primary
+                    backgroundColor: const Color(0xff8b7ff5)
                   ),
                   child: Text(
                     '다음',
@@ -142,41 +142,40 @@ class BmiQuestHeightWidget extends StatelessWidget {
   }
 
   insertData() async {
-    // Map<String, dynamic> myInfo = {
-    //   'write' : [
-    //     formattedDate,
-    //     box.read('wValue'),
-    //     box.read('hValue'),
-    //   ]
-    // };
+    /* insertdate가 string일 때 */
+    Map<String, dynamic> myInfo = {
+      'write' : [
+        formattedDate,
+        box.read('wValue'),
+        box.read('hValue'),
+      ]
+    };
+
+    //로그인한 email과 같은 user를 가져옴
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      .collection('user')
+      .where('email', isEqualTo: box.read('email'))
+      .limit(1)
+      .get();
+
+    if(querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot document = querySnapshot.docs.first;
+      String documentId = document.id;
 
 
-      // //로그인한 email과 같은 user를 가져옴
-      // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-      //   .collection('user')
-      //   .where('email', isEqualTo: box.read('email'))
-      //   .limit(1)
-      //   .get();
+      await FirebaseFirestore.instance
+          .collection('user')
+          .doc(documentId)
+          .update({'write' : myInfo['write']});
+    } 
 
-      // if(querySnapshot.docs.isNotEmpty) {
-      //  // DocumentSnapshot document = querySnapshot.docs.first;
-      //   //String documentId = document.id;
-
-
-      //   await FirebaseFirestore.instance
-      //       .collection('user')
-      //       .doc(documentId)
-      //       .update({'write' : myInfo['write']});
-      // } 
-
-      FirebaseFirestore.instance
-      .collection('write')
-      .add({
-        'email' : box.read('email'),
-        'height' : box.read('hValue'),
-        'insertdate' : formattedDate,
-        'weight' : box.read('wValue')
-      });
-
+    FirebaseFirestore.instance
+    .collection('write')
+    .add({
+      'email' : box.read('email'),
+      'height' : box.read('hValue'),
+      'insertdate' : formattedDate,
+      'weight' : box.read('wValue')
+    });
   }
 }
