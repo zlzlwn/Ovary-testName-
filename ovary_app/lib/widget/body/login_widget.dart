@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:ovary_app/model/users.dart';
 import 'package:ovary_app/view/find_password.dart';
 import 'package:ovary_app/view/home.dart';
 import 'package:ovary_app/view/signup.dart';
@@ -11,7 +9,6 @@ import 'package:ovary_app/view/sim_pass_insert.dart';
 import 'package:ovary_app/view/simple_login.dart';
 import 'package:ovary_app/vm/database_handler.dart';
 import 'package:ovary_app/vm/login_vm.dart';
-import 'package:ovary_app/widget/body/simpleloginwidget.dart';
 
 class LogInWidget extends StatelessWidget {
   LogInWidget({super.key});
@@ -19,7 +16,13 @@ class LogInWidget extends StatelessWidget {
   final TextEditingController idController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  final LoginGetX mcontroller = Get.put(LoginGetX());
+
   final box = GetStorage();
+  late int resultValue; 
+  late int pwValue;
+  final databaseHandler = DatabaseHandler();
+  late final email;
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +121,7 @@ class LogInWidget extends StatelessWidget {
                     loginAction(controller);
                   },
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xff8b7ff5),
+                      backgroundColor: const Color(0xff8b7ff5),
                       foregroundColor: Colors.white),
                   child: const Text(
                     '로그인',
@@ -135,41 +138,96 @@ class LogInWidget extends StatelessWidget {
 
   // --- Functions ---
   //log인 시 textfield에 입력된 id값으로 db에 있는 id값을 찾는 함수
-  loginAction(LoginGetX controller) async {
-    controller.id = idController.text.trim();
-    controller.password = passwordController.text.trim();
+  // loginAction(LoginGetX controller) async {
+  //   controller.id = idController.text.trim();
+  //   controller.password = passwordController.text.trim();
 
-    final loginCheck = FirebaseFirestore.instance
-        .collection('user')
-        .where('email', isEqualTo: controller.id)
-        .where('password', isEqualTo: controller.password)
-        // .snapshots();
-        .get();
+  //   // 1. firebase에서 id, pw값 체크하기 위함
+  //   final loginCheck = await FirebaseFirestore.instance
+  //       .collection('user')
+  //       .where('email', isEqualTo: controller.id)
+  //       .where('password', isEqualTo: controller.password)
+  //       // .snapshots();
+  //       .get();
 
-    final loginData = await loginCheck; // Future를 해결하여 데이터를 가져옵니다.
-    final list = loginData.docs; // QuerySnapshot을 List로 변환합니다.
-    print(list);
-//-----------------------------sqlite 입력부분
-    if (list.isEmpty) {
-      print('다시 입력');
+  //   //final loginData = await loginCheck; // Future를 해결하여 데이터를 가져옵니다.
+  //   //final list = loginData.docs; // QuerySnapshot을 List로 변환합니다.
+  //   //print('dddd : $list');
 
-      //firebase  로그인 성공시
+  //   // 2. 조회되는 값이 없을 때, alert창
+  //   if (loginCheck.docs.isEmpty) {
+  //       buttonDialog();
+
+
+  //   } else {                        //3. Firebase에 회원정보가 있을 떄
+  //     final email = controller.id; // 입력한 이메일 값 가져오기
+      
+
+  //     // 4. SQLite에서 입력한 아이디 값이 있는지 체크 (0 : 없음, 1 : 있음)
+  //     int resultValue = await databaseHandler.checkEmailInfo(email);// 4-2. SQLite에 해당 아이디에 PW가 있는지 없는지 체크 (0 : 없음, 1 : 있음)
+  //     if(resultValue == 0) {
+  //       // 5-1. SQLite에 아이디가 없을 때 SQLite에 아이디값 insert 처리하기
+  //       await databaseHandler.insertUsers(email); 
+      
+  //     } else {
+  //       // 5-2. SQLite에 아이디가 있을 때 SQLite에 해당 아이디의 비번이 있는지 체크
+  //       int pwValue = await databaseHandler.checkPwInfo(email);
+
+  //       //간편비번 없으면
+  //       if(pwValue == 0){
+
+  //         //간편비번 로그인 페이지로 이동
+  //         Get.back(); 
+  //         Get.to(const SimplePasswordInssert());
+
+  //       } else {
+
+  //         //간편로그인 비번 있으면, storage에 아이디값 저장 후, home 화면
+  //         box.write('email',email); Get.back();
+  //       }
+  //     }
+  //     // //db에서 정보 가져오기
+  //     // final users = await databaseHandler.queryUsers();
+
+  //     // checkLogin();
+
+  //     // checkPasswordBoolValue(databaseHandler);
+  //   }
+  // }
+
+
+  Future<void> loginAction(LoginGetX controller) async {
+  mcontroller.id = idController.text.trim();
+  mcontroller.password = passwordController.text.trim();
+
+  final loginCheck = await FirebaseFirestore.instance
+      .collection('user')
+      .where('email', isEqualTo: mcontroller.id)
+      .where('password', isEqualTo: mcontroller.password)
+      .get();
+
+  if (loginCheck.docs.isEmpty) {
+    buttonDialog();
+  } else {
+    email = mcontroller.id;
+    int resultValue = await databaseHandler.checkEmailInfo(email);
+
+    if (resultValue == 0) {
+      await databaseHandler.insertUsers(email);
     } else {
-      final email = controller.id; // 입력한 이메일 값 가져오기
+      int pwValue = await databaseHandler.checkPwInfo(email);
 
-      // SQLite 데이터베이스에 사용자 정보 저장---- 이메일값이 같은 값이 있으면 insert 안시키게 변경필요!
-      final databaseHandler = DatabaseHandler();
-      final user = Users(email: email);
-      await databaseHandler.insertUsers(user);
-
-      //db에서 정보 가져오기
-      final users = await databaseHandler.queryUsers();
-
-      checkLogin();
-
-      checkPasswordBoolValue(databaseHandler);
+      if (pwValue == 0) {
+        Get.back();
+        Get.to(const SimplePasswordInssert());
+      } else {
+        box.write('email', email);
+        Get.back();
+      }
     }
   }
+}
+
 
   checkLogin() {
     box.write('email', idController.text);
@@ -181,6 +239,29 @@ class LogInWidget extends StatelessWidget {
 
     int result = await databaseHandler.hasPassword();
     print("패스워드 불값 확인: $result");
-    result == 0 ? Get.to(SimplePasswordInssert()) : Get.to(const Home());
+    result == 0 ? Get.to(const SimplePasswordInssert()) : Get.to(const Home());
   }
+
+
+  //회원정보 없을 때 alert창
+  buttonDialog() {
+  Get.defaultDialog(
+      title: '알림',
+      middleText: '입력하신 정보가 없습니다.',
+      barrierDismissible: false,
+      backgroundColor: Colors.yellowAccent,
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.back();
+            Get.back();
+            Get.to(const SignUp());
+          }, 
+          child: const Text('회원가입 하기')
+        )
+      ]
+    );
+  }
+
+
 } // End
