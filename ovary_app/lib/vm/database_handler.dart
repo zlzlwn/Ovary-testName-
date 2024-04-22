@@ -11,7 +11,7 @@ class DatabaseHandler {
     return openDatabase(
       join(path, 'user.db'),
       onCreate: (db, version) async {
-        //테이블 만들기(초기 구동시에만 작동
+        //테이블 만들기(초기 구동시에만 작동)
         await db.execute(
             "create table users (id integer primary key autoincrement, email text,password text)");
       },
@@ -28,9 +28,8 @@ class DatabaseHandler {
     return queryResults.map((e) => Users.fromMap(e)).toList();
   }
 
-  //입력
-  // return 받기 싫으면 <void>를 쓰면 된다
-  Future<int> insertUsers(Users user) async {
+  //이메일 입력
+    Future<int> insertUsers(Users user) async {
     int result = 0;
     final Database db = await initializeDB();
     result = await db.rawInsert(
