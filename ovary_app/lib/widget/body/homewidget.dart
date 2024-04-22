@@ -179,10 +179,7 @@ class HomeWidget extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                   child: ElevatedButton(
                       onPressed: () {
-                        // Get.to(const WorkVideo());
-                        box.read('email')==null
-                    ? loginDialog(context)
-                    :  Get.to(const WorkVideo());
+                       Get.to(const WorkVideo());
                         
                       },
                       style: ElevatedButton.styleFrom(
@@ -220,7 +217,10 @@ class HomeWidget extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                     child: ElevatedButton(
                       onPressed: () {
-                        Get.to(const HospitalMap());
+                         box.read('email')==null
+                    ? loginDialog(context)
+                    :  Get.to(const HospitalMap());
+                        
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromRGBO(255, 215, 222, 1),

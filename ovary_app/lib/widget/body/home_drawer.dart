@@ -12,6 +12,7 @@ import 'package:ovary_app/view/hospital_likelist.dart';
 import 'package:ovary_app/view/login.dart';
 import 'package:ovary_app/view/mypage_menu.dart';
 import 'package:ovary_app/vm/mypage_update_vm.dart';
+import 'package:ovary_app/widget/appbar/weight_chart.dart';
 
 class HomeDrawer extends StatelessWidget {
   HomeDrawer({Key? key}) : super(key: key);
@@ -73,6 +74,30 @@ class HomeDrawer extends StatelessWidget {
                     : Get.to(MypageMenu());
               },
             ),
+            ListTile(
+              leading: const Icon(
+                Icons.water_drop,
+              ),
+              title: Text("나의 생리주기 차트"),
+              onTap: () {
+                print(box.read('email'));
+                box.read('email') == null
+                    ? mypageUpdateVM.loginDialog(context)
+                    : Get.to(const periodCycleChart());
+              },
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.bar_chart_rounded,
+              ),
+              title: const Text("나의 체중 변화"),
+              onTap: () {
+                box.read('email') == null
+                    ? mypageUpdateVM.loginDialog(context)
+                    : Get.back(); Get.to(const WeightChart());
+              },
+            ),
+            
           ],
         ),
       );
@@ -121,13 +146,16 @@ class HomeDrawer extends StatelessWidget {
                     : Get.to(MypageMenu());
               },
             ),
+            
             ListTile(
               leading: const Icon(
-                Icons.water_drop,
+                Icons.bar_chart_rounded,
               ),
-              title: const Text("나의 생리주기 차트"),
+              title: const Text("나의 체중 변화"),
               onTap: () {
-                Get.to(const periodCycleChart());
+                box.read('email') == null
+                    ? mypageUpdateVM.loginDialog(context)
+                    : Get.to(const WeightChart());
               },
             ),
           ],
