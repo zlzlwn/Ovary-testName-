@@ -87,9 +87,9 @@ class PcosResult extends StatelessWidget {
                 ),
 
 
-                //홈으로 가기
+                //이전 가기
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
+                  padding: const EdgeInsets.fromLTRB(0, 150, 0, 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -98,17 +98,13 @@ class PcosResult extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () { 
                             Get.back();
-                            Get.back();
-                            Get.back();
-                            Get.back();
-                            Get.back();
                           },
                           style: ElevatedButton.styleFrom(
                               minimumSize: const Size(120, 50),
                               backgroundColor:
                                   const Color(0xff8b7ff5)),
                           child: Text(
-                            '홈으로',
+                            '이전',
                             style: TextStyle(
                               fontSize: 20,
                               color: Theme.of(context).colorScheme.onPrimary,

@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ovary_app/model/bmi_model.dart';
+import 'package:ovary_app/widget/appbar/bmi_quest_weight.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class WeightChartWidget extends StatefulWidget {
@@ -89,7 +91,31 @@ class _WeightChartWidgetState extends State<WeightChartWidget> {
               ),
             ],
           )
-          : const CircularProgressIndicator(),
+          : Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('등록된 BMI가 없습니다.'),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Get.back();
+                    Get.to(const BmiQuestWeight());
+                  }, 
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.pink[300]
+                  ),
+                  child: const Text(
+                    'BMI 등록하기',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
     );
   }
 

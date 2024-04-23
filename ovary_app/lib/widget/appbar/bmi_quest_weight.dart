@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
-import 'package:ovary_app/view/home.dart';
 import 'package:ovary_app/widget/body/bmi_quest_weight_widget.dart';
 class BmiQuestWeight extends StatelessWidget {
   const BmiQuestWeight({super.key});
@@ -17,11 +16,14 @@ class BmiQuestWeight extends StatelessWidget {
             fontWeight: FontWeight.bold
           ),
         ),
-        leading: IconButton(
-          onPressed: () {
-            Get.to(const Home());
-          }, 
-          icon: const Icon(Icons.keyboard_arrow_left)
+        leading: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+          child: IconButton(
+            onPressed: () {
+              Get.back();
+            }, 
+            icon: const Icon(Icons.home)
+          ),
         ),
       ),
       body: BmiQuestWeightWidget(),
