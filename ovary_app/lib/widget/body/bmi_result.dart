@@ -60,7 +60,7 @@ class BmiResult extends StatelessWidget {
         ),
 
         Padding(
-          padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+          padding: const EdgeInsets.fromLTRB(0, 80, 0, 0),
           child: Text(
             bmi.result,
             style: const TextStyle(
@@ -70,7 +70,7 @@ class BmiResult extends StatelessWidget {
         ),
 
         Padding(
-          padding: const EdgeInsets.fromLTRB(10, 50, 0, 0),
+          padding: const EdgeInsets.fromLTRB(10, 160, 0, 0),
           child: ElevatedButton(
             onPressed: () {
               Get.back();

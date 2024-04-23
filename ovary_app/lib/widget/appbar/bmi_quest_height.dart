@@ -19,9 +19,12 @@ class BmiQuestHeight extends StatelessWidget {
             fontWeight: FontWeight.bold
           ),
         ),
-        leading: IconButton(
-          onPressed: () => Get.back(), 
-          icon: const Icon(Icons.keyboard_arrow_left)
+        leading: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+          child: IconButton(
+            onPressed: () => {Get.back(),Get.back()}, 
+            icon: const Icon(Icons.home)
+          ),
         ),
       ),
       body: BmiQuestHeightWidget(),
