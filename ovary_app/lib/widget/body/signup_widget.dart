@@ -19,6 +19,7 @@ class SignUpWidget extends StatelessWidget {
   // final SignUpController signUpController2 = SignUpController(); // 직접 생성
 
   final SignUpGetX signUpGetX = Get.put(SignUpGetX());
+  // final SignUpGetX signUpGetXpath = Get.put(SignUpGetX());
 
     // Gallery에서 사진 가져오기
   ImagePicker picker = ImagePicker();
@@ -53,14 +54,14 @@ class SignUpWidget extends StatelessWidget {
                         width: 130,
                       )
                     )
-                  : Image.file(File(imageFile!.path)),
+                  : Image.file(File(signUpGetX.selectedImagePath)),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                 child: OutlinedButton(
                   onPressed: () {
-                    // getImageFromDevice(ImageSource.gallery);
+                    getImageFromDevice(ImageSource.gallery);
                   },
                   child: const Text('사진 변경하기')
                 ),
@@ -197,17 +198,19 @@ class SignUpWidget extends StatelessWidget {
   }
 
   // --- Functions ---
-  //   getImageFromDevice(imageSource) async {
-  // final XFile? pickedFile = await picker.pickImage(source: imageSource);
-  // if(pickedFile == null) {
-  //   imageFile = null;
-  // }
-  // else {
-  //   imageFile = XFile(pickedFile.path);
-  //   imgFile = File(imageFile!.path);
-  // }
-  // // setState(() {});
-  // }
+    getImageFromDevice(imageSource) async {
+   final XFile? pickedFile = await picker.pickImage(source: imageSource);
+  if(pickedFile == null) {
+    imageFile = null;
+    // signUpGetX.selectedImagePath = null; // signUpGetX에 null 할당
+    signUpGetX.update();
+  }
+  else {
+    imageFile = XFile(pickedFile.path);
+    signUpGetX.selectedImagePath = imageFile!.path; // signUpGetX에 경로 할당
+    signUpGetX.update();
+  }
+  }
   
   bool isValidEmail(String email) {
     // 이메일 주소의 유효성을 검사하는 정규식
