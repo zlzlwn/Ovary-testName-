@@ -10,7 +10,7 @@ class FindPw extends StatelessWidget {
       appBar: AppBar(
         title: const Text('비밀번호 찾기')
       ),
-      body: const FindPwd(),
+      body: FindPwd(),
     );
   }
 }
