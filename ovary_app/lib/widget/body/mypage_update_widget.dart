@@ -8,6 +8,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:ovary_app/vm/mypage_update_vm.dart';
 import 'package:ovary_app/vm/signup_vm.dart';
 import 'package:ovary_app/widget/image_widget/image_widget.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MypageUpdateWidget extends StatelessWidget {
   MypageUpdateWidget({super.key});
@@ -19,10 +21,14 @@ class MypageUpdateWidget extends StatelessWidget {
 
 //값 사용
   final MypageUpdateVM mypageUpdateVM = Get.put(MypageUpdateVM());
+  //imagepath 가져오려고 사용
+  final MypageUpdateVM mypageUpdateVMInstance = Get.put(MypageUpdateVM());
   //함수사용
   final mypageUpdateVMFunction = MypageUpdateVM();
+  final imageWidget = ImageWidget();
   //중복체크 함수
   final SignUpGetX signUpGetX = Get.put(SignUpGetX());
+  // final ImageWidget imageWidget = Get.put(ImageWidget());
   // Gallery에서 사진 가져오기
   ImagePicker picker = ImagePicker();
   XFile? imageFile;
@@ -39,40 +45,40 @@ class MypageUpdateWidget extends StatelessWidget {
         builder: (controller) {
           return Column(
             children: [
-              ImageWidget(),
-              // SizedBox(
-              //   width: MediaQuery.of(context).size.width,
-              //   height: MediaQuery.of(context).size.width / 2,
-              //   child: Center(
-              //     child: imageFile == null
-              //         ? CircleAvatar(
-              //             backgroundImage: NetworkImage(controller.imagepath),
-              //             radius: 100,
-              //           )
-              //         : Image.file(File(imageFile!.path) //null들어갈수도 있어서 ! 붙임
-              //             ),
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(10.0),
-              //   child: ElevatedButton(
-              //     onPressed: () {
-              //       getImageFromDevice(ImageSource.gallery);
-              //     },
-              //     style: ElevatedButton.styleFrom(
-              //       backgroundColor: const Color.fromRGBO(139, 127, 245, 1),
-              //       foregroundColor: Colors.white,
-              //       shape: RoundedRectangleBorder(
-              //           borderRadius: BorderRadius.circular(15)),
-              //       fixedSize: Size(MediaQuery.of(context).size.width / 2,
-              //           MediaQuery.of(context).size.height / 17),
-              //     ),
-              //     child: const Text(
-              //       'Gallery에서 사진 불러오기',
-              //       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-              //     ),
-              //   ),
-              // ),
+              // ImageWidget(),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.width / 2,
+                child: Center(
+                  child: imageFile == null
+                      ? CircleAvatar(
+                          backgroundImage: NetworkImage(controller.imagepath),
+                          radius: 100,
+                        )
+                      : Image.file(
+                          File(mypageUpdateVMInstance.selectedImagePath)),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    getImageFromDevice(ImageSource.gallery);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromRGBO(139, 127, 245, 1),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    fixedSize: Size(MediaQuery.of(context).size.width / 2,
+                        MediaQuery.of(context).size.height / 17),
+                  ),
+                  child: const Text(
+                    'Gallery에서 사진 불러오기',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 50, 20, 10),
                 child: TextField(
@@ -140,7 +146,11 @@ class MypageUpdateWidget extends StatelessWidget {
                   onPressed: () {
                     checkpassword();
                     updateAction();
+                    getImageFromDevice(ImageSource.gallery);
+                    // 프로필 이미지 업데이트 함수 호출
+                    updateProfileImage(File(imageFile!.path));
                     // mypageUpdateVMFunction.updateAction();
+                    // imageWidget.updateProfileImage
                     Get.back();
                   },
                   style: ElevatedButton.styleFrom(
@@ -235,11 +245,14 @@ class MypageUpdateWidget extends StatelessWidget {
         'email': mypageUpdateVM.email,
         'password': mypageUpdateVM.password1,
         'nickname': mypageUpdateVM.nickname,
+        
         // 프로필 필드가 있으면 업데이트
         if (mypageUpdateVM.imagepath != null)
           'profile': mypageUpdateVM.imagepath,
         // 다른 필드 업데이트
       }).then((_) {
+        updateProfileImage(File(mypageUpdateVMInstance.selectedImagePath));
+        Get.back();
         Get.back();
       }).catchError((error) {
         print("업데이트 실패: $error");
@@ -270,8 +283,49 @@ class MypageUpdateWidget extends StatelessWidget {
     final XFile? pickedFile = await picker.pickImage(source: imageSource);
     if (pickedFile == null) {
       imageFile = null;
+      mypageUpdateVM.update();
     } else {
-      imageFile = XFile(pickedFile.path); //경로 들어온거를 이미지로 바꿔서 띄어준다
+      imageFile = XFile(pickedFile.path);
+      mypageUpdateVMInstance.selectedImagePath = imageFile!.path;
+      print(mypageUpdateVMInstance.selectedImagePath);
+      mypageUpdateVM.update();
     }
   }
+
+  Future<void> updateProfileImage(File imageFile) async {
+  final email = box.read('email');
+  final storage = firebase_storage.FirebaseStorage.instance;
+
+  // Firebase Storage에 이미지 업로드 -> 이메일 기준으로 사진이름이 정해지기 때문에 자동으로 덮어쓰기가 된다!
+  final imageRef = storage.ref().child('images/${email}.jpg');
+  await imageRef.putFile(imageFile);
+
+  // Firebase Storage에서 업로드된 이미지의 다운로드 URL 가져오기
+  final downloadURL = await imageRef.getDownloadURL();
+
+  // Firestore 문서에 다운로드 URL 업데이트
+  final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      .collection('user')
+      .where('email', isEqualTo: email)
+      .get();
+
+  if (querySnapshot.docs.isNotEmpty) {
+    final DocumentSnapshot document = querySnapshot.docs[0];
+final existingImageURL = document.get('profile');
+    // 기존 이미지 삭제 (있는 경우에만)
+    // if (existingImageURL != null) {
+    //   final existingImageRef = storage.refFromURL(existingImageURL);
+    //   await existingImageRef.delete();
+    // }
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(document.id) // 문서 ID 사용
+        .update({
+      'profile': downloadURL,
+    });
+  } else {
+    // 데이터가 없는 경우
+    print('데이터 없음');
+  }
+}
 }
