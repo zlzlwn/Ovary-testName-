@@ -43,10 +43,11 @@ class _SimplePasswordWidget extends State<SimplePasswordWidget> {
     final databaseHandler = DatabaseHandler();
     
     await databaseHandler.updateUserPassword(box.read("email"), _passwordString.toString());
-
+  
     Get.back();
     Get.back();
     Get.back();
+    buttonSnack();
     
   }
 
@@ -301,6 +302,18 @@ class _SimplePasswordWidget extends State<SimplePasswordWidget> {
           ),
         ],
       ),
+    );
+  }
+
+  //스낵바 보이기
+  buttonSnack() {
+    Get.snackbar(
+      '알림', 
+      '간편비밀번호가 등록되었습니다.',
+      duration: const Duration(seconds: 2),
+      backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
+      colorText: const Color.fromARGB(255, 117, 103, 241),
+      snackPosition: SnackPosition.TOP,
     );
   }
 }
