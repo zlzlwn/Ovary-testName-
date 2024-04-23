@@ -262,48 +262,55 @@ _showNoDataDialog() {
 
 
 
-
 // PROCESS PERIOD DATA FROM FIREBASE STORAGE TO FIND THE AVG CYCLE LENGTH
 processPeriodData(Map<String, dynamic> periodMap) {
-  List<int> daysBetweenPeriods = [];
+  // Initialize a map to store the most recent period date for each month
+  Map<int, DateTime> recentPeriodDates = {};
 
-  // Create a list of DateTime objects from periodMap and sort them chronologically
-  List<DateTime> periodDates = periodMap.values.map((periodInfo) {
-    List<dynamic> periodData = periodInfo;
+  // Iterate through period data to find the most recent date for each month
+  periodMap.forEach((key, value) {
+    List<dynamic> periodData = value;
     String date = periodData[0];
-    return DateTime.parse(date);
+    DateTime periodDate = DateTime.parse(date);
+    int month = periodDate.month;
+    // Update recentPeriodDates with the most recent date for each month
+    if (recentPeriodDates.containsKey(month)) {
+      DateTime existingDate = recentPeriodDates[month]!;
+      // Check if the current date is more recent
+      if (periodDate.isAfter(existingDate)) {
+        recentPeriodDates[month] = periodDate;
+      }
+    } else {
+      recentPeriodDates[month] = periodDate;
+    }
+  });
+
+  print("Recent period dates: $recentPeriodDates");
+
+  // Calculate days between consecutive periods for recent dates of each month
+  List<int> daysBetweenPeriods = recentPeriodDates.values.map((date) {
+    return date.day - 1; // Subtract 1 to get the day count
   }).toList();
 
-periodDates.sort((a, b) => a.month.compareTo(b.month));
-
-print("Sorted periodDates: $periodDates");
-
-  // Calculate days between consecutive periods
-  for (int i = 0; i < periodDates.length - 1; i++) {
-    int daysDifference = periodDates[i + 1].difference(periodDates[i]).inDays;
-    daysBetweenPeriods.add(daysDifference);
-  }
-
-print("Days between periods: $daysBetweenPeriods");
+  print("Days between recent periods: $daysBetweenPeriods");
 
   // Calculate period cycle average
   double cycleLengthAverage = 0.0;
   if (daysBetweenPeriods.isNotEmpty) {
-    // Consider three most recent intervals
-    List<int> recentIntervals = daysBetweenPeriods.sublist(0, 3);
-    // Calculate sum of recent intervals
-    int sum = recentIntervals.reduce((value, element) => value + element);
+    // Calculate sum of all intervals
+    int sum = daysBetweenPeriods.reduce((value, element) => value + element);
     // Calculate average
-    cycleLengthAverage = sum / recentIntervals.length;
+    cycleLengthAverage = sum / daysBetweenPeriods.length;
   }
 
-print("Cycle length average: $cycleLengthAverage");
+  print("Cycle length average: $cycleLengthAverage");
 
-setState(() {
-  this.cycleLengthAverage = cycleLengthAverage;
-});
-
+  setState(() {
+    this.cycleLengthAverage = cycleLengthAverage;
+  });
 }
+
+
 
 
 
