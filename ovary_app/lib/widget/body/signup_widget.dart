@@ -1,9 +1,12 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ovary_app/vm/signup_vm.dart';
+// import 'package:ovary_app/widget/image_widget/image_widget.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class SignUpWidget extends StatelessWidget {
   SignUpWidget({super.key});
@@ -28,189 +31,243 @@ class SignUpWidget extends StatelessWidget {
 
 
   @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                // width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height/6,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: const Color.fromARGB(255, 188, 186, 186),
-                  ),
-                  borderRadius: BorderRadius.circular(10)
-                ),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width/4.8*2,
-                  height: 150,
-                  child: imageFile == null
-                  ? Center(
-                      child: Image.asset('images/${signUpGetX.defaultImage}',
-                        width: 130,
-                      )
-                    )
-                  : Image.file(File(signUpGetX.selectedImagePath)),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                child: OutlinedButton(
-                  onPressed: () {
-                    getImageFromDevice(ImageSource.gallery);
-                  },
-                  child: const Text('사진 변경하기')
-                ),
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 1.46,
-                    child: TextField(
-                      controller: idController,
-                      // readOnly: signUpController.idReadOnly.value,
-                      decoration: const InputDecoration(
-                        labelText: '아이디를 입력 하세요',
-                        border: OutlineInputBorder() 
-                      ),
-                      keyboardType: TextInputType.text,
+Widget build(BuildContext context) {
+  return SingleChildScrollView(
+    child: Center(
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: GetBuilder<SignUpGetX>(
+          builder: (controller) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height / 6,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: const Color.fromARGB(255, 188, 186, 186),
                     ),
+                    borderRadius: BorderRadius.circular(10)
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        emailCheck(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
-                        foregroundColor: const Color.fromRGBO(139, 127, 245, 1),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(13)),
-                      fixedSize: Size( MediaQuery.of(context).size.width / 5,
-                        MediaQuery.of(context).size.height / 15
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width / 4.8 * 2,
+                    height: 150,
+                    child: imageFile == null
+                      ? Center(
+                          child: Image.asset(
+                            'images/${signUpGetX.defaultImage}',
+                            width: 130,
+                          )
+                        )
+                      : Image.file(File(signUpGetX.selectedImagePath)),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                  child: OutlinedButton(
+                    onPressed: () {
+                      getImageFromDevice(ImageSource.gallery);
+                    },
+                    child: const Text('사진 변경하기')
+                  ),
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: idController,
+                        decoration: const InputDecoration(
+                          labelText: '아이디를 입력 하세요',
+                          border: OutlineInputBorder()
+                        ),
+                        keyboardType: TextInputType.text,
                       ),
-                    ), 
-                      child: const Text('중복 확인',
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          emailCheck(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
+                          foregroundColor: const Color.fromRGBO(139, 127, 245, 1),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(13)
+                          ),
+                          fixedSize: Size(
+                            MediaQuery.of(context).size.width / 5,
+                            MediaQuery.of(context).size.height / 15
+                          ),
+                        ),
+                        child: const Text(
+                          '중복 확인',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        'One Day',
                         style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold
+                          color: Colors.purple[300],
+                          fontWeight: FontWeight.w900
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text('One Day',
-                      style: TextStyle(
-                        color: Colors.purple[300],
-                        fontWeight: FontWeight.w900
-                      ),
-                    ),
-                  ],
                 ),
-              ),
-              TextField(
-                onChanged: (value) {
-                  passwordCheck();
-                },
-                controller: passwordController1,
-                decoration: const InputDecoration(
-                  labelText: '비밀번호를 입력 하세요',
-                  border: OutlineInputBorder() 
+                TextField(
+                  onChanged: (value) {
+                    passwordCheck();
+                  },
+                  controller: passwordController1,
+                  decoration: const InputDecoration(
+                    labelText: '비밀번호를 입력 하세요',
+                    border: OutlineInputBorder()
+                  ),
+                  keyboardType: TextInputType.text,
                 ),
-                keyboardType: TextInputType.text,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextField(
-                onChanged: (value) {
-                  passwordCheck();
-                },
-                controller: passwordController2,
-                decoration: const InputDecoration(
+                const SizedBox(
+                  height: 20,
+                ),
+                TextField(
+                  onChanged: (value) {
+                    passwordCheck();
+                  },
+                  controller: passwordController2,
+                  decoration: const InputDecoration(
                     labelText: '비밀번호를 다시 입력 하세요',
-                    border: OutlineInputBorder()),
-                keyboardType: TextInputType.text,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Obx(() => Text(
-                      signUpGetX.pwCheckResult.value,
-                      style: TextStyle(
-                        color: signUpGetX.pwCheckResult.value == '일치'
-                            ? Colors.blue
-                            : signUpGetX.pwCheckResult.value == '불일치'
-                              ? Colors.red
-                              : Colors.green
-                              ,
-                        fontWeight: FontWeight.w900,
+                    border: OutlineInputBorder()
+                  ),
+                  keyboardType: TextInputType.text,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Obx(
+                        () => Text(
+                          signUpGetX.pwCheckResult.value,
+                          style: TextStyle(
+                            color: signUpGetX.pwCheckResult.value == '일치'
+                              ? Colors.blue
+                              : signUpGetX.pwCheckResult.value == '불일치'
+                                ? Colors.red
+                                : Colors.green,
+                            fontWeight: FontWeight.w900,
+                          ),
                         ),
                       ),
+                    ],
+                  ),
+                ),
+                TextField(
+                  controller: nicknameController,
+                  decoration: const InputDecoration(
+                    labelText: '닉네임을 입력 하세요',
+                    border: OutlineInputBorder()
+                  ),
+                  keyboardType: TextInputType.text,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(50.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      insertProfileImage(File(imageFile!.path));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.purple[300],
+                      foregroundColor: Colors.white
                     ),
-                  ],
-                ),
-              ),
-              TextField(
-                controller: nicknameController,
-                decoration: const InputDecoration(
-                  labelText: '닉네임을 입력 하세요',
-                  border: OutlineInputBorder() 
-                ),
-                keyboardType: TextInputType.text,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    
-                  }, 
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.purple[300],
-                    foregroundColor: Colors.white
-                  ),
-                  child: const Text('회원가입',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold
-                    ),  
+                    child: const Text(
+                      '회원가입',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            );
+          },
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   // --- Functions ---
     getImageFromDevice(imageSource) async {
-   final XFile? pickedFile = await picker.pickImage(source: imageSource);
+
+  final XFile? pickedFile = await picker.pickImage(source: imageSource);
   if(pickedFile == null) {
     imageFile = null;
-    // signUpGetX.selectedImagePath = null; // signUpGetX에 null 할당
-    signUpGetX.update();
   }
   else {
-    imageFile = XFile(pickedFile.path);
-    signUpGetX.selectedImagePath = imageFile!.path; // signUpGetX에 경로 할당
-    signUpGetX.update();
+   imageFile = XFile(pickedFile.path);
+      signUpGetX.selectedImagePath = imageFile!.path;
+      print(signUpGetX.selectedImagePath);
+      signUpGetX.update();
   }
   }
+
+Future<void> insertProfileImage(File imageFile) async {
+  final email = idController.text;
+  final storage = firebase_storage.FirebaseStorage.instance;
+
+  // Firebase Storage에 이미지 업로드 -> 이메일 기준으로 사진이름이 정해지기 때문에 자동으로 덮어쓰기가 된다!
+  final imageRef = storage.ref().child('images/${email}.jpg');
+  await imageRef.putFile(imageFile);
+
+  // Firebase Storage에서 업로드된 이미지의 다운로드 URL 가져오기
+  final downloadURL = await imageRef.getDownloadURL();
+
+  // Firestore 문서에 다운로드 URL 업데이트
+  final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      .collection('user')
+      .where('email', isEqualTo: email)
+      .get();
+
+  if (querySnapshot.docs.isNotEmpty) {
+    final DocumentSnapshot document = querySnapshot.docs[0];
+    final existingImageURL = document.get('profile');
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(document.id) // 문서 ID 사용
+        .set({
+      'profile': downloadURL,
+    }, SetOptions(merge: true));
+  } else {
+    // 데이터가 없는 경우
+    print('데이터 없음');
+  }
+}
+
+// getImageFromDevice(imageSource) async {
+//   final XFile? pickedFile = await picker.pickImage(source: imageSource);
+//   if (pickedFile == null) {
+//     imageFile = null;
+//     // signUpGetX.selectedImagePath = null; // signUpGetX에 null 할당
+//     signUpGetX.update();
+//   } else {
+//     imageFile = XFile(pickedFile.path);
+//     signUpGetX.selectedImagePath = imageFile!.path; // signUpGetX에 경로 할당
+//     signUpGetX.update();
+//   }
+// }
+
   
   bool isValidEmail(String email) {
     // 이메일 주소의 유효성을 검사하는 정규식
@@ -268,4 +325,7 @@ class SignUpWidget extends StatelessWidget {
       );
     }
   }
+
+
+  
 } // End

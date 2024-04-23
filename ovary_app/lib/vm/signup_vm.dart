@@ -7,8 +7,13 @@ class SignUpGetX extends GetxController{
   String profile = "";
   String nickname = "";
   String insertdate = "";
-  String defaultImage = "user.png";
+
   String selectedImagePath = "";
+  
+
+  String defaultImage = "user.png";
+
+
 
   var pwCheckResult = RxString(''); // 비밀번호 일치 여부 상태
 

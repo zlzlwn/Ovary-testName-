@@ -9,7 +9,6 @@ import 'package:ovary_app/vm/mypage_update_vm.dart';
 import 'package:ovary_app/vm/signup_vm.dart';
 import 'package:ovary_app/widget/image_widget/image_widget.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MypageUpdateWidget extends StatelessWidget {
   MypageUpdateWidget({super.key});
