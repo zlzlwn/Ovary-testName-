@@ -207,7 +207,7 @@ class _PeriodInputState extends State<PeriodInput> {
                     icon: const Icon(Icons.add),
                     onPressed: () {
                       setState(() {
-                        if (chosenCycleLength < 31) {
+                        if (chosenCycleLength < 100) {
                           chosenCycleLength++;
                         }
                       });

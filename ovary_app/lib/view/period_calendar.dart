@@ -146,15 +146,17 @@ Widget build(BuildContext context) {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Padding(
+                padding: const EdgeInsets.fromLTRB(80, 0, 0, 0),
+                child: Row(
                   children: [
-                  Image.asset('images/periodStart.png', width: 40,),
-                  Padding(
-                  padding:  const EdgeInsets.all(8.0),
-                  child: Text('생리 시작날짜:  ${formatFocusedDay(_rangeStart)} ',style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),
-                    ),
-                  ],
+                    Image.asset('images/periodStart.png',width: 40),
+                    Padding(
+                    padding:  const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: Text('생리 시작날짜 :  ${formatFocusedDay(_rangeStart)} 일',style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),
+                      ),
+                    ],
+                  ),
                 ),
                 Padding(
                 padding: const EdgeInsets.fromLTRB(80, 0, 0, 0),
@@ -270,6 +272,7 @@ DateTime? calculateRangeStartBackward(DateTime focusedDay) {
   
   // Calculate the range start for the focused month based on the cycle length
   return _rangeStart;
+  
 }
 
 
@@ -329,83 +332,84 @@ String calculateDDay(DateTime? nextPeriodDay) {
 
 
 
-  retrievePeriodData() async {
-    // Retrieve the email from GetStorage
-    final box = GetStorage();
-    String? email = box.read<String>('email');
+ retrievePeriodData() async {
+  // Retrieve the email from GetStorage
+  final box = GetStorage();
+  String? email = box.read<String>('email');
 
-    if (email == null) {
-      print('Email not found in the box');
-      return;
-    }
+  if (email == null) {
+    print('Email not found in the box');
+    return;
+  }
 
-    try {
-      // Query Firestore to find the document with the specified email
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('user')
-          .where('email', isEqualTo: email)
-          .limit(1)
-          .get();
-      if (querySnapshot.docs.isNotEmpty) {
-        // Document found for the specified email
-        DocumentSnapshot document = querySnapshot.docs.first;
-        final data = document.data() as Map<String, dynamic>?;
-        // Check if the 'period' map exists
-        if (data != null && data.containsKey('period')) {
-          Map<String, dynamic> periodMap = data['period'] as Map<String, dynamic>;
-          // Get all keys from periodMap and sort them in descending order
-          List<String> keys = periodMap.keys.toList();
-          keys.sort((a, b) => b.compareTo(a));
-          if (keys.isNotEmpty) {
-            // Get the latest key (first in the sorted list)
-            String latestKey = keys.first;
-            // Retrieve the latest period data array using the latest key
-            List<dynamic>? latestPeriodData = periodMap[latestKey];
-            if (latestPeriodData != null && latestPeriodData.length >= 3) {
-              // Retrieve formatted date, period length, and cycle length
-              String formattedDate = latestPeriodData[0] as String;
-              periodLength = latestPeriodData[1] as int;
-              cycleLength = latestPeriodData[2] as int;
-              // Convert formatted date to DateTime
-              _rangeStart = DateFormat('yyyy-MM-dd').parse(formattedDate);
-              _rangeEnd = _rangeStart!.add(Duration(days: periodLength - 1));
-              // Set the focused day to _rangeStart
-              _focusedDay = _rangeStart!;
-              // Initialize temporary range values
-              _tempRangeStart = _rangeStart;
-              _tempRangeEnd = _rangeEnd;
-              //Calculate next period date:
-              predictPeriodDate();
-              // Refresh the state to reflect the changes
-              setState(() {});
-              print('Latest period data retrieved and state updated');
-            } else {
-              // Handle case where period data is invalid or not present
-              _showNoDataDialogue();
-              print('No valid period data found for the latest key');
-            }
+  try {
+    // Query Firestore to find the document with the specified email
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('user')
+        .where('email', isEqualTo: email)
+        .limit(1)
+        .get();
+    if (querySnapshot.docs.isNotEmpty) {
+      // Document found for the specified email
+      DocumentSnapshot document = querySnapshot.docs.first;
+      final data = document.data() as Map<String, dynamic>?;
+      // Check if the 'period' map exists
+      if (data != null && data.containsKey('period')) {
+        Map<String, dynamic> periodMap = data['period'] as Map<String, dynamic>;
+        // Get all keys from periodMap and sort them in descending order
+        List<String> keys = periodMap.keys.toList();
+        keys.sort((a, b) => b.compareTo(a));
+        if (keys.isNotEmpty) {
+          // Get the latest key (first in the sorted list)
+          String latestKey = keys.first;
+          // Retrieve the latest period data array using the latest key
+          List<dynamic>? latestPeriodData = periodMap[latestKey];
+          if (latestPeriodData != null && latestPeriodData.length >= 3) {
+            // Retrieve formatted date, period length, and cycle length
+            String formattedDate = latestPeriodData[0] as String;
+            periodLength = latestPeriodData[1] as int;
+            cycleLength = latestPeriodData[2] as int;
+            // Convert formatted date to DateTime
+            _rangeStart = DateFormat('yyyy-MM-dd').parse(formattedDate);
+            _rangeEnd = _rangeStart!.add(Duration(days: periodLength - 1));
+            // Set the focused day to _rangeStart
+            _focusedDay = _rangeStart!;
+            // Initialize temporary range values
+            _tempRangeStart = _rangeStart;
+            _tempRangeEnd = _rangeEnd;
+
+            // Update the calendar immediately after retrieving the data
+            _onPageChanged(_rangeStart!);
+
+            // Calculate next period date:
+            predictPeriodDate();
+            // Refresh the state to reflect the changes
+            setState(() {});
+            print('Latest period data retrieved and state updated');
           } else {
-            // Handle case where there are no keys in the 'period' map
+            // Handle case where period data is invalid or not present
             _showNoDataDialogue();
-            print('No keys found in the period map');
+            print('No valid period data found for the latest key');
           }
         } else {
-          // Handle case where the 'period' map is not present in the document
+          // Handle case where there are no keys in the 'period' map
           _showNoDataDialogue();
-          print('No period data found in the specified document');
+          print('No keys found in the period map');
         }
       } else {
-        // Handle case where no document is found for the specified email
+        // Handle case where the 'period' map is not present in the document
         _showNoDataDialogue();
-        print('No document found with the specified email');
+        print('No period data found in the specified document');
       }
-    } catch (error) {
-      print('Error retrieving data: $error');
-
-
+    } else {
+      // Handle case where no document is found for the specified email
+      _showNoDataDialogue();
+      print('No document found with the specified email');
     }
-
-
+  } catch (error) {
+    print('Error retrieving data: $error');
+  }
 }
+
 
 }//END

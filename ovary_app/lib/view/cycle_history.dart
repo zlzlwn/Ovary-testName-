@@ -19,6 +19,7 @@ class periodCycleChart extends StatefulWidget {
 class _periodCycleChartState extends State<periodCycleChart> {
   // Store the list of cycle lengths for each month
   List<double> cycleLengths = List.filled(12, 0); // Initialize with zeros
+  List<int> daysBetweenPeriods = List.filled(11, 0); // List to store days between periods
   double cycleLengthAverage = 0.0;
 
 
@@ -26,6 +27,8 @@ class _periodCycleChartState extends State<periodCycleChart> {
   void initState() {
     super.initState();
     fetchDataFromFirebase();
+    fetchCycleLengthsFromFirebase();
+    
   }
 
 
@@ -44,7 +47,7 @@ class _periodCycleChartState extends State<periodCycleChart> {
               padding: const EdgeInsets.fromLTRB(9, 0, 15, 0),
               child: BarChart(
                 _mainBarData(),
-                swapAnimationDuration: const Duration(milliseconds: 900),
+                swapAnimationDuration: const Duration(milliseconds: 1000),
               ),
             ),
           ),
@@ -99,8 +102,8 @@ class _periodCycleChartState extends State<periodCycleChart> {
         axisNameWidget: const Text(
           '월 (Months)', // x-axis title
           style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 15,
+            fontWeight: FontWeight.bold,
+            fontSize: 15,
           ),
         ),
       ),
@@ -114,11 +117,11 @@ class _periodCycleChartState extends State<periodCycleChart> {
         // Add y-axis title here
         axisNameSize: 19, // Space for the axis title
         axisNameWidget: Text(
-        '일 (Days)', // y-axis title
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 15,
-        ),
+          '일 (Days)', // y-axis title
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 15,
+          ),
         ),
       ),
       topTitles: const AxisTitles(
@@ -134,12 +137,14 @@ class _periodCycleChartState extends State<periodCycleChart> {
   );
 }
 
+
+
   // Generate the bar chart data based on cycleLengths
-  List<BarChartGroupData> _showingGroups() {
-    return List.generate(12, (i) {
-      return _makeGroupData(i, cycleLengths[i], barColor: Color(0xff8b7ff5));
-    });
-  }
+List<BarChartGroupData> _showingGroups() {
+  return List.generate(12, (i) {
+    return _makeGroupData(i, cycleLengths[i], barColor: Color(0xff8b7ff5));
+  });
+}
 
   // Function to create bar chart group data
   BarChartGroupData _makeGroupData(
@@ -159,7 +164,7 @@ class _periodCycleChartState extends State<periodCycleChart> {
           borderSide: BorderSide.none,
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
-            toY: 30,
+            toY: 40,
             color: Colors.white,
           ),
         ),
@@ -190,76 +195,52 @@ class _periodCycleChartState extends State<periodCycleChart> {
 
 //FUNCTIONS 
 
-findCycleAverage() {
-  // Count the number of months with available data
-  int monthsWithData = cycleLengths.where((length) => length > 0).length;
-
-  // Calculate the sum of all cycle lengths
-  double sum = cycleLengths.reduce((value, element) => value + element);
-
-  // Calculate the average cycle length
-  if (monthsWithData > 0) {
-    cycleLengthAverage = sum / monthsWithData;
-  } else {
-    cycleLengthAverage = 0.0; // Avoid division by zero
-  }
-
-  // Call setState to update the UI and show the calculated average
-  setState(() {});
-}
 
 
-Future<void> fetchDataFromFirebase() async {
-  // Get email from GetStorage
-  final box = GetStorage();
-  String? email = box.read<String>('email');
+  Future<void> fetchDataFromFirebase() async {
+    final box = GetStorage();
+    String? email = box.read<String>('email');
 
-  if (email == null) {
-    print('Email not found in GetStorage box');
-    return;
-  }
-
-  try {
-    // Query Firestore to find the document with the specified email
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('user')
-        .where('email', isEqualTo: email)
-        .limit(1)
-        .get();
-
-    // Check if a document is found
-    if (querySnapshot.docs.isNotEmpty) {
-      DocumentSnapshot document = querySnapshot.docs.first;
-      Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
-
-      // Get the 'period' map from data
-      Map<String, dynamic>? periodMap = data?['period'] as Map<String, dynamic>?;
-
-      if (periodMap != null) {
-        // Process the periodMap to extract cycle lengths and their corresponding months
-        processPeriodData(periodMap);
-      } else {
-        // Show dialog when 'period' map is empty
-        _showNoDataDialog();
-        print('No period data found in the specified document.');
-      }
-    } else {
-      // Show dialog when no document is found
-      _showNoDataDialog();
-      print('No document found with the specified email.');
+    if (email == null) {
+      print('Email not found in GetStorage box');
+      return;
     }
-  } catch (error) {
-    print('Failed to fetch data from Firebase: $error');
-  }
-}
 
-// Function to display a dialog when there is no data
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('user')
+          .where('email', isEqualTo: email)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        DocumentSnapshot document = querySnapshot.docs.first;
+        Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
+
+        Map<String, dynamic>? periodMap = data?['period'] as Map<String, dynamic>?;
+
+        if (periodMap != null) {
+          processPeriodData(periodMap);
+        } else {
+          _showNoDataDialog();
+          print('No period data found in the specified document.');
+        }
+      } else {
+        _showNoDataDialog();
+        print('No document found with the specified email.');
+      }
+    } catch (error) {
+      print('Failed to fetch data from Firebase: $error');
+    }
+  }
+
+
 _showNoDataDialog() {
   showCupertinoDialog(
     context: context,
     builder: (BuildContext context) {
       return CupertinoAlertDialog(
-        title: const Text("생리주기를 입력해주세요!"),
+        title: const Text("데이터가 없습니다."),
         actions: [
           CupertinoDialogAction(
             child: const Text("확인"),
@@ -278,33 +259,125 @@ _showNoDataDialog() {
 
 
 
-  // Process the period map data
+
+
+
+
+// PROCESS PERIOD DATA FROM FIREBASE STORAGE TO FIND THE AVG CYCLE LENGTH
 processPeriodData(Map<String, dynamic> periodMap) {
-    // Reset cycle lengths
-    cycleLengths = List.filled(12, 0); // Reset cycle lengths to zeros
+  List<int> daysBetweenPeriods = [];
 
-    // Iterate through periodMap and populate cycleLengths based on the month
-    periodMap.forEach((timestamp, periodInfo) {
-        // periodInfo contains an array with the date, period length, and cycle length
-        List<dynamic> periodData = periodInfo;
+  // Create a list of DateTime objects from periodMap and sort them chronologically
+  List<DateTime> periodDates = periodMap.values.map((periodInfo) {
+    List<dynamic> periodData = periodInfo;
+    String date = periodData[0];
+    return DateTime.parse(date);
+  }).toList();
 
-        // Extract the date from periodInfo
-        String date = periodData[0];
-        DateTime periodDate = DateTime.parse(date);
+periodDates.sort((a, b) => a.month.compareTo(b.month));
 
-        // Extract the cycle length
-        double cycleLength = periodData[2].toDouble();
+print("Sorted periodDates: $periodDates");
 
-        // Get the month (1-12) from periodDate
-        int month = periodDate.month - 1;
+  // Calculate days between consecutive periods
+  for (int i = 0; i < periodDates.length - 1; i++) {
+    int daysDifference = periodDates[i + 1].difference(periodDates[i]).inDays;
+    daysBetweenPeriods.add(daysDifference);
+  }
 
-        // Store the cycle length in the corresponding month index
-        cycleLengths[month] = cycleLength;
-    });
+print("Days between periods: $daysBetweenPeriods");
 
-    // Now that cycleLengths has been populated, calculate the average
-    findCycleAverage();
+  // Calculate period cycle average
+  double cycleLengthAverage = 0.0;
+  if (daysBetweenPeriods.isNotEmpty) {
+    // Consider three most recent intervals
+    List<int> recentIntervals = daysBetweenPeriods.sublist(0, 3);
+    // Calculate sum of recent intervals
+    int sum = recentIntervals.reduce((value, element) => value + element);
+    // Calculate average
+    cycleLengthAverage = sum / recentIntervals.length;
+  }
+
+print("Cycle length average: $cycleLengthAverage");
+
+setState(() {
+  this.cycleLengthAverage = cycleLengthAverage;
+});
+
 }
+
+
+
+
+
+
+
+
+Future<void> fetchCycleLengthsFromFirebase() async {
+  final box = GetStorage();
+  String? email = box.read<String>('email');
+
+  if (email == null) {
+    print('Email not found in GetStorage box');
+    return;
+  }
+
+  try {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('user')
+        .where('email', isEqualTo: email)
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot document = querySnapshot.docs.first;
+      Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
+
+      Map<String, dynamic>? periodMap = data?['period'] as Map<String, dynamic>?;
+
+      if (periodMap != null) {
+        processCycleLengthData(periodMap);
+      } else {
+        _showNoDataDialog();
+        print('No period data found in the specified document.');
+      }
+    } else {
+      _showNoDataDialog();
+      print('No document found with the specified email.');
+    }
+  } catch (error) {
+    print('Failed to fetch data from Firebase: $error');
+  }
+}
+
+// Process cycle length data from Firebase storage
+processCycleLengthData(Map<String, dynamic> periodMap) {
+  // Initialize cycle lengths list
+  List<double> cycleLengths = List.filled(12, 0);
+
+  // Iterate through period data to find the latest cycle length for each month
+  periodMap.forEach((key, value) {
+    List<dynamic> periodData = value;
+    String date = periodData[0];
+    int month = DateTime.parse(date).month;
+    double cycleLength = periodData[2].toDouble();
+    // Update cycle length if it's greater than the existing one for the month
+    if (cycleLength > cycleLengths[month - 1]) {
+      cycleLengths[month - 1] = cycleLength;
+    }
+  });
+
+  // Update state with retrieved cycle lengths
+  setState(() {
+    this.cycleLengths = cycleLengths;
+  });
+}
+
+
+
+
+
+
+
 
 
 } //END
