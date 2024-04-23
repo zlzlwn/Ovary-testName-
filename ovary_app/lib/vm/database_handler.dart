@@ -91,4 +91,31 @@ class DatabaseHandler {
     return maps.isNotEmpty ? 1 : 0; // password 값이 null이 아니면 1, null이면 0
   }
 
+
+//사용자가 입력한 이메일이 Sqlite에 이메일이 있는지 체크
+  Future<int> CheckInEmail(String email) async {
+    int result = 0;
+    final db = await initializeDB();
+
+    result = Sqflite.firstIntValue(
+      await db.rawQuery('select count(email) from users where email = ?', [email])
+    )!;
+
+    return result; //이메일이 있으면 1, 없으면 0
+  }
+
+
+//사용자가 입력한 이메일 Sqlite에 pw 체크
+  Future<int> CheckInPw(String email) async {
+    int result = 0;
+    final db = await initializeDB();
+
+    result = Sqflite.firstIntValue(
+      //select count(email) from likes where email = 'nara@naver.com' and initdate is null;
+      await db.rawQuery('select count(email) from users where email = ? and password is null', [email])
+    )!;
+
+    return result; //비밀번호가 없으면 1, 있으면 0
+  }
+
 }

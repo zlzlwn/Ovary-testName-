@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ovary_app/model/users.dart';
 import 'package:ovary_app/view/auth_email_view.dart';
 import 'package:ovary_app/view/home.dart';
 import 'package:ovary_app/view/signup.dart';
@@ -151,24 +152,18 @@ class LogInWidget extends StatelessWidget {
 
     final loginData = await loginCheck; // Future를 해결하여 데이터를 가져옵니다.
     final list = loginData.docs; // QuerySnapshot을 List로 변환합니다.
-    print('dddd : $list');
 
     // 2. 조회되는 값이 없을 때, alert창
     if (loginCheck.docs.isEmpty) {
         buttonDialog();
 
+    //3. 회원정보가 있을 떄
+    } else {           
+      // ignore: unused_local_variable             
+      final email = controller.id;
 
-    } else {                        //3. Firebase에 회원정보가 있을 떄
-      final email = controller.id; // 입력한 이메일 값 가져오기
-      
-      
-
-      //db에서 정보 가져오기
-      // final users = await databaseHandler.queryUsers();@@@@@@@@@@@@@@@@@생행 안되면 이 아이 주석 풀기!
-
-      checkLogin();
-
-      checkPasswordBoolValue(databaseHandler);
+      //아이디 체크하기
+      chaekIdBoolValue(databaseHandler);
     }
   }
 
@@ -179,14 +174,33 @@ class LogInWidget extends StatelessWidget {
     box.write('email', idController.text);
   }
 
+  //SQLite에 id값 있는지 확인
+  chaekIdBoolValue(databaseHandler) async {
+
+    int chkReult = await databaseHandler.CheckInEmail(idController.text);
+    
+    chkReult == 0 //id가 SQLite에 없으면 insert처리 (0 : 없음, 1 : 있음)
+    ? await databaseHandler.insertUsers(Users(email: idController.text))
+    : null;
+
+    
+    checkPasswordBoolValue(databaseHandler);
+  }
+
+  // pw가 있는지 체크하기
   checkPasswordBoolValue(databaseHandler) async {
     //sqlite에 간편 비밀번호 값이 있으면 home으로 이동, 없으면 simplepasswordinsert화면으로 이동!
-    print("패스워드 불값 확인${databaseHandler.hasPassword().toString()}");
+    int result = await databaseHandler.CheckInPw(idController.text);
 
-    int result = await databaseHandler.hasPassword();
-    print("패스워드 불값 확인: $result");
-    result == 0 ? Get.to(const SimplePasswordInssert()) : Get.to(const Home());
+    //간편로그인 인증 하기 위해 storage에 email값 넣기
+    checkLogin();
+
+    //SQLite에 비밀번호가 없을 때 (result == 1)
+    result == 1 
+    ? guideDialog()
+    : {checkLogin(), Get.to(const Home())};
   }
+
 
 
   //회원정보 없을 때 alert창
@@ -207,6 +221,28 @@ class LogInWidget extends StatelessWidget {
         )
       ]
     );
+  }
+
+    // 간편로그인 등록안내 알림창
+  guideDialog() {
+    Get.defaultDialog(
+      title: '알림',
+      middleText: '간편 비밀번호를 등록해주세요.',
+      barrierDismissible: false,
+      backgroundColor: const Color.fromARGB(255, 194, 188, 245),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.back();
+            Get.to(const SimplePasswordInssert());
+          }, 
+          child: const Text(
+            '확인',
+          )
+        )
+      ]
+    );
+  
   }
 
 
