@@ -14,7 +14,7 @@ class LoginGetX extends GetxController{
   context: context,
   builder: (BuildContext context) {
     return AlertDialog(
-      backgroundColor: Colors.white, // 배경색을 흰색으로 설정
+      backgroundColor: Colors.white, 
       content: Text(
         '로그아웃이 필요한 서비스입니다.',
         style: TextStyle(
