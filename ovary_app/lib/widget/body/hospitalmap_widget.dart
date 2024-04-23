@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../view/marker_detail_screen.dart';
 // import 'package:flutter_google_places/flutter_google_places.dart' as loc;
@@ -17,6 +18,9 @@ class HospitalMapWidget extends StatefulWidget {
 }
 
 class _HospitalMapWidgetState extends State<HospitalMapWidget> {
+  late List data;
+  bool _hasCallSupport = false;
+  Future<void>? _launched;
   Location location = Location();
   final Map<String, Marker> _markers = {};
   List<Map<String, dynamic>> places = [
@@ -67,6 +71,17 @@ class _HospitalMapWidgetState extends State<HospitalMapWidget> {
     zoom: 15,
   );
 
+
+
+
+  @override
+  void initState() {
+    getCurrentLocation();
+    checkCanCall();
+    super.initState();
+  }
+
+  // 현재 위치 가져오기.
   getCurrentLocation() async {
     bool serviceEnabled;
     PermissionStatus permissionGranted;
@@ -107,10 +122,115 @@ class _HospitalMapWidgetState extends State<HospitalMapWidget> {
     });
   }
 
-  @override
-  void initState() {
-    getCurrentLocation();
-    super.initState();
+  // 전화연결권한.
+  checkCanCall() {
+    canLaunchUrl(Uri(scheme: 'tel', path: '123')).then((bool result) {
+      setState(() {
+        _hasCallSupport = result;
+      });
+    });
+  }
+
+  // 전화연결.
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    await launchUrl(launchUri);
+  }
+
+  // Functions  ---------
+  showHospitalInfo(String name, String tel) {
+    Get.bottomSheet(
+      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      Container(
+        height: 200,
+        // color: Theme.of(context).colorScheme.primaryContainer,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Image.asset(
+                      "images/hospital.png",
+                      width: 80,
+                    ),
+                  ),
+                  Column(
+                    // mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        style: const TextStyle(
+                            color: Colors.pink,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 5),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            tel,
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 5),
+                          ),
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     _makePhoneCall(tel);
+                          //     setState(() {
+
+                          //     });
+                          //   },
+                          //   // child: const Icon(
+                          //   //   Icons.phone,
+                          //   //   color: Colors.deepPurple,
+                          //   // ),
+                          // ),
+                        ],
+                      ),
+                      // ElevatedButton(
+                      //   onPressed: () => _makePhoneCall(tel),
+                      //   child: const Text('전화걸기'),
+                      // ),
+                      ElevatedButton(
+                        onPressed: _hasCallSupport
+                            ? () => setState(() {
+                                  _launched = _makePhoneCall(tel);
+                                })
+                            : null,
+                        child: _hasCallSupport
+                            ? const Text('Make phone call')
+                            : const Text('Calling not supported'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                onPressed: () => Get.back(),
+                child: const Text('Close'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -143,7 +263,7 @@ class _HospitalMapWidgetState extends State<HospitalMapWidget> {
               Navigator.push(
                   context,
                   CupertinoPageRoute(
-                      builder: (context) => MarkerDetailScreen()));
+                      builder: (context) => const MarkerDetailScreen()));
             },
             child: Container(
               width: MediaQuery.of(context).size.width - 21,
@@ -151,23 +271,23 @@ class _HospitalMapWidgetState extends State<HospitalMapWidget> {
               decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(8))),
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
+                    padding: EdgeInsets.only(left: 16.0),
                     child: Text(
                       '위치 검색',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                         color: Colors.grey,
                       ),
                     ),
                   ),
-                  const Spacer(),
+                  Spacer(),
                   Padding(
-                    padding: const EdgeInsets.only(right: 13.0),
+                    padding: EdgeInsets.only(right: 13.0),
                   ),
                 ],
               ),
@@ -175,64 +295,6 @@ class _HospitalMapWidgetState extends State<HospitalMapWidget> {
           ),
         ),
       ]),
-    );
-  }
-
-// Functions  ---------
-  showHospitalInfo(String name, String tel) {
-    Get.bottomSheet(
-      Container(
-        height: 200,
-        color: Theme.of(context).colorScheme.primaryContainer,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            // crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Image.asset(
-                      "images/hospital.png",
-                      width: 80,
-                    ),
-                  ),
-                  Column(
-                    // mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        name,
-                        style: const TextStyle(
-                            color: Colors.pink,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 5),
-                      ),
-                      Text(
-                        tel,
-                        style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 5),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              ElevatedButton(
-                onPressed: () => Get.back(),
-                child: const Text('Close'),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 } // end
