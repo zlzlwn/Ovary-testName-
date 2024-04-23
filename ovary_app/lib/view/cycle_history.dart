@@ -274,9 +274,9 @@ processPeriodData(Map<String, dynamic> periodMap) {
     return DateTime.parse(date);
   }).toList();
 
-periodDates.sort((a, b) => a.month.compareTo(b.month));
+  periodDates.sort((a, b) => a.month.compareTo(b.month));
 
-print("Sorted periodDates: $periodDates");
+  print("Sorted periodDates: $periodDates");
 
   // Calculate days between consecutive periods
   for (int i = 0; i < periodDates.length - 1; i++) {
@@ -284,26 +284,24 @@ print("Sorted periodDates: $periodDates");
     daysBetweenPeriods.add(daysDifference);
   }
 
-print("Days between periods: $daysBetweenPeriods");
+  print("Days between periods: $daysBetweenPeriods");
 
   // Calculate period cycle average
   double cycleLengthAverage = 0.0;
   if (daysBetweenPeriods.isNotEmpty) {
-    // Consider three most recent intervals
-    List<int> recentIntervals = daysBetweenPeriods.sublist(0, 3);
-    // Calculate sum of recent intervals
-    int sum = recentIntervals.reduce((value, element) => value + element);
+    // Calculate sum of all intervals
+    int sum = daysBetweenPeriods.reduce((value, element) => value + element);
     // Calculate average
-    cycleLengthAverage = sum / recentIntervals.length;
+    cycleLengthAverage = sum / daysBetweenPeriods.length;
   }
 
-print("Cycle length average: $cycleLengthAverage");
+  print("Cycle length average: $cycleLengthAverage");
 
-setState(() {
-  this.cycleLengthAverage = cycleLengthAverage;
-});
-
+  setState(() {
+    this.cycleLengthAverage = cycleLengthAverage;
+  });
 }
+
 
 
 

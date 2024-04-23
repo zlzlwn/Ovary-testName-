@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
+import 'package:ovary_app/view/home.dart';
 import 'package:ovary_app/view/period_calendar.dart';
 
 class PeriodInput extends StatefulWidget {
@@ -305,7 +306,7 @@ class _PeriodInputState extends State<PeriodInput> {
                                     // Dismiss the dialog
                                     Navigator.of(context).pop();
                                     // Navigate to the Home screen
-                                    Get.to(const PeriodCalender());
+                                    Get.to(const Home());
                                 },
                             ),
                         ],
