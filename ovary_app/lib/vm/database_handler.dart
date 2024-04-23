@@ -28,12 +28,9 @@ class DatabaseHandler {
   }
 
   //이메일 입력-----@@@@@@@@
-  Future<int> insertUsers(Users user) async {
-    int result = 0;
+  Future<void> insertUsers(Users user ) async {
     final Database db = await initializeDB();
-    result =
-        await db.rawInsert('insert into users(email) values (?)', [user.email]);
-    return result;
+    await db.rawInsert('insert into users(email) values (?)', [user.email]);
   }
 
   //간편비밀번호 값 입력
@@ -93,4 +90,5 @@ class DatabaseHandler {
 
     return maps.isNotEmpty ? 1 : 0; // password 값이 null이 아니면 1, null이면 0
   }
+
 }

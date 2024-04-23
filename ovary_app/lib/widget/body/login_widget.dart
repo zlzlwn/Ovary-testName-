@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:ovary_app/model/users.dart';
 import 'package:ovary_app/view/find_password.dart';
 import 'package:ovary_app/view/home.dart';
 import 'package:ovary_app/view/signup.dart';
@@ -11,7 +9,6 @@ import 'package:ovary_app/view/sim_pass_insert.dart';
 import 'package:ovary_app/view/simple_login.dart';
 import 'package:ovary_app/vm/database_handler.dart';
 import 'package:ovary_app/vm/login_vm.dart';
-import 'package:ovary_app/widget/body/simpleloginwidget.dart';
 
 class LogInWidget extends StatelessWidget {
   LogInWidget({super.key});
@@ -20,6 +17,10 @@ class LogInWidget extends StatelessWidget {
   final TextEditingController passwordController = TextEditingController();
 
   final box = GetStorage();
+  late int resultValue; 
+  late int pwValue;
+  final databaseHandler = DatabaseHandler();
+  late final email;
 
   @override
   Widget build(BuildContext context) {
@@ -98,8 +99,10 @@ class LogInWidget extends StatelessWidget {
                     onTap: () async {
                       final databaseHandler = DatabaseHandler();
                       bool hasEmail = await databaseHandler.hasEmailData();
-                      print(hasEmail);
-                      hasEmail ? Get.to(SimpleLogIn()) : print('이메일 값이 없습니다.');
+                        print(hasEmail);
+                      hasEmail 
+                      ? Get.to(SimpleLogIn()) 
+                      : print('이메일 값이 없습니다.');
                     },
                     child: const Text(
                       '간편 로그인하기',
@@ -118,7 +121,7 @@ class LogInWidget extends StatelessWidget {
                     loginAction(controller);
                   },
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xff8b7ff5),
+                      backgroundColor: const Color(0xff8b7ff5),
                       foregroundColor: Colors.white),
                   child: const Text(
                     '로그인',
@@ -133,13 +136,13 @@ class LogInWidget extends StatelessWidget {
     );
   }
 
-  // --- Functions ---
-  //log인 시 textfield에 입력된 id값으로 db에 있는 id값을 찾는 함수
+  //--- Functions ---
   loginAction(LoginGetX controller) async {
     controller.id = idController.text.trim();
     controller.password = passwordController.text.trim();
 
-    final loginCheck = FirebaseFirestore.instance
+    // 1. firebase에서 id, pw값 체크하기 위함
+    final loginCheck = await FirebaseFirestore.instance
         .collection('user')
         .where('email', isEqualTo: controller.id)
         .where('password', isEqualTo: controller.password)
@@ -148,28 +151,29 @@ class LogInWidget extends StatelessWidget {
 
     final loginData = await loginCheck; // Future를 해결하여 데이터를 가져옵니다.
     final list = loginData.docs; // QuerySnapshot을 List로 변환합니다.
-    print(list);
-//-----------------------------sqlite 입력부분
-    if (list.isEmpty) {
-      print('다시 입력');
+    print('dddd : $list');
 
-      //firebase  로그인 성공시
-    } else {
+    // 2. 조회되는 값이 없을 때, alert창
+    if (loginCheck.docs.isEmpty) {
+        buttonDialog();
+
+
+    } else {                        //3. Firebase에 회원정보가 있을 떄
       final email = controller.id; // 입력한 이메일 값 가져오기
-
-      // SQLite 데이터베이스에 사용자 정보 저장---- 이메일값이 같은 값이 있으면 insert 안시키게 변경필요!
-      final databaseHandler = DatabaseHandler();
-      final user = Users(email: email);
-      await databaseHandler.insertUsers(user);
+      
+      
 
       //db에서 정보 가져오기
-      final users = await databaseHandler.queryUsers();
+      // final users = await databaseHandler.queryUsers();@@@@@@@@@@@@@@@@@생행 안되면 이 아이 주석 풀기!
 
       checkLogin();
 
       checkPasswordBoolValue(databaseHandler);
     }
   }
+
+
+
 
   checkLogin() {
     box.write('email', idController.text);
@@ -181,6 +185,29 @@ class LogInWidget extends StatelessWidget {
 
     int result = await databaseHandler.hasPassword();
     print("패스워드 불값 확인: $result");
-    result == 0 ? Get.to(SimplePasswordInssert()) : Get.to(const Home());
+    result == 0 ? Get.to(const SimplePasswordInssert()) : Get.to(const Home());
   }
+
+
+  //회원정보 없을 때 alert창
+  buttonDialog() {
+  Get.defaultDialog(
+      title: '알림',
+      middleText: '입력하신 정보가 없습니다.',
+      barrierDismissible: false,
+      backgroundColor: Colors.yellowAccent,
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.back();
+            Get.back();
+            Get.to(const SignUp());
+          }, 
+          child: const Text('회원가입 하기')
+        )
+      ]
+    );
+  }
+
+
 } // End

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ovary_app/view/login.dart';
 
@@ -11,6 +10,7 @@ class MypageUpdateVM extends GetxController {
   String password1 = "";
   String password2 = "";
   String imagepath = "";
+  String selectedImagePath = "";
   
 
     final box = GetStorage();
