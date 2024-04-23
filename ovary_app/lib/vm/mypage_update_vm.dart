@@ -10,6 +10,7 @@ class MypageUpdateVM extends GetxController {
   String password1 = "";
   String password2 = "";
   String imagepath = "";
+  String selectedImagePath = "";
   
 
     final box = GetStorage();
