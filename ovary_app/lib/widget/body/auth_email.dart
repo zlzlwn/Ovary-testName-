@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 import 'package:ovary_app/view/find_pw.dart';
-import 'package:ovary_app/widget/body/findpw.dart';
 
 class AuthEmail extends StatefulWidget {
   const AuthEmail({super.key});
@@ -15,8 +14,8 @@ class AuthEmail extends StatefulWidget {
 }
 
 class _AuthEmailState extends State<AuthEmail> {
-  final TextEditingController idController = TextEditingController();
-  final TextEditingController authController = TextEditingController();
+  late TextEditingController idController;
+  late TextEditingController authController;
 
   bool showAuthField = false; // 인증키 입력 필드를 보여줄지 여부
   String sentAuthKey = ''; // 전송된 인증키를 저장할 변수
@@ -24,8 +23,10 @@ class _AuthEmailState extends State<AuthEmail> {
   @override
   void initState() {
     super.initState();
-
+    idController = TextEditingController();
+    authController = TextEditingController();
   }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -142,7 +143,6 @@ class _AuthEmailState extends State<AuthEmail> {
  // --- Functions ---
   bool isValidEmail(String email) {
     // 이메일 주소의 유효성을 검사하는 정규식
-    // 해당 정규식은 일반적인 이메일 주소 형식을 검증합니다.
     String pattern = r'^[a-z0-9._]+@[a-z]+\.[a-z]{2,3}$';
     RegExp regex = RegExp(pattern);
     return regex.hasMatch(email);
@@ -240,26 +240,6 @@ class _AuthEmailState extends State<AuthEmail> {
     print('Mail sent: ${sendReport.toString()}');
   }
 
-
-// void openMailApp(String email, String authenticationKey) async {
-//   final Uri emailLaunchUri = Uri(
-//     scheme: 'mailto',
-//     path: email,
-//     query: 'subject=One Day 앱 아이디 찾기 인증번호&body=인증 번호는 [$authenticationKey] 입니다',
-//   );
-
-//   try {
-//     if (await canLaunchUrl(emailLaunchUri)) {
-//       await launchUrl(emailLaunchUri);
-//     } else {
-//       throw 'Could not launch $emailLaunchUri';
-//     }
-//   } catch (e) {
-//     // 에러 발생 시 처리할 로직 추가
-//     print('Error launching mail app: $e');
-//   }
-// }
-  
   String generateRandomString(int length) {
     final random = Random();
     const chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';

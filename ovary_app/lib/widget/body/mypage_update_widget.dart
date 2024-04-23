@@ -314,7 +314,7 @@ final existingImageURL = document.get('profile');
     // 기존 이미지 삭제 (있는 경우에만)
     // if (existingImageURL != null) {
     //   final existingImageRef = storage.refFromURL(existingImageURL);
-    //   await existingImageRef.delete();
+    //   await existingIma geRef.delete();
     // }
     await FirebaseFirestore.instance
         .collection('user')

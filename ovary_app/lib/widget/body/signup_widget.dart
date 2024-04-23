@@ -184,6 +184,8 @@ Widget build(BuildContext context) {
                   padding: const EdgeInsets.all(50.0),
                   child: ElevatedButton(
                     onPressed: () {
+                      // 회원정보 담기
+                      insertSignUp();
                       insertProfileImage(File(imageFile!.path));
                     },
                     style: ElevatedButton.styleFrom(
@@ -326,6 +328,28 @@ Future<void> insertProfileImage(File imageFile) async {
     }
   }
 
+  Future<void> insertSignUp() async {
+    if (signUpGetX != null) {
+      signUpGetX.email = idController.text.trim(); 
+      signUpGetX.nickname = nicknameController.text.trim(); 
+      signUpGetX.password1 = passwordController1.text.trim(); 
 
+      // 현재 시간 가져오기
+      DateTime now = DateTime.now();
+
+      await FirebaseFirestore.instance
+        .collection('user')
+        .add({
+          'email': signUpGetX.email,
+          'nickname': signUpGetX.nickname,
+          'password': signUpGetX.password1,
+          'profile': '',
+          'inserdate': now,
+          'deletedate': '',
+          'occurRate': '',
+          'period': {},
+        });
+    }
+  }
   
 } // End
