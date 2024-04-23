@@ -17,12 +17,9 @@ class SignUpWidget extends StatelessWidget {
   final TextEditingController passwordController2 = TextEditingController();
   final TextEditingController nicknameController = TextEditingController();
 
-  // 중복 확인후 중복이 없으면 readOnly로 바꿔주기
-  // final signUpController = Get.put(SignUpController());
-  // final SignUpController signUpController2 = SignUpController(); // 직접 생성
 
   final SignUpGetX signUpGetX = Get.put(SignUpGetX());
-  // final SignUpGetX signUpGetXpath = Get.put(SignUpGetX());
+  final SignUpGetX boolSignUpGetX = Get.put(SignUpGetX());
 
     // Gallery에서 사진 가져오기
   ImagePicker picker = ImagePicker();
@@ -76,6 +73,7 @@ Widget build(BuildContext context) {
                     Expanded(
                       child: TextField(
                         controller: idController,
+                        readOnly: boolSignUpGetX.idReadOnly,
                         decoration: const InputDecoration(
                           labelText: '아이디를 입력 하세요',
                           border: OutlineInputBorder()
@@ -91,7 +89,7 @@ Widget build(BuildContext context) {
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
-                          foregroundColor: const Color.fromRGBO(139, 127, 245, 1),
+                          foregroundColor: Color(0xff8b7ff5),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(13)
                           ),
@@ -111,20 +109,8 @@ Widget build(BuildContext context) {
                     ),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        'One Day',
-                        style: TextStyle(
-                          color: Colors.purple[300],
-                          fontWeight: FontWeight.w900
-                        ),
-                      ),
-                    ],
-                  ),
+                const SizedBox(
+                  height: 35,
                 ),
                 TextField(
                   onChanged: (value) {
@@ -190,7 +176,7 @@ Widget build(BuildContext context) {
                       imageCheck(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.purple[300],
+                      backgroundColor: Color(0xff8b7ff5),
                       foregroundColor: Colors.white
                     ),
                     child: const Text(
@@ -227,10 +213,10 @@ Widget build(BuildContext context) {
                 Navigator.pop(context);
               },
               child: const Text('확인'),
-            ),
-          ],
-        ),
-      );
+              ),
+            ],
+          ),
+        );
       idController.text = '';
       passwordController1.text = '';
       passwordController2.text = '';
@@ -290,13 +276,14 @@ Widget build(BuildContext context) {
 
     // Firestore 문서에 다운로드 URL 업데이트
     final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('user')
-        .where('email', isEqualTo: email)
-        .get();
+      .collection('user')
+      .where('email', isEqualTo: email)
+      .get();
 
     if (querySnapshot.docs.isNotEmpty) {
       final DocumentSnapshot document = querySnapshot.docs[0];
       final existingImageURL = document.get('profile');
+
       await FirebaseFirestore.instance
           .collection('user')
           .doc(document.id) // 문서 ID 사용
@@ -318,13 +305,35 @@ Widget build(BuildContext context) {
     return regex.hasMatch(email);
   }
 
-  void emailCheck(BuildContext context) {
+  void emailCheck(BuildContext context) async {
   String email = idController.text;
   if (isValidEmail(email)) {
     // 이메일이 유효한 경우 중복 확인 로직 실행
-    // 여기에 중복 확인 로직을 추가하세요
     // signUpGetX.setIdReadOnly(true);
-    //     isIdReadOnly = true;
+    // isIdReadOnly = true;
+
+    // 1. firebase에서 id, pw값 체크하기 위함
+    final loginCheck = await FirebaseFirestore.instance
+        .collection('user')
+        .where('email', isEqualTo: idController.text)
+        // .snapshots();
+        .get();
+
+    final loginData = await loginCheck; // Future를 해결하여 데이터를 가져옵니다.
+    final list = loginData.docs; // QuerySnapshot을 List로 변환합니다.
+
+    // 2. 조회되는 값이 없을 때, alert창
+    if (loginCheck.docs.isEmpty) {
+      buttonDialog();
+      boolSignUpGetX.idReadOnly = true;
+
+      boolSignUpGetX.updateState();
+    //3. 회원정보가 있을 떄
+    } else {           
+      // ignore: unused_local_variable             
+      final email = idController.text;
+
+    }
   } else {
     // 이메일이 유효하지 않은 경우 사용자에게 다이얼로그 표시
     showDialog(
@@ -345,6 +354,23 @@ Widget build(BuildContext context) {
     // 이메일을 다시 입력하도록 입력 필드를 초기화
     idController.clear();
     }
+  }
+
+  //회원정보 없을 때 alert창
+  buttonDialog() {
+  Get.defaultDialog(
+      title: '알림',
+      middleText: '사용 가능한 아이디입니다.',
+      barrierDismissible: false,
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.back();
+          }, 
+          child: const Text('확인')
+        )
+      ]
+    );
   }
 
   passwordCheck() {

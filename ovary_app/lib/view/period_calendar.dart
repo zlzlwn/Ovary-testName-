@@ -260,7 +260,7 @@ DateTime? calculateRangeStartForward(DateTime focusedDay) {
   int monthDiff = (focusedDay.year - _rangeStart!.year) * 12 + focusedDay.month - _rangeStart!.month;
   
   // Calculate the range start for the focused month based on the cycle length
-  return _rangeStart!.add(Duration(days: monthDiff * cycleLength + 7));
+  return _rangeStart!.add(Duration(days: monthDiff * cycleLength));
 }
 
 
@@ -306,7 +306,7 @@ _showNoDataDialogue(){
 //CALCULATE THE NEXT PERIOD DATE
 predictPeriodDate(){
 // next period day: period cycle +- 7 days. 
-nextPeriodDay = _rangeStart!.add(Duration(days: cycleLength + 7));
+nextPeriodDay = _rangeStart!.add(Duration(days: cycleLength));
 
 print(nextPeriodDay);
 

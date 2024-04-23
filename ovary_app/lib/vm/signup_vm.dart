@@ -13,7 +13,7 @@ class SignUpGetX extends GetxController{
 
   String defaultImage = "user.png";
 
-
+  
 
   var pwCheckResult = RxString(''); // 비밀번호 일치 여부 상태
 
@@ -27,29 +27,15 @@ class SignUpGetX extends GetxController{
     }
   }
 
-  // final idReadOnly = false.obs;
-
-  // void setIdReadOnly(bool value) {
-
-  //   if(value == true) {
-  //     idReadOnly.value = value;
-  //   }
-
-  // }
-  // var emailCheckResult = RxString(''); // 이메일 정규식
-
-  // class SignUpController extends GetxController {
-  // }
-}
-
-class SignUpController extends GetxController {
-  var idReadOnly = false.obs;
   
-  void setIdReadOnly(bool value) {
-    idReadOnly.value = value;
+  bool idReadOnly = false;
+
+  void updateState() {
+    idReadOnly == true
+    ? idReadOnly = true
+    : idReadOnly = false;
+    update(); // Get 패키지의 update() 메서드를 호출하여 상태를 갱신합니다.
   }
-
-
-
 }
+
 
