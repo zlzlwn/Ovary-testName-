@@ -1,17 +1,20 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
+import 'package:ovary_app/view/find_pw.dart';
+import 'package:ovary_app/widget/body/findpw.dart';
 
-class FindPasswordWidget extends StatefulWidget {
-  const FindPasswordWidget({super.key});
+class AuthEmail extends StatefulWidget {
+  const AuthEmail({super.key});
 
   @override
-  State<FindPasswordWidget> createState() => _FindPasswordWidgetState();
+  State<AuthEmail> createState() => _AuthEmailState();
 }
 
-class _FindPasswordWidgetState extends State<FindPasswordWidget> {
+class _AuthEmailState extends State<AuthEmail> {
   final TextEditingController idController = TextEditingController();
   final TextEditingController authController = TextEditingController();
 
@@ -48,7 +51,7 @@ class _FindPasswordWidgetState extends State<FindPasswordWidget> {
                   const Padding(
                     padding: EdgeInsets.all(15.0),
                     child: Text(
-                      '이메일을 입력하여 주세요',
+                      '인증하실 이메일을 입력하여 주세요',
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
@@ -222,6 +225,7 @@ class _FindPasswordWidgetState extends State<FindPasswordWidget> {
       // 인증키가 일치하는 경우 다음 단계로 진행
       print('인증키 일치');
       // 비밀번호 재설정 페이지로 이동 등 추가 작업 수행
+      Get.to(() => FindPw());
     } else {
       // 인증키가 일치하지 않는 경우 에러 메시지 표시
       print('인증키 불일치');
