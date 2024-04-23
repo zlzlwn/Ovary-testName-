@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ovary_app/view/home.dart';
 import 'package:ovary_app/vm/signup_vm.dart';
 // import 'package:ovary_app/widget/image_widget/image_widget.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -12,7 +13,6 @@ class SignUpWidget extends StatelessWidget {
   SignUpWidget({super.key});
 
   final TextEditingController idController = TextEditingController();
-  final TextEditingController authController = TextEditingController();
   final TextEditingController passwordController1 = TextEditingController();
   final TextEditingController passwordController2 = TextEditingController();
   final TextEditingController nicknameController = TextEditingController();
@@ -131,6 +131,7 @@ Widget build(BuildContext context) {
                     passwordCheck();
                   },
                   controller: passwordController1,
+                  obscureText: true,
                   decoration: const InputDecoration(
                     labelText: '비밀번호를 입력 하세요',
                     border: OutlineInputBorder()
@@ -145,6 +146,7 @@ Widget build(BuildContext context) {
                     passwordCheck();
                   },
                   controller: passwordController2,
+                  obscureText: true,
                   decoration: const InputDecoration(
                     labelText: '비밀번호를 다시 입력 하세요',
                     border: OutlineInputBorder()
@@ -185,8 +187,7 @@ Widget build(BuildContext context) {
                   child: ElevatedButton(
                     onPressed: () {
                       // 회원정보 담기
-                      insertSignUp();
-                      insertProfileImage(File(imageFile!.path));
+                      imageCheck(context);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.purple[300],
@@ -211,66 +212,103 @@ Widget build(BuildContext context) {
 }
 
   // --- Functions ---
-    getImageFromDevice(imageSource) async {
 
-  final XFile? pickedFile = await picker.pickImage(source: imageSource);
-  if(pickedFile == null) {
-    imageFile = null;
+    imageCheck(BuildContext context) {
+      if (signUpGetX.selectedImagePath.isEmpty) {
+        print('이미지 없음');
+        showDialog(
+          context: context, // 여기서 context를 전달해줍니다.
+          builder: (context) => AlertDialog(
+            title: const Text('이미지'),
+            content: const Text('이미지를 넣어주세요.'),
+            actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('확인'),
+            ),
+          ],
+        ),
+      );
+      idController.text = '';
+      passwordController1.text = '';
+      passwordController2.text = '';
+      nicknameController.text = '';
+    } else {
+      insertSignUp();
+      insertProfileImage(File(imageFile!.path));
+      showDialog(
+          context: context, // 여기서 context를 전달해줍니다.
+          builder: (context) => AlertDialog(
+            title: const Text('회원 가입'),
+            content: const Text('회원 가입을 환영합니다.'),
+            actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Get.back();
+                Get.back();
+                Get.to(const Home());
+              },
+              child: const Text('확인'),
+            ),
+          ],
+        )
+      );
+    }
+
   }
-  else {
-   imageFile = XFile(pickedFile.path);
+
+
+  getImageFromDevice(imageSource) async {
+
+    final XFile? pickedFile = await picker.pickImage(source: imageSource);
+
+    if(pickedFile == null) {
+      imageFile = null;
+    }
+    else {
+      imageFile = XFile(pickedFile.path);
       signUpGetX.selectedImagePath = imageFile!.path;
       print(signUpGetX.selectedImagePath);
       signUpGetX.update();
+    }
+
   }
-  }
 
-Future<void> insertProfileImage(File imageFile) async {
-  final email = idController.text;
-  final storage = firebase_storage.FirebaseStorage.instance;
+  Future<void> insertProfileImage(File imageFile) async {
+    final email = idController.text;
+    final storage = firebase_storage.FirebaseStorage.instance;
 
-  // Firebase Storage에 이미지 업로드 -> 이메일 기준으로 사진이름이 정해지기 때문에 자동으로 덮어쓰기가 된다!
-  final imageRef = storage.ref().child('images/${email}.jpg');
-  await imageRef.putFile(imageFile);
+    // Firebase Storage에 이미지 업로드 -> 이메일 기준으로 사진이름이 정해지기 때문에 자동으로 덮어쓰기가 된다!
+    final imageRef = storage.ref().child('images/${email}.jpg');
+    await imageRef.putFile(imageFile);
 
-  // Firebase Storage에서 업로드된 이미지의 다운로드 URL 가져오기
-  final downloadURL = await imageRef.getDownloadURL();
+    // Firebase Storage에서 업로드된 이미지의 다운로드 URL 가져오기
+    final downloadURL = await imageRef.getDownloadURL();
 
-  // Firestore 문서에 다운로드 URL 업데이트
-  final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-      .collection('user')
-      .where('email', isEqualTo: email)
-      .get();
-
-  if (querySnapshot.docs.isNotEmpty) {
-    final DocumentSnapshot document = querySnapshot.docs[0];
-    final existingImageURL = document.get('profile');
-    await FirebaseFirestore.instance
+    // Firestore 문서에 다운로드 URL 업데이트
+    final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('user')
-        .doc(document.id) // 문서 ID 사용
-        .set({
-      'profile': downloadURL,
-    }, SetOptions(merge: true));
-  } else {
-    // 데이터가 없는 경우
-    print('데이터 없음');
+        .where('email', isEqualTo: email)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final DocumentSnapshot document = querySnapshot.docs[0];
+      final existingImageURL = document.get('profile');
+      await FirebaseFirestore.instance
+          .collection('user')
+          .doc(document.id) // 문서 ID 사용
+          .set({
+        'profile': downloadURL,
+      }, SetOptions(merge: true));
+    } else {
+      // 데이터가 없는 경우
+      print('데이터 없음');
+    }
   }
-}
 
-// getImageFromDevice(imageSource) async {
-//   final XFile? pickedFile = await picker.pickImage(source: imageSource);
-//   if (pickedFile == null) {
-//     imageFile = null;
-//     // signUpGetX.selectedImagePath = null; // signUpGetX에 null 할당
-//     signUpGetX.update();
-//   } else {
-//     imageFile = XFile(pickedFile.path);
-//     signUpGetX.selectedImagePath = imageFile!.path; // signUpGetX에 경로 할당
-//     signUpGetX.update();
-//   }
-// }
-
-  
   bool isValidEmail(String email) {
     // 이메일 주소의 유효성을 검사하는 정규식
     // 해당 정규식은 일반적인 이메일 주소 형식을 검증합니다.
