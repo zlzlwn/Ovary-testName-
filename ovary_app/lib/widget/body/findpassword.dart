@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
-import 'package:ovary_app/widget/body/Findpasswordwidget.dart';
 
 class FindPasswordWidget extends StatefulWidget {
   const FindPasswordWidget({super.key});
@@ -15,6 +14,9 @@ class FindPasswordWidget extends StatefulWidget {
 class _FindPasswordWidgetState extends State<FindPasswordWidget> {
   final TextEditingController idController = TextEditingController();
   final TextEditingController authController = TextEditingController();
+
+  bool showAuthField = false; // 인증키 입력 필드를 보여줄지 여부
+  String sentAuthKey = ''; // 전송된 인증키를 저장할 변수
 
   @override
   void initState() {
@@ -81,7 +83,53 @@ class _FindPasswordWidgetState extends State<FindPasswordWidget> {
                 ],
               ),
             ),
-            FindPassWordWidget()
+            const SizedBox(
+              height: 50,
+            ),
+            if (showAuthField)
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height / 5.5,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: const Color.fromARGB(255, 188, 186, 186),
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: TextField(
+                        controller: authController,
+                        decoration: const InputDecoration(
+                          labelText: '인증키를 입력하여 주세요',
+                          border: OutlineInputBorder(),
+                        ),
+                        keyboardType: TextInputType.text,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: ElevatedButton(
+                        onPressed: validateAuthKey,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xff8b7ff5),
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text(
+                          '인증키 확인',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
           ],
         ),
       ),
@@ -117,6 +165,7 @@ class _FindPasswordWidgetState extends State<FindPasswordWidget> {
       // 인증 번호 생성기
       String authenticationKey = generateRandomString(10);
       print(authenticationKey);
+      sentAuthKey = authenticationKey;
 
       // 메일 전송
       final message = Message()
@@ -133,6 +182,10 @@ class _FindPasswordWidgetState extends State<FindPasswordWidget> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('메일이 성공적으로 전송되었습니다.')),
         );
+        setState(() {
+          showAuthField = true;
+        });
+        
       })
       .catchError((error) {
         // 메일 전송 실패 시 처리
@@ -163,10 +216,25 @@ class _FindPasswordWidgetState extends State<FindPasswordWidget> {
     }
   }
 
-Future<void> sendMail(Message message, SmtpServer smtpServer) async {
-  final sendReport = await send(message, smtpServer);
-  print('Mail sent: ${sendReport.toString()}');
-}
+  void validateAuthKey() {
+    String inputAuthKey = authController.text;
+    if (inputAuthKey == sentAuthKey) {
+      // 인증키가 일치하는 경우 다음 단계로 진행
+      print('인증키 일치');
+      // 비밀번호 재설정 페이지로 이동 등 추가 작업 수행
+    } else {
+      // 인증키가 일치하지 않는 경우 에러 메시지 표시
+      print('인증키 불일치');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('인증키를 다시 입력하여 주세요.')),
+      );
+    }
+  }
+  
+  Future<void> sendMail(Message message, SmtpServer smtpServer) async {
+    final sendReport = await send(message, smtpServer);
+    print('Mail sent: ${sendReport.toString()}');
+  }
 
 
 // void openMailApp(String email, String authenticationKey) async {
