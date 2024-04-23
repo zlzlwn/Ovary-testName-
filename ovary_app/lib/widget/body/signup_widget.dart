@@ -22,6 +22,7 @@ class SignUpWidget extends StatelessWidget {
   // final SignUpController signUpController2 = SignUpController(); // 직접 생성
 
   final SignUpGetX signUpGetX = Get.put(SignUpGetX());
+  // final SignUpGetX signUpGetXpath = Get.put(SignUpGetX());
 
     // Gallery에서 사진 가져오기
   ImagePicker picker = ImagePicker();
@@ -35,10 +36,47 @@ class SignUpWidget extends StatelessWidget {
       child: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
+
           child: GetBuilder<SignUpGetX>(
             builder: (controller) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                // width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height/6,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: const Color.fromARGB(255, 188, 186, 186),
+                  ),
+                  borderRadius: BorderRadius.circular(10)
+                ),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width/4.8*2,
+                  height: 150,
+                  child: imageFile == null
+                  ? Center(
+                      child: Image.asset('images/${signUpGetX.defaultImage}',
+                        width: 130,
+                      )
+                    )
+                  : Image.file(File(signUpGetX.selectedImagePath)),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                child: OutlinedButton(
+                  onPressed: () {
+                    getImageFromDevice(ImageSource.gallery);
+                  },
+                  child: const Text('사진 변경하기')
+                ),
+              ),
+              Row(
+
                 children: [
                   Container(
                     // width: MediaQuery.of(context).size.width,
@@ -205,6 +243,7 @@ class SignUpWidget extends StatelessWidget {
 
   // --- Functions ---
     getImageFromDevice(imageSource) async {
+
   final XFile? pickedFile = await picker.pickImage(source: imageSource);
   if(pickedFile == null) {
     imageFile = null;
@@ -249,6 +288,20 @@ final existingImageURL = document.get('profile');
     print('데이터 없음');
   }
 }
+
+   final XFile? pickedFile = await picker.pickImage(source: imageSource);
+  if(pickedFile == null) {
+    imageFile = null;
+    // signUpGetX.selectedImagePath = null; // signUpGetX에 null 할당
+    signUpGetX.update();
+  }
+  else {
+    imageFile = XFile(pickedFile.path);
+    signUpGetX.selectedImagePath = imageFile!.path; // signUpGetX에 경로 할당
+    signUpGetX.update();
+  }
+  }
+
   
   bool isValidEmail(String email) {
     // 이메일 주소의 유효성을 검사하는 정규식

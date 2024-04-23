@@ -30,7 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  mailer: ^6.0.0
+  # url_launcher: ^6.1.10
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -55,6 +56,12 @@ dependencies:
   google_maps_flutter: ^2.6.1   # 구글맵
   location: ^6.0.1              # 현재위치
   permission_handler: ^11.3.1   # 권한설정
+  percent_indicator: ^4.2.3     # percentage bar
+
+  url_launcher: ^6.2.6          # 전화연결
+
+
+  # flutter_email_sender: ^6.0.3  # 메일 인증 api
 
   # flutter_google_places: ^0.3.0 # 구글맵 검색
   # google_maps_webservice: ^0.0.19 # 구글맵 검색
@@ -63,6 +70,15 @@ dependencies:
   # flutter_cache_manager: ^3.3.1   # http 설정 변경
 
   sqflite: ^2.3.3               # sqlite
+
+flutter_native_splash:
+  android: false
+  ios: true
+  web : false
+
+  color: "#8B7FF5"
+  # background image: "images/dark.png"
+  image: "images/OneDayLogoWhite.png"
 
 
 dev_dependencies:
