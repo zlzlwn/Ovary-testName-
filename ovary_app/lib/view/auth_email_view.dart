@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ovary_app/widget/body/findpassword.dart';
+import 'package:ovary_app/widget/body/auth_email.dart';
 
 class FindPassword extends StatelessWidget {
   const FindPassword({super.key});
@@ -10,7 +10,7 @@ class FindPassword extends StatelessWidget {
       appBar: AppBar(
         title: const Text('본인 인증')
       ),
-      body: FindPasswordWidget(),
+      body: const AuthEmail(),
     );
   }
 }
