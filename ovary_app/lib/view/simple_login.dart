@@ -15,7 +15,7 @@ class SimpleLogIn extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("로 그 인"),
+        title: const Text("간 편 로 그 인"),
       ),
       //db에 값이 있나없나 확인하려고 FutureBuilder사용!
       body: FutureBuilder<bool>(
