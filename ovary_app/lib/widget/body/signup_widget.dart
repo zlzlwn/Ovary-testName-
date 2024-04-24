@@ -333,6 +333,23 @@ Widget build(BuildContext context) {
       // ignore: unused_local_variable             
       final email = idController.text;
 
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('아이디 중복'),
+          content: const Text('존재하는 아이디가 있습니다.\n아이디를 변경하여 주세요.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('확인'),
+            ),
+          ],
+        ),
+      );
+      // 이메일을 다시 입력하도록 입력 필드를 초기화
+      idController.clear();
     }
   } else {
     // 이메일이 유효하지 않은 경우 사용자에게 다이얼로그 표시
