@@ -75,10 +75,10 @@ Widget build(BuildContext context) {
                         controller: idController,
                         readOnly: boolSignUpGetX.idReadOnly,
                         decoration: const InputDecoration(
-                          labelText: '아이디를 입력 하세요',
+                          labelText: '이메일을 입력 하세요',
                           border: OutlineInputBorder()
                         ),
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.emailAddress,
                       ),
                     ),
                     Padding(
