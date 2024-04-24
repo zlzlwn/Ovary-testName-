@@ -71,6 +71,10 @@ class _HospitalMapWidgetState extends State<HospitalMapWidget> {
             title: hospital['name'], // 'name' 필드에 접근합니다.
             snippet: hospital['phone'], // 'phone' 필드에 접근합니다.
           ),
+          onTap: () {
+            showHospitalInfo(hospital['name'], hospital['phone']);
+          },
+
         );
         _markers[hospital['name']] = marker; 
         // places.addAll(result as Iterable<Map<String, dynamic>>);
@@ -225,6 +229,7 @@ class _HospitalMapWidgetState extends State<HospitalMapWidget> {
           onMapCreated: (GoogleMapController controller) {
             _controller = controller;
           },
+          
         ),
         Positioned(
           bottom: 16,
