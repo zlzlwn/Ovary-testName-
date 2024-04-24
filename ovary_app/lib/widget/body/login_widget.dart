@@ -123,10 +123,16 @@ class LogInWidget extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xff8b7ff5),
-                      foregroundColor: Colors.white),
+                      foregroundColor: Colors.white,
+                      fixedSize: Size(MediaQuery.of(context).size.width / 3.5,
+                            MediaQuery.of(context).size.height / 17),
+                  ),
+                      
                   child: const Text(
                     '로그인',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold
+                    ),
                   ),
                 ),
               ],
@@ -147,7 +153,6 @@ class LogInWidget extends StatelessWidget {
         .collection('user')
         .where('email', isEqualTo: controller.id)
         .where('password', isEqualTo: controller.password)
-        // .snapshots();
         .get();
 
     final loginData = await loginCheck; // Future를 해결하여 데이터를 가져옵니다.
@@ -162,8 +167,22 @@ class LogInWidget extends StatelessWidget {
       // ignore: unused_local_variable             
       final email = controller.id;
 
-      //아이디 체크하기
-      chaekIdBoolValue(databaseHandler);
+      // deletedate의 count값 가져오기 
+      final delCheck = await FirebaseFirestore.instance
+        .collection('user')
+        .where('email', isEqualTo: controller.id)
+        .where('password', isEqualTo: controller.password)
+        .where('deletedate', isEqualTo: '')
+        .get()
+        .then((value) => value.size);
+
+
+      //deletedate가 null이 아닌 경우
+      if(delCheck == 0) {
+        delDialog();
+      } else {
+        chaekIdBoolValue(databaseHandler);  //아이디 체크하기
+      }
     }
   }
 
@@ -172,6 +191,7 @@ class LogInWidget extends StatelessWidget {
 
   checkLogin() {
     box.write('email', idController.text);
+    box.write('simpleEmail', idController.text);
   }
 
   //SQLite에 id값 있는지 확인
@@ -223,7 +243,7 @@ class LogInWidget extends StatelessWidget {
     );
   }
 
-    // 간편로그인 등록안내 알림창
+  // 간편로그인 등록안내 알림창
   guideDialog() {
     Get.defaultDialog(
       title: '알림',
@@ -242,8 +262,29 @@ class LogInWidget extends StatelessWidget {
         )
       ]
     );
-  
   }
 
+  // 탈퇴된 사용자 알림창
+  delDialog() {
+    Get.defaultDialog(
+      title: '알림',
+      middleText: '탈퇴한 계정입니다.',
+      barrierDismissible: false,
+      backgroundColor: const Color.fromARGB(255, 194, 188, 245),
+      actions: [
+        TextButton(
+          onPressed: () {
+            idController.clear();
+            passwordController.clear();
+            Get.back();
+
+          }, 
+          child: const Text(
+            '확인',
+          )
+        )
+      ]
+    );
+  }
 
 } // End
