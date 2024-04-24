@@ -56,7 +56,7 @@ String? storedPassword = await databaseHandler.getUserPassword(box.read('simpleE
     print(storedPassword);
     box.write("email", storedPassword);
   } else {
-    
+    _allClear();
     buttonSnack();
   }
 }

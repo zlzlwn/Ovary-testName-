@@ -100,10 +100,9 @@ class LogInWidget extends StatelessWidget {
                     onTap: () async {
                       final databaseHandler = DatabaseHandler();
                       bool hasEmail = await databaseHandler.hasEmailData();
-                        print(hasEmail);
                       hasEmail 
                       ? Get.to(SimpleLogIn()) 
-                      : print('이메일 값이 없습니다.');
+                      : initialLoginDialog();
                     },
                     child: const Text(
                       '간편 로그인하기',
@@ -278,6 +277,25 @@ class LogInWidget extends StatelessWidget {
             passwordController.clear();
             Get.back();
 
+          }, 
+          child: const Text(
+            '확인',
+          )
+        )
+      ]
+    );
+  }
+
+initialLoginDialog() {
+    Get.defaultDialog(
+      title: '알림',
+      middleText: '일반 로그인 후 이용 가능합니다.',
+      barrierDismissible: false,
+      backgroundColor: const Color.fromARGB(255, 194, 188, 245),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.back();
           }, 
           child: const Text(
             '확인',
