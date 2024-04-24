@@ -57,7 +57,7 @@ class HomeDrawer extends StatelessWidget {
                 Icons.local_hospital,
                 color: Colors.black,
               ),
-              title: Text("찜 병원보기"),
+              title: Text("병원목록"),
               onTap: () {
                 Get.to(HospitalLikeList());
               },
