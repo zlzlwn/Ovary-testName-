@@ -273,7 +273,7 @@ class _SimplePasswordWidget extends State<SimplePasswordWidget> {
                    fontWeight: FontWeight.bold
                  ),),
                    style: ElevatedButton.styleFrom(
-                   backgroundColor: Colors.green[300],
+                   backgroundColor: Colors.green[200],
                    foregroundColor: Colors.white,
                    fixedSize: Size(120, 60)
                  ),
@@ -301,7 +301,7 @@ class _SimplePasswordWidget extends State<SimplePasswordWidget> {
                 onPressed: _handleBackspace,
                 child: const Icon(Icons.backspace),
                 style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.pink[300] ,
+                backgroundColor: Colors.pink[200] ,
                 foregroundColor: Colors.white,
                 fixedSize: Size(120, 60)
               ),
