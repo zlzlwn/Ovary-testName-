@@ -222,14 +222,33 @@ Widget build(BuildContext context) {
       passwordController2.text = '';
       nicknameController.text = '';
     } else {
+      // 중복 확인을 거치지 않았을 때만 회원가입 처리
+    if (!boolSignUpGetX.idReadOnly) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('중복 확인'),
+          content: const Text('아이디 중복 확인을 해주세요.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('확인'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      // 중복 확인을 거쳤을 때 회원가입 처리
       insertSignUp();
       insertProfileImage(File(imageFile!.path));
       showDialog(
-          context: context, // 여기서 context를 전달해줍니다.
-          builder: (context) => AlertDialog(
-            title: const Text('회원 가입'),
-            content: const Text('회원 가입을 환영합니다.'),
-            actions: [
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('회원 가입'),
+          content: const Text('회원 가입을 환영합니다.'),
+          actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
@@ -240,11 +259,11 @@ Widget build(BuildContext context) {
               child: const Text('확인'),
             ),
           ],
-        )
+        ),
       );
     }
-
   }
+}
 
 
   getImageFromDevice(imageSource) async {
