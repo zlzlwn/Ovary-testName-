@@ -66,7 +66,7 @@ class _periodCycleChartState extends State<periodCycleChart> {
           ),
             const SizedBox(height: 100),
             ElevatedButton(
-              onPressed: () => Get.to(const Home()),
+              onPressed: () => {Get.back(), Get.back()},
               style: ElevatedButton.styleFrom(
                     minimumSize: const Size(120, 50),
                     backgroundColor: Color(0xff8b7ff5),
