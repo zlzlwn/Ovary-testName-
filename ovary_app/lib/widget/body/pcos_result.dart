@@ -98,13 +98,16 @@ class PcosResult extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () { 
                             Get.back();
+                            Get.back();
+                            Get.back();
+                            Get.back();
                           },
                           style: ElevatedButton.styleFrom(
                               minimumSize: const Size(120, 50),
                               backgroundColor:
                                   const Color(0xff8b7ff5)),
                           child: Text(
-                            '이전',
+                            '다시 진단',
                             style: TextStyle(
                               fontSize: 20,
                               color: Theme.of(context).colorScheme.onPrimary,
