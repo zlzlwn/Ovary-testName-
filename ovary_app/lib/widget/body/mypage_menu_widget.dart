@@ -181,7 +181,7 @@ class MypageMenuWidget extends StatelessWidget {
     Get.bottomSheet(
       Container(
         height: 200,
-        color: const Color(0xff8b7ff5),
+        color: Color.fromARGB(255, 196, 174, 251),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
