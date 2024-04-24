@@ -33,18 +33,31 @@ class _SimpleLoginWidgetState extends State<SimpleLoginWidget> {
       });
     }
   }
+  //배열 전체삭제
+   void _allClear() {
+ _password = List.filled(6, '');
+ _currentIndex=0;
+ setState(() {
+   
+ });
+  }
   //입력한 리스트값을 box에 담고 이메일을 기준으로 비밀번호를 인서트 시키기 위해 이메일이랑 패스워드값을 보냄
   void _handleSubmit() async {
   _passwordString = _password.join().toString(); // 리스트를 문자열로 변환
 
   final databaseHandler = DatabaseHandler();
   print("박스 이메일값 확인");
-  print(box.read('email'));
-String? storedPassword = await databaseHandler.getUserPassword(box.read('email'));
+  print(box.read('simpleEmail'));
+String? storedPassword = await databaseHandler.getUserPassword(box.read('simpleEmail'));
   if (storedPassword == _passwordString) {
     Get.back();
+    Get.back();
+    print("로그인 성공");
+    print(storedPassword);
+    box.write("email", storedPassword);
   } else {
-    print("비밀번호 다름");
+    
+    buttonSnack();
   }
 }
 
@@ -250,24 +263,39 @@ String? storedPassword = await databaseHandler.getUserPassword(box.read('email')
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
              
-              
-              Padding(
-                padding: const EdgeInsets.fromLTRB(130, 0, 0, 0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    _handleNumberInput('0');
-                  },
-                  child: const Text('0',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold
-                ),),
-                  style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xff8b7ff5) ,
-                  foregroundColor: Colors.white,
-                  fixedSize: Size(120, 60)
-                ),
-                ),
+               Padding(
+                 padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                 child: ElevatedButton(
+                   onPressed: () {
+                     _allClear();
+                   },
+                   child: const Text('C',
+                 style: TextStyle(
+                   fontSize: 20,
+                   fontWeight: FontWeight.bold
+                 ),),
+                   style: ElevatedButton.styleFrom(
+                   backgroundColor: const Color(0xff8b7ff5) ,
+                   foregroundColor: Colors.white,
+                   fixedSize: Size(120, 60)
+                 ),
+                 ),
+               ),
+               
+              ElevatedButton(
+                onPressed: () {
+                  _handleNumberInput('0');
+                },
+                child: const Text('0',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold
+              ),),
+                style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xff8b7ff5) ,
+                foregroundColor: Colors.white,
+                fixedSize: Size(120, 60)
+              ),
               ),
               
               const SizedBox(width: 8),
@@ -301,4 +329,17 @@ String? storedPassword = await databaseHandler.getUserPassword(box.read('email')
       ),
     );
   }
+
+  //스낵바 보이기
+  buttonSnack() {
+    Get.snackbar(
+      '알림', 
+      '비밀번호가 틀립니다.',
+      duration: const Duration(seconds: 2),
+      backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
+      colorText: const Color.fromARGB(255, 117, 103, 241),
+      snackPosition: SnackPosition.TOP,
+    );
+  }
+  
 }

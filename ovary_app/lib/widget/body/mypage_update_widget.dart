@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ovary_app/vm/mypage_update_vm.dart';
 import 'package:ovary_app/vm/signup_vm.dart';
@@ -82,6 +83,7 @@ class MypageUpdateWidget extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(20, 50, 20, 10),
                 child: TextField(
                   controller: emailController,
+                  readOnly: true,
                   decoration: const InputDecoration(
                       labelText: '이메일(수정불가)', border: OutlineInputBorder()),
                   keyboardType: TextInputType.text,
@@ -144,13 +146,7 @@ class MypageUpdateWidget extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     checkpassword();
-                    updateAction();
-                    getImageFromDevice(ImageSource.gallery);
-                    // 프로필 이미지 업데이트 함수 호출
-                    updateProfileImage(File(imageFile!.path));
-                    // mypageUpdateVMFunction.updateAction();
-                    // imageWidget.updateProfileImage
-                    Get.back();
+                    // Get.back();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromRGBO(139, 127, 245, 1),
@@ -183,8 +179,24 @@ class MypageUpdateWidget extends StatelessWidget {
       //비밀번호 값 vm에 저장
       mypageUpdateVM.password1 = passwordController1.text;
       mypageUpdateVM.password2 = passwordController2.text;
+    }
+    if (nicknameController.text == null || nicknameController.text.isEmpty) {
+      nicknameSnack();
+    } else if (passwordController1.text == null ||
+        passwordController1.text.isEmpty) {
+      passwordSnack();
+    } else if (passwordController2.text == null ||
+        passwordController2.text.isEmpty) {
+      passwordSnack();
+    } else if (imageFile == null) {
+      imageSnack();
     } else {
-      print("불일치");
+      updatesuccessSnack();
+      updateAction();
+      // 프로필 이미지 업데이트 함수 호출
+      // updateProfileImage(File(imageFile!.path));
+      Get.back();
+      print("업데이트 성공");
     }
   }
 
@@ -244,7 +256,7 @@ class MypageUpdateWidget extends StatelessWidget {
         'email': mypageUpdateVM.email,
         'password': mypageUpdateVM.password1,
         'nickname': mypageUpdateVM.nickname,
-        
+
         // 프로필 필드가 있으면 업데이트
         if (mypageUpdateVM.imagepath != null)
           'profile': mypageUpdateVM.imagepath,
@@ -253,12 +265,14 @@ class MypageUpdateWidget extends StatelessWidget {
         updateProfileImage(File(mypageUpdateVMInstance.selectedImagePath));
         Get.back();
         Get.back();
+        Get.back();
       }).catchError((error) {
         print("업데이트 실패: $error");
       });
     } else {
       // 데이터가 없는 경우
       print('데이터 없음');
+      // passwordController1.text.length==0;
     }
   }
 
@@ -292,39 +306,84 @@ class MypageUpdateWidget extends StatelessWidget {
   }
 
   Future<void> updateProfileImage(File imageFile) async {
-  final email = box.read('email');
-  final storage = firebase_storage.FirebaseStorage.instance;
+    final email = box.read('email');
+    final storage = firebase_storage.FirebaseStorage.instance;
 
-  // Firebase Storage에 이미지 업로드 -> 이메일 기준으로 사진이름이 정해지기 때문에 자동으로 덮어쓰기가 된다!
-  final imageRef = storage.ref().child('images/${email}.jpg');
-  await imageRef.putFile(imageFile);
+    // Firebase Storage에 이미지 업로드 -> 이메일 기준으로 사진이름이 정해지기 때문에 자동으로 덮어쓰기가 된다!
+    final imageRef = storage.ref().child('images/${email}.jpg');
+    await imageRef.putFile(imageFile);
 
-  // Firebase Storage에서 업로드된 이미지의 다운로드 URL 가져오기
-  final downloadURL = await imageRef.getDownloadURL();
+    // Firebase Storage에서 업로드된 이미지의 다운로드 URL 가져오기
+    final downloadURL = await imageRef.getDownloadURL();
 
-  // Firestore 문서에 다운로드 URL 업데이트
-  final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-      .collection('user')
-      .where('email', isEqualTo: email)
-      .get();
-
-  if (querySnapshot.docs.isNotEmpty) {
-    final DocumentSnapshot document = querySnapshot.docs[0];
-final existingImageURL = document.get('profile');
-    // 기존 이미지 삭제 (있는 경우에만)
-    // if (existingImageURL != null) {
-    //   final existingImageRef = storage.refFromURL(existingImageURL);
-    //   await existingIma geRef.delete();
-    // }
-    await FirebaseFirestore.instance
+    // Firestore 문서에 다운로드 URL 업데이트
+    final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('user')
-        .doc(document.id) // 문서 ID 사용
-        .update({
-      'profile': downloadURL,
-    });
-  } else {
-    // 데이터가 없는 경우
-    print('데이터 없음');
+        .where('email', isEqualTo: email)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final DocumentSnapshot document = querySnapshot.docs[0];
+      final existingImageURL = document.get('profile');
+      // 기존 이미지 삭제 (있는 경우에만)
+      // if (existingImageURL != null) {
+      //   final existingImageRef = storage.refFromURL(existingImageURL);
+      //   await existingIma geRef.delete();
+      // }
+      await FirebaseFirestore.instance
+          .collection('user')
+          .doc(document.id) // 문서 ID 사용
+          .update({
+        'profile': downloadURL,
+      });
+    } else {
+      // 데이터가 없는 경우
+      print('데이터 없음');
+    }
   }
-}
+
+  //이미지 없을시에 나오는 snackbar
+  imageSnack() {
+    Get.snackbar(
+      '알림',
+      '이미지를 변경해주세요.',
+      duration: const Duration(seconds: 1),
+      backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
+      colorText: const Color.fromARGB(255, 117, 103, 241),
+      snackPosition: SnackPosition.TOP,
+    );
+  }
+
+  nicknameSnack() {
+    Get.snackbar(
+      '알림',
+      '변경할 닉네임을 입력해주세요.',
+      duration: const Duration(seconds: 1),
+      backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
+      colorText: const Color.fromARGB(255, 117, 103, 241),
+      snackPosition: SnackPosition.TOP,
+    );
+  }
+
+  passwordSnack() {
+    Get.snackbar(
+      '알림',
+      '변경할 비밀번호를 입력해주세요.',
+      duration: const Duration(seconds: 1),
+      backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
+      colorText: const Color.fromARGB(255, 117, 103, 241),
+      snackPosition: SnackPosition.TOP,
+    );
+  }
+
+  updatesuccessSnack() {
+    Get.snackbar(
+      '알림',
+      '회원정보 변경에 성공했습니다!.',
+      duration: const Duration(seconds: 1),
+      backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
+      colorText: const Color.fromARGB(255, 117, 103, 241),
+      snackPosition: SnackPosition.TOP,
+    );
+  }
 }

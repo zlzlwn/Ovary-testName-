@@ -34,6 +34,14 @@ class _SimplePasswordWidget extends State<SimplePasswordWidget> {
       });
     }
   }
+  //배열 전체삭제
+   void _allClear() {
+ _password = List.filled(6, '');
+ _currentIndex=0;
+ setState(() {
+   
+ });
+  }
   //입력한 리스트값을 box에 담고 이메일을 기준으로 비밀번호를 인서트 시키기 위해 이메일이랑 패스워드값을 보냄
   void _handleSubmit() async{
     _passwordString = _password.join(); // 리스트를 문자열로 변환
@@ -249,28 +257,43 @@ class _SimplePasswordWidget extends State<SimplePasswordWidget> {
             ],
           ),
           const SizedBox(height: 8),
-          Row(
+      Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
              
-              
-              Padding(
-                padding: const EdgeInsets.fromLTRB(130, 0, 0, 0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    _handleNumberInput('0');
-                  },
-                  child: const Text('0',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold
-                ),),
-                  style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xff8b7ff5) ,
-                  foregroundColor: Colors.white,
-                  fixedSize: Size(120, 60)
-                ),
-                ),
+               Padding(
+                 padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                 child: ElevatedButton(
+                   onPressed: () {
+                     _allClear();
+                   },
+                   child: const Text('C',
+                 style: TextStyle(
+                   fontSize: 20,
+                   fontWeight: FontWeight.bold
+                 ),),
+                   style: ElevatedButton.styleFrom(
+                   backgroundColor: const Color(0xff8b7ff5) ,
+                   foregroundColor: Colors.white,
+                   fixedSize: Size(120, 60)
+                 ),
+                 ),
+               ),
+               
+              ElevatedButton(
+                onPressed: () {
+                  _handleNumberInput('0');
+                },
+                child: const Text('0',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold
+              ),),
+                style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xff8b7ff5) ,
+                foregroundColor: Colors.white,
+                fixedSize: Size(120, 60)
+              ),
               ),
               
               const SizedBox(width: 8),
