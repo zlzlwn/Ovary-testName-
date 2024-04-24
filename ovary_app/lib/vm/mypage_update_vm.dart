@@ -36,6 +36,7 @@ loadingUserInfoAction() async {
       email = await dataList1[0]['email'];
       nickname = dataList1[0]['nickname'];
       imagepath = await dataList1[0]['profile'];
+      box.write('nick',dataList1[0]['nickname']);
       
 
 

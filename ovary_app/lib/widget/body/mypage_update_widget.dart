@@ -11,42 +11,49 @@ import 'package:ovary_app/vm/signup_vm.dart';
 import 'package:ovary_app/widget/image_widget/image_widget.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-class MypageUpdateWidget extends StatelessWidget {
-  MypageUpdateWidget({super.key});
+class MypageUpdateWidget extends StatefulWidget {
+  MypageUpdateWidget({Key? key}) : super(key: key);
 
+  @override
+  _MypageUpdateWidgetState createState() => _MypageUpdateWidgetState();
+}
+
+class _MypageUpdateWidgetState extends State<MypageUpdateWidget> {
   final TextEditingController nicknameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController1 = TextEditingController();
   final TextEditingController passwordController2 = TextEditingController();
 
-//값 사용
   final MypageUpdateVM mypageUpdateVM = Get.put(MypageUpdateVM());
-  //imagepath 가져오려고 사용
   final MypageUpdateVM mypageUpdateVMInstance = Get.put(MypageUpdateVM());
-  //함수사용
   final mypageUpdateVMFunction = MypageUpdateVM();
   final imageWidget = ImageWidget();
-  //중복체크 함수
-  final SignUpGetX signUpGetX = Get.put(SignUpGetX());
-  // final ImageWidget imageWidget = Get.put(ImageWidget());
-  // Gallery에서 사진 가져오기
+  final SignUpGetX c = Get.put(SignUpGetX());
   ImagePicker picker = ImagePicker();
   XFile? imageFile;
   File? imgFile;
-
+  String email = '';
+  String nickValue = '';
   final box = GetStorage();
 
   @override
-  Widget build(BuildContext context) {
-    serchInfo();
+  void initState() {
+    super.initState();
+    email = box.read('email');
+    nickValue = box.read('nick');
+    emailController.text = email;
+    nicknameController.text = nickValue;
     loadingUserInfoAction();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Center(
         child: GetBuilder<MypageUpdateVM>(
           builder: (controller) {
             return Column(
               children: [
-                // ImageWidget(),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.width / 2,
@@ -127,27 +134,26 @@ class MypageUpdateWidget extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(30, 10, 0, 10),
                   child: Obx(() => Row(
-                        children: [
-                          Text(
-                            signUpGetX.pwCheckResult.value,
-                            style: TextStyle(
-                              color: signUpGetX.pwCheckResult.value == '일치'
-                                  ? Colors.blue
-                                  : signUpGetX.pwCheckResult.value == '불일치'
-                                      ? Colors.red
-                                      : Colors.green,
-                              fontWeight: FontWeight.w900,
-                            ),
-                          ),
-                        ],
-                      )),
+                    children: [
+                      Text(
+                        signUpGetX.pwCheckResult.value,
+                        style: TextStyle(
+                          color: signUpGetX.pwCheckResult.value == '일치'
+                              ? Colors.blue
+                              : signUpGetX.pwCheckResult.value == '불일치'
+                              ? Colors.red
+                              : Colors.green,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ],
+                  )),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: ElevatedButton(
                     onPressed: () {
                       checkpassword();
-                      // Get.back();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromRGBO(139, 127, 245, 1),
@@ -170,6 +176,8 @@ class MypageUpdateWidget extends StatelessWidget {
       ),
     );
   }
+
+
 
   serchInfo() {
     nicknameController.text = mypageUpdateVM.nickname;
@@ -228,7 +236,7 @@ class MypageUpdateWidget extends StatelessWidget {
 
       mypageUpdateVM.show();
       //변수 바꾸고 나서 텍스트 필드에 변수 할당
-      nicknameController.text = await mypageUpdateVM.nickname;
+      //nicknameController.text = await mypageUpdateVM.nickname;
       emailController.text = await mypageUpdateVM.email;
     } else {
       // 데이터가 없는 경우
