@@ -89,6 +89,25 @@ class _WeightChartWidgetState extends State<WeightChartWidget> {
                     ),
                   ),
               ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Get.back();
+                    Get.to(const BmiQuestWeight());
+                  }, 
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.pink[300]
+                  ),
+                  child: const Text(
+                    'BMI 등록하기',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
+                ),
+              )
             ],
           )
           : Column(
