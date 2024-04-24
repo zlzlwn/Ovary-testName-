@@ -41,8 +41,8 @@ class LogInWidget extends StatelessWidget {
                   child: TextField(
                     controller: idController,
                     decoration: const InputDecoration(
-                        labelText: '아이디를 입력 하세요', border: OutlineInputBorder()),
-                    keyboardType: TextInputType.text,
+                        labelText: '이메일을 입력 하세요', border: OutlineInputBorder()),
+                    keyboardType: TextInputType.emailAddress,
                   ),
                 ),
                 Padding(

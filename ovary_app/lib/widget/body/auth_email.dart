@@ -29,101 +29,55 @@ class _AuthEmailState extends State<AuthEmail> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            Image.asset(
-              'images/OneDayLogoPurple.png',
-              width: 300,
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height / 4,
-              decoration: BoxDecoration(
-                  border: Border.all(
-                    color: const Color.fromARGB(255, 188, 186, 186),
-                  ),
-                  borderRadius: BorderRadius.circular(10)),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: Text(
-                      '인증하실 이메일을 입력하여 주세요',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: TextField(
-                      controller: idController,
-                      decoration: const InputDecoration(
-                          labelText: 'ex)oneday@oneday.com',
-                          border: OutlineInputBorder()),
-                      keyboardType: TextInputType.text,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        emailCheck(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xff8b7ff5),
-                          foregroundColor: Colors.white),
-                      child: const Text(
-                        '인증키 발송',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+    return SingleChildScrollView(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              Image.asset(
+                'images/OneDayLogoPurple.png',
+                width: 300,
               ),
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            if (showAuthField)
               Container(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 5.5,
+                height: MediaQuery.of(context).size.height / 4,
                 decoration: BoxDecoration(
-                  border: Border.all(
-                    color: const Color.fromARGB(255, 188, 186, 186),
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
+                    border: Border.all(
+                      color: const Color.fromARGB(255, 188, 186, 186),
+                    ),
+                    borderRadius: BorderRadius.circular(10)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: TextField(
-                        controller: authController,
-                        decoration: const InputDecoration(
-                          labelText: '인증키를 입력하여 주세요',
-                          border: OutlineInputBorder(),
-                        ),
-                        keyboardType: TextInputType.text,
+                    const Padding(
+                      padding: EdgeInsets.all(15.0),
+                      child: Text(
+                        '인증하실 이메일을 입력하여 주세요',
+                        style: TextStyle(fontSize: 20),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(5.0),
+                      padding: const EdgeInsets.all(15.0),
+                      child: TextField(
+                        controller: idController,
+                        decoration: const InputDecoration(
+                            labelText: 'ex)oneday@oneday.com',
+                            border: OutlineInputBorder()),
+                        keyboardType: TextInputType.emailAddress,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
                       child: ElevatedButton(
-                        onPressed: validateAuthKey,
+                        onPressed: () {
+                          emailCheck(context);
+                        },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xff8b7ff5),
-                          foregroundColor: Colors.white,
-                        ),
+                            backgroundColor: const Color(0xff8b7ff5),
+                            foregroundColor: Colors.white),
                         child: const Text(
-                          '인증키 확인',
+                          '인증키 발송',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -134,7 +88,55 @@ class _AuthEmailState extends State<AuthEmail> {
                   ],
                 ),
               ),
-          ],
+              const SizedBox(
+                height: 50,
+              ),
+              if (showAuthField)
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height / 5.5,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: const Color.fromARGB(255, 188, 186, 186),
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: TextField(
+                          controller: authController,
+                          decoration: const InputDecoration(
+                            labelText: '인증키를 입력하여 주세요',
+                            border: OutlineInputBorder(),
+                          ),
+                          keyboardType: TextInputType.text,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: ElevatedButton(
+                          onPressed: validateAuthKey,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xff8b7ff5),
+                            foregroundColor: Colors.white,
+                          ),
+                          child: const Text(
+                            '인증키 확인',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
