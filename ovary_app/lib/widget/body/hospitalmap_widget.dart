@@ -1,10 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:ovary_app/model/hospital.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:http/http.dart' as http;
 import '../../view/marker_detail_screen.dart';
 // import 'package:flutter_google_places/flutter_google_places.dart' as loc;
 // import 'package:google_api_headers/google_api_headers.dart' as header;
@@ -19,70 +22,64 @@ class HospitalMapWidget extends StatefulWidget {
 
 class _HospitalMapWidgetState extends State<HospitalMapWidget> {
   late List data;
+
+  final Map<String, Marker> _markers = {};
+  Location location = Location();
+  List<Map<String, dynamic>> places = []; 
   bool _hasCallSupport = false;
   Future<void>? _launched;
-  Location location = Location();
-  final Map<String, Marker> _markers = {};
-  List<Map<String, dynamic>> places = [
-    {
-      'name': '나를위한산부인과의원',
-      'tel': '02-539-5004',
-      'latitude': 37.4955366,
-      'longitude': 127.0293521,
-    },
-    {
-      'name': '다움산부인과',
-      'tel': '02-555-5799',
-      'latitude': 37.4978931,
-      'longitude': 127.0286404,
-    },
-    {
-      'name': '애플산부인과의원 강남점',
-      'tel': '02-530-8500',
-      'latitude': 37.4979626,
-      'longitude': 127.0264302,
-    },
-    {
-      'name': '쉬즈웰산부인과',
-      'tel': '02-564-2211',
-      'latitude': 37.4999834,
-      'longitude': 127.0259797,
-    },
-    {
-      'name': '유로진여성의원',
-      'tel': '02-555-7633',
-      'latitude': 37.4993781,
-      'longitude': 127.0310839,
-    },
-    {
-      'name': '강남리즈산부인과',
-      'tel': '02-558-5538',
-      'latitude': 37.5008952,
-      'longitude': 127.0266227,
-    },
-  ];
+
 // 3d37.4944858
 // 4d127.030066
   double latitude = 0;
   double longitude = 0;
   GoogleMapController? _controller;
-  final CameraPosition _kGooglePlex = const CameraPosition(
+
+  final CameraPosition _theJoeun = const CameraPosition(
     target: LatLng(37.4944858, 127.030066), // 더조은 강남아카데미 주소.
     zoom: 15,
   );
 
-
-
-
   @override
   void initState() {
-    getCurrentLocation();
-    checkCanCall();
     super.initState();
+
+    _getCurrentLocation();
+    checkCanCall();
+    
+    data = [];
+    getJsonData();
+  }
+
+  // mysql에 저장된 데이터를 가져옴.
+  getJsonData() async {
+    var url = Uri.parse(
+        'http://localhost:8080/Flutter/JSP/pcos/hospital_query_flutter.jsp'); // Rest API (json외에 다른것을 사용해도 됨)
+    var response = await http.get(url);
+    var dataConvertedJson = json.decode(utf8.decode(response
+        .bodyBytes)); // response.bodyBytes는 Uint8Byte : utf가 8bit로 되어있어서 8bit만 가져옴.
+    List result = dataConvertedJson['results'];
+    data.addAll(result); // data에 가져온 데이터를 넣어줌.
+      _markers.clear();
+      // var hospital = "";
+      for (final hospital in result) {
+        setState(() {
+        final marker = Marker(
+          markerId: MarkerId(hospital['name']), // Map에서 'name' 필드에 접근합니다.
+          position: LatLng(double.parse(hospital['lat']), double.parse(hospital['lng'])), // 'lat', 'lng' 필드에도 동일하게 접근합니다.
+          infoWindow: InfoWindow(
+            title: hospital['name'], // 'name' 필드에 접근합니다.
+            snippet: hospital['phone'], // 'phone' 필드에 접근합니다.
+          ),
+        );
+        _markers[hospital['name']] = marker; 
+        // places.addAll(result as Iterable<Map<String, dynamic>>);
+        }); // async를 사용하기 때문에 어떤 것이 먼저 될지 몰라서 써줘용~~
+      }
   }
 
   // 현재 위치 가져오기.
-  getCurrentLocation() async {
+  Future<void> _getCurrentLocation() async {
     bool serviceEnabled;
     PermissionStatus permissionGranted;
 
@@ -150,11 +147,9 @@ class _HospitalMapWidgetState extends State<HospitalMapWidget> {
       ),
       Container(
         height: 200,
-        // color: Theme.of(context).colorScheme.primaryContainer,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -187,24 +182,8 @@ class _HospitalMapWidgetState extends State<HospitalMapWidget> {
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 5),
                           ),
-                          // GestureDetector(
-                          //   onTap: () {
-                          //     _makePhoneCall(tel);
-                          //     setState(() {
-
-                          //     });
-                          //   },
-                          //   // child: const Icon(
-                          //   //   Icons.phone,
-                          //   //   color: Colors.deepPurple,
-                          //   // ),
-                          // ),
                         ],
                       ),
-                      // ElevatedButton(
-                      //   onPressed: () => _makePhoneCall(tel),
-                      //   child: const Text('전화걸기'),
-                      // ),
                       ElevatedButton(
                         onPressed: _hasCallSupport
                             ? () => setState(() {
@@ -239,22 +218,27 @@ class _HospitalMapWidgetState extends State<HospitalMapWidget> {
       body: Stack(children: [
         GoogleMap(
           mapType: MapType.normal,
-          myLocationEnabled: true,
-          initialCameraPosition: _kGooglePlex,
-          markers: Set<Marker>.of(places.map((place) {
-            return Marker(
-              markerId: MarkerId(place['name']),
-              position: LatLng(place['latitude'], place['longitude']),
-              infoWindow: InfoWindow(title: place['name']),
-              // infoWindow: InfoWindow(title: place['name'] +  "\n" + place['tel']),
-              onTap: () {
-                showHospitalInfo(place['name'], place['tel']);
-              },
-            );
-          })),
+          // myLocationEnabled: true,
+          myLocationButtonEnabled: false,
+          initialCameraPosition: _theJoeun,
+          markers: _markers.values.toSet(),
           onMapCreated: (GoogleMapController controller) {
             _controller = controller;
           },
+        ),
+        Positioned(
+          bottom: 16,
+          right: 16,
+          child: FloatingActionButton(
+            onPressed: _getCurrentLocation,
+            foregroundColor: Colors.black,
+            backgroundColor: Colors.white,
+            elevation: 8, // 그림자 크기
+            child: Icon(Icons.my_location),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10), // 버튼 모서리 둥글기
+            ),
+          ),
         ),
         Positioned(
           top: 10,

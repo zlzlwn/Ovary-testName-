@@ -953,9 +953,12 @@ PODS:
     - BoringSSL-GRPC/Interface (= 0.0.32)
   - BoringSSL-GRPC/Interface (0.0.32)
   - cloud_firestore (4.17.0):
-    - Firebase/Firestore (= 10.24.0)
+    - Firebase/CoreOnly (~> 10.24.0)
+    - Firebase/Firestore (~> 10.24.0)
     - firebase_core
-    - Flutter
+    - FlutterMacOS
+  - file_selector_macos (0.0.1):
+    - FlutterMacOS
   - Firebase/Analytics (10.24.0):
     - Firebase/Core
   - Firebase/Core (10.24.0):
@@ -975,18 +978,20 @@ PODS:
   - firebase_analytics (10.10.2):
     - Firebase/Analytics (= 10.24.0)
     - firebase_core
-    - Flutter
+    - FlutterMacOS
   - firebase_core (2.30.0):
-    - Firebase/CoreOnly (= 10.24.0)
-    - Flutter
+    - Firebase/CoreOnly (~> 10.24.0)
+    - FlutterMacOS
   - firebase_database (10.5.2):
-    - Firebase/Database (= 10.24.0)
+    - Firebase/CoreOnly (~> 10.24.0)
+    - Firebase/Database (~> 10.24.0)
     - firebase_core
-    - Flutter
+    - FlutterMacOS
   - firebase_storage (11.7.2):
-    - Firebase/Storage (= 10.24.0)
+    - Firebase/CoreOnly (~> 10.24.0)
+    - Firebase/Storage (~> 10.24.0)
     - firebase_core
-    - Flutter
+    - FlutterMacOS
   - FirebaseAnalytics (10.24.0):
     - FirebaseAnalytics/AdIdSupport (= 10.24.0)
     - FirebaseCore (~> 10.0)
@@ -1052,12 +1057,7 @@ PODS:
     - FirebaseCore (~> 10.0)
     - FirebaseCoreExtension (~> 10.0)
     - GTMSessionFetcher/Core (< 4.0, >= 2.1)
-  - Flutter (1.0.0)
-  - flutter_native_splash (0.0.1):
-    - Flutter
-  - google_maps_flutter_ios (0.0.1):
-    - Flutter
-    - GoogleMaps (< 9.0, >= 8.4)
+  - FlutterMacOS (1.0.0)
   - GoogleAppMeasurement (10.24.0):
     - GoogleAppMeasurement/AdIdSupport (= 10.24.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
@@ -1078,11 +1078,6 @@ PODS:
     - GoogleUtilities/Network (~> 7.11)
     - "GoogleUtilities/NSData+zlib (~> 7.11)"
     - nanopb (< 2.30911.0, >= 2.30908.0)
-  - GoogleMaps (8.4.0):
-    - GoogleMaps/Maps (= 8.4.0)
-  - GoogleMaps/Base (8.4.0)
-  - GoogleMaps/Maps (8.4.0):
-    - GoogleMaps/Base
   - GoogleUtilities/AppDelegateSwizzler (7.13.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -1189,12 +1184,10 @@ PODS:
     - gRPC-Core/Privacy (= 1.62.5)
   - gRPC-Core/Interface (1.62.5)
   - gRPC-Core/Privacy (1.62.5)
-  - GTMSessionFetcher/Core (3.4.0)
-  - image_picker_ios (0.0.1):
-    - Flutter
+  - GTMSessionFetcher/Core (3.4.1)
   - leveldb-library (1.22.5)
   - location (0.0.1):
-    - Flutter
+    - FlutterMacOS
   - nanopb (2.30910.0):
     - nanopb/decode (= 2.30910.0)
     - nanopb/encode (= 2.30910.0)
@@ -1203,33 +1196,25 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - permission_handler_apple (9.3.0):
-    - Flutter
   - PromisesObjC (2.4.0)
   - sqflite (0.0.3):
     - Flutter
     - FlutterMacOS
-  - url_launcher_ios (0.0.1):
-    - Flutter
-  - webview_flutter_wkwebview (0.0.1):
-    - Flutter
+  - url_launcher_macos (0.0.1):
+    - FlutterMacOS
 
 DEPENDENCIES:
-  - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
-  - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
-  - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
-  - firebase_database (from `.symlinks/plugins/firebase_database/ios`)
-  - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
-  - Flutter (from `Flutter`)
-  - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
-  - google_maps_flutter_ios (from `.symlinks/plugins/google_maps_flutter_ios/ios`)
-  - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
-  - location (from `.symlinks/plugins/location/ios`)
-  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
-  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
-  - sqflite (from `.symlinks/plugins/sqflite/darwin`)
-  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
-  - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
+  - cloud_firestore (from `Flutter/ephemeral/.symlinks/plugins/cloud_firestore/macos`)
+  - file_selector_macos (from `Flutter/ephemeral/.symlinks/plugins/file_selector_macos/macos`)
+  - firebase_analytics (from `Flutter/ephemeral/.symlinks/plugins/firebase_analytics/macos`)
+  - firebase_core (from `Flutter/ephemeral/.symlinks/plugins/firebase_core/macos`)
+  - firebase_database (from `Flutter/ephemeral/.symlinks/plugins/firebase_database/macos`)
+  - firebase_storage (from `Flutter/ephemeral/.symlinks/plugins/firebase_storage/macos`)
+  - FlutterMacOS (from `Flutter/ephemeral`)
+  - location (from `Flutter/ephemeral/.symlinks/plugins/location/macos`)
+  - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
+  - sqflite (from `Flutter/ephemeral/.symlinks/plugins/sqflite/darwin`)
+  - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
 
 SPEC REPOS:
   trunk:
@@ -1249,7 +1234,6 @@ SPEC REPOS:
     - FirebaseSharedSwift
     - FirebaseStorage
     - GoogleAppMeasurement
-    - GoogleMaps
     - GoogleUtilities
     - "gRPC-C++"
     - gRPC-Core
@@ -1260,45 +1244,38 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   cloud_firestore:
-    :path: ".symlinks/plugins/cloud_firestore/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/cloud_firestore/macos
+  file_selector_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/file_selector_macos/macos
   firebase_analytics:
-    :path: ".symlinks/plugins/firebase_analytics/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/firebase_analytics/macos
   firebase_core:
-    :path: ".symlinks/plugins/firebase_core/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/firebase_core/macos
   firebase_database:
-    :path: ".symlinks/plugins/firebase_database/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/firebase_database/macos
   firebase_storage:
-    :path: ".symlinks/plugins/firebase_storage/ios"
-  Flutter:
-    :path: Flutter
-  flutter_native_splash:
-    :path: ".symlinks/plugins/flutter_native_splash/ios"
-  google_maps_flutter_ios:
-    :path: ".symlinks/plugins/google_maps_flutter_ios/ios"
-  image_picker_ios:
-    :path: ".symlinks/plugins/image_picker_ios/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/firebase_storage/macos
+  FlutterMacOS:
+    :path: Flutter/ephemeral
   location:
-    :path: ".symlinks/plugins/location/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/location/macos
   path_provider_foundation:
-    :path: ".symlinks/plugins/path_provider_foundation/darwin"
-  permission_handler_apple:
-    :path: ".symlinks/plugins/permission_handler_apple/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
   sqflite:
-    :path: ".symlinks/plugins/sqflite/darwin"
-  url_launcher_ios:
-    :path: ".symlinks/plugins/url_launcher_ios/ios"
-  webview_flutter_wkwebview:
-    :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/sqflite/darwin
+  url_launcher_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
 
 SPEC CHECKSUMS:
   abseil: d121da9ef7e2ff4cab7666e76c5a3e0915ae08c3
   BoringSSL-GRPC: 1e2348957acdbcad360b80a264a90799984b2ba6
-  cloud_firestore: ec5623634fc3b82f7b23a6e87f116c953eae714d
+  cloud_firestore: 651ce8d312fe07e51e4745d4df813350b39b4f05
+  file_selector_macos: 468fb6b81fac7c0e88d71317f3eec34c3b008ff9
   Firebase: 91fefd38712feb9186ea8996af6cbdef41473442
-  firebase_analytics: 57d684b05ce9767ebb2dc13166d38bb725a97c5d
-  firebase_core: 66b99b4fb4e5d7cc4e88d4c195fe986681f3466a
-  firebase_database: 8da9008830aaefb7355a9897b4244e24785d7b5c
-  firebase_storage: 056e3c8f9ec19df166eec9211cd3dba876d1ca36
+  firebase_analytics: d37df6627654ce5c19db85b11b1cbb0734e9a78b
+  firebase_core: 15617e716aee891ef3b431cabfa1859261537ecf
+  firebase_database: d57d1032c437cf3987f0af3c735a54e820ef72bb
+  firebase_storage: fe09298167b119d43204b5b4564e946b4ed9fc70
   FirebaseAnalytics: b5efc493eb0f40ec560b04a472e3e1a15d39ca13
   FirebaseAppCheckInterop: fecc08c89936c8acb1428d8088313aabedb348e4
   FirebaseAuthInterop: 29336ab84df12fc0f340ba5fe58d3e5811a4192d
@@ -1311,26 +1288,20 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 8f581fca6478a50705d2bd2abd66d306e0f5736e
   FirebaseSharedSwift: 76e1529c32101d80e4f1ca2fba7c39d59f0a390a
   FirebaseStorage: 03710f9a0e3824d3069ed1128601a3d3a5e7d817
-  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_native_splash: edf599c81f74d093a4daf8e17bd7a018854bc778
-  google_maps_flutter_ios: c454f18e0e22df6ac0e9f2a4df340858f5a3680c
+  FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   GoogleAppMeasurement: f3abf08495ef2cba7829f15318c373b8d9226491
-  GoogleMaps: 8939898920281c649150e0af74aa291c60f2e77d
   GoogleUtilities: d053d902a8edaa9904e1bd00c37535385b8ed152
   "gRPC-C++": e725ef63c4475d7cdb7e2cf16eb0fde84bd9ee51
   gRPC-Core: eee4be35df218649fe66d721a05a7f27a28f069b
-  GTMSessionFetcher: ed61055dc13f769533d057edc520a4cb8f41c324
-  image_picker_ios: b545a5f16c0fa88e3ecbbce3ed4de45567a8ec18
+  GTMSessionFetcher: 8000756fc1c19d2e5697b90311f7832d2e33f6cd
   leveldb-library: e8eadf9008a61f9e1dde3978c086d2b6d9b9dc28
-  location: d5cf8598915965547c3f36761ae9cc4f4e87d22e
+  location: 7cdb0665bd6577d382b0a343acdadbcb7f964775
   nanopb: 438bc412db1928dac798aa6fd75726007be04262
   path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
-  permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
-  url_launcher_ios: 6116280ddcfe98ab8820085d8d76ae7449447586
-  webview_flutter_wkwebview: be0f0d33777f1bfd0c9fdcb594786704dbf65f36
+  url_launcher_macos: d2691c7dd33ed713bf3544850a623080ec693d95
 
-PODFILE CHECKSUM: 1a3e29cd24a8ffdcd96d3ea25b49d09dec3db6d9
+PODFILE CHECKSUM: 236401fc2c932af29a9fcf0e97baeeb2d750d367
 
 COCOAPODS: 1.15.2
