@@ -203,7 +203,6 @@ class MypageMenuWidget extends StatelessWidget {
                         Get.back();
                         Get.back(); 
                         Get.back();
-                        Get.back();
                         box.erase();
                         guideDialog();
                       },

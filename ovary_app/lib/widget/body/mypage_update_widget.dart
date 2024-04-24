@@ -40,131 +40,133 @@ class MypageUpdateWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     serchInfo();
     loadingUserInfoAction();
-    return Center(
-      child: GetBuilder<MypageUpdateVM>(
-        builder: (controller) {
-          return Column(
-            children: [
-              // ImageWidget(),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.width / 2,
-                child: Center(
-                  child: imageFile == null
-                      ? CircleAvatar(
-                          backgroundImage: NetworkImage(controller.imagepath),
-                          radius: 100,
-                        )
-                      : Image.file(
-                          File(mypageUpdateVMInstance.selectedImagePath)),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    getImageFromDevice(ImageSource.gallery);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromRGBO(139, 127, 245, 1),
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                    fixedSize: Size(MediaQuery.of(context).size.width / 2,
-                        MediaQuery.of(context).size.height / 17),
-                  ),
-                  child: const Text(
-                    'Gallery에서 사진 불러오기',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+    return SingleChildScrollView(
+      child: Center(
+        child: GetBuilder<MypageUpdateVM>(
+          builder: (controller) {
+            return Column(
+              children: [
+                // ImageWidget(),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.width / 2,
+                  child: Center(
+                    child: imageFile == null
+                        ? CircleAvatar(
+                            backgroundImage: NetworkImage(controller.imagepath),
+                            radius: 100,
+                          )
+                        : Image.file(
+                            File(mypageUpdateVMInstance.selectedImagePath)),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 50, 20, 10),
-                child: TextField(
-                  controller: emailController,
-                  readOnly: true,
-                  decoration: const InputDecoration(
-                      labelText: '이메일(수정불가)', border: OutlineInputBorder()),
-                  keyboardType: TextInputType.text,
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      getImageFromDevice(ImageSource.gallery);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromRGBO(139, 127, 245, 1),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      fixedSize: Size(MediaQuery.of(context).size.width / 2,
+                          MediaQuery.of(context).size.height / 17),
+                    ),
+                    child: const Text(
+                      'Gallery에서 사진 불러오기',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                    ),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                child: TextField(
-                  controller: nicknameController,
-                  decoration: const InputDecoration(
-                      labelText: '닉네임을 입력하세요', border: OutlineInputBorder()),
-                  keyboardType: TextInputType.text,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 50, 20, 10),
+                  child: TextField(
+                    controller: emailController,
+                    readOnly: true,
+                    decoration: const InputDecoration(
+                        labelText: '이메일(수정불가)', border: OutlineInputBorder()),
+                    keyboardType: TextInputType.text,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                child: TextField(
-                  onChanged: (value) {
-                    passwordCheck();
-                  },
-                  controller: passwordController1,
-                  decoration: const InputDecoration(
-                      labelText: '비밀번호를 입력 하세요', border: OutlineInputBorder()),
-                  keyboardType: TextInputType.text,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  child: TextField(
+                    controller: nicknameController,
+                    decoration: const InputDecoration(
+                        labelText: '닉네임을 입력하세요', border: OutlineInputBorder()),
+                    keyboardType: TextInputType.text,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                child: TextField(
-                  onChanged: (value) {
-                    passwordCheck();
-                  },
-                  controller: passwordController2,
-                  decoration: const InputDecoration(
-                      labelText: '비밀번호를 다시 입력 하세요',
-                      border: OutlineInputBorder()),
-                  keyboardType: TextInputType.text,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  child: TextField(
+                    onChanged: (value) {
+                      passwordCheck();
+                    },
+                    controller: passwordController1,
+                    decoration: const InputDecoration(
+                        labelText: '비밀번호를 입력 하세요', border: OutlineInputBorder()),
+                    keyboardType: TextInputType.text,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 10, 0, 10),
-                child: Obx(() => Row(
-                      children: [
-                        Text(
-                          signUpGetX.pwCheckResult.value,
-                          style: TextStyle(
-                            color: signUpGetX.pwCheckResult.value == '일치'
-                                ? Colors.blue
-                                : signUpGetX.pwCheckResult.value == '불일치'
-                                    ? Colors.red
-                                    : Colors.green,
-                            fontWeight: FontWeight.w900,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  child: TextField(
+                    onChanged: (value) {
+                      passwordCheck();
+                    },
+                    controller: passwordController2,
+                    decoration: const InputDecoration(
+                        labelText: '비밀번호를 다시 입력 하세요',
+                        border: OutlineInputBorder()),
+                    keyboardType: TextInputType.text,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(30, 10, 0, 10),
+                  child: Obx(() => Row(
+                        children: [
+                          Text(
+                            signUpGetX.pwCheckResult.value,
+                            style: TextStyle(
+                              color: signUpGetX.pwCheckResult.value == '일치'
+                                  ? Colors.blue
+                                  : signUpGetX.pwCheckResult.value == '불일치'
+                                      ? Colors.red
+                                      : Colors.green,
+                              fontWeight: FontWeight.w900,
+                            ),
                           ),
-                        ),
-                      ],
-                    )),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    checkpassword();
-                    // Get.back();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromRGBO(139, 127, 245, 1),
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                    fixedSize: Size(MediaQuery.of(context).size.width / 2,
-                        MediaQuery.of(context).size.height / 17),
-                  ),
-                  child: const Text(
-                    '정보수정',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                        ],
+                      )),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      checkpassword();
+                      // Get.back();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromRGBO(139, 127, 245, 1),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      fixedSize: Size(MediaQuery.of(context).size.width / 2,
+                          MediaQuery.of(context).size.height / 17),
+                    ),
+                    child: const Text(
+                      '정보수정',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          );
-        },
+              ],
+            );
+          },
+        ),
       ),
     );
   }
