@@ -179,8 +179,6 @@ class _AuthEmailState extends State<AuthEmail> {
         ..subject = "One Day 앱 아이디 찾기 인증번호"
         ..text = "인증 번호는 [$authenticationKey] 입니다";
 
-      // openMailApp(email, authenticationKey);
-
       sendMail(message, smtpServer)
       .then((_) {
         // 메일 전송 성공 시 처리
@@ -242,6 +240,7 @@ class _AuthEmailState extends State<AuthEmail> {
     print('Mail sent: ${sendReport.toString()}');
   }
 
+  // chars에 있는 값을 가지고 난수 발생
   String generateRandomString(int length) {
     final random = Random();
     const chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';

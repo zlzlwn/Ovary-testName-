@@ -228,7 +228,7 @@ Widget build(BuildContext context) {
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('중복 확인'),
-          content: const Text('아이디 중복 확인을 해주세요.'),
+          content: const Text('이메일 중복 확인을 해주세요.'),
           actions: [
             TextButton(
               onPressed: () {
@@ -355,8 +355,8 @@ Widget build(BuildContext context) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('아이디 중복'),
-          content: const Text('존재하는 아이디가 있습니다.\n아이디를 변경하여 주세요.'),
+          title: const Text('이메일 중복'),
+          content: const Text('존재하는 이메일이 있습니다.\n이메일을 변경하여 주세요.'),
           actions: [
             TextButton(
               onPressed: () {
