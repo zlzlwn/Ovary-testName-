@@ -56,9 +56,6 @@ class PcosResult extends StatelessWidget {
                     lineWidth: 30.0, // 굵기
                     animation: true,
                     percent: checkValue,
-                    center: Text(
-                      "${controller.result.toStringAsFixed(2)}%",
-                    ),
                     footer: const Text(
                       "PCOS 예측 결과",
                     ),
@@ -77,8 +74,8 @@ class PcosResult extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 60, 0, 0),
                   child: Text(
-                    '다낭성 난소 증후군\n'
-                    '발생률 ${controller.result.toStringAsFixed(2)}% 입니다.',
+                    '다낭성 난소 증후군 진단 결과\n'
+                    ' ${controller.textResult} ',
                     style: const TextStyle(
                       fontSize: 20,
                     ),

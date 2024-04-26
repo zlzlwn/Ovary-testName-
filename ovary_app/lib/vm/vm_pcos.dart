@@ -19,6 +19,7 @@ class ChangeSwitch extends GetxController {
   int sValue = 0;
 
   double result = 0;
+  String textResult = '';
 
   final box = GetStorage();
 
@@ -71,7 +72,16 @@ class ChangeSwitch extends GetxController {
     var dataConvertedJSON = json.decode(response.body);
 
     result = dataConvertedJSON['result'] * 100;
-    
+
+    if (result >= 80) {
+      textResult = "병원을 가보시는 것을 추천드립니다.";
+    } else if (result >= 60) {
+      textResult = "정기적인 검진을 받아보시는 것을 추천드립니다.";
+    } else if (result >= 40) {
+      textResult = "긴장하셔야 합니다.";
+    } else {
+      textResult = "양호합니다.";
+    }
     insertResult(result);
 
     //스위치 value false로 초기화
