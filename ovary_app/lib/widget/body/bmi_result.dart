@@ -69,8 +69,13 @@ class BmiResult extends StatelessWidget {
           ),
         ),
 
+        const Padding(
+          padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+          child: Text('[BMI 체질량 지표는 질병관리청 국가건강정보포털 기준입니다.]'),
+        ),
+
         Padding(
-          padding: const EdgeInsets.fromLTRB(10, 160, 0, 0),
+          padding: const EdgeInsets.fromLTRB(10, 140, 0, 0),
           child: ElevatedButton(
             onPressed: () {
               Get.back();
