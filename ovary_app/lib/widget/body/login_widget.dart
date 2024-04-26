@@ -229,7 +229,7 @@ class LogInWidget extends StatelessWidget {
       title: '알림',
       middleText: '입력하신 정보가 없습니다.',
       barrierDismissible: false,
-      backgroundColor: Colors.yellowAccent,
+      backgroundColor: Color(0xff8b7ff5),
       actions: [
         TextButton(
           onPressed: () {
