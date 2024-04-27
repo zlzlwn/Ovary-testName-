@@ -79,7 +79,7 @@ Widget build(BuildContext context) {
             lastDay: DateTime.utc(2030, 3, 14),
             focusedDay: _focusedDay,
             calendarFormat: _calendarFormat,
-            startingDayOfWeek: StartingDayOfWeek.monday,
+            startingDayOfWeek: StartingDayOfWeek.sunday,
          rangeStartDay: _tempRangeStart ?? _rangeStart, // Use _rangeStart if _tempRangeStart is null
             rangeEndDay: _tempRangeEnd ?? _rangeEnd, // Use _rangeEnd if _tempRangeEnd is null
             rangeSelectionMode: RangeSelectionMode.toggledOn,

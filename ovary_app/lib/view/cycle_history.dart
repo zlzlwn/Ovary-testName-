@@ -16,11 +16,12 @@ class periodCycleChart extends StatefulWidget {
 }
 
 // ignore: camel_case_types
-class _periodCycleChartState extends State<periodCycleChart> {
+class _periodCycleChartState extends State<periodCycleChart>with TickerProviderStateMixin {
   // Store the list of cycle lengths for each month
   List<double> cycleLengths = List.filled(12, 0); // Initialize with zeros
   List<int> daysBetweenPeriods = List.filled(11, 0); // List to store days between periods
   double cycleLengthAverage = 0.0;
+  late AnimationController _animationController;
 
 
   @override
@@ -28,65 +29,91 @@ class _periodCycleChartState extends State<periodCycleChart> {
     super.initState();
     fetchDataFromFirebase();
     fetchCycleLengthsFromFirebase();
-    
+    _animationController = AnimationController(
+    duration: const Duration(seconds: 2),
+    vsync: this,
+    )..addListener(() {
+    setState(() {});
+  });
+  _animationController.forward();
   }
 
+@override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+
+  }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(' 올해 나의 생리주기'),
-      ),
-      body: Column(
-        children: [
-          const SizedBox(height: 150),
-          AspectRatio(
-            aspectRatio: 1.1,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(9, 0, 15, 0),
-              child: BarChart(
-                _mainBarData(),
-                swapAnimationDuration: const Duration(milliseconds: 1000),
-              ),
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text(' 올해 나의 생리주기'),
+    ),
+    body: Column(
+      children: [
+        const SizedBox(height: 150),
+        AspectRatio(
+          aspectRatio: 1.1,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(9, 0, 15, 0),
+            child: LineChart(
+              _mainLineData(),
             ),
           ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '평균 생리주기:   ${cycleLengthAverage.toStringAsFixed(0)} 일',
-                style: const TextStyle(
-                  fontSize: 19,
-                  fontWeight: FontWeight.bold
-                ),
-              ),
-            ],
-          ),
-            const SizedBox(height: 100),
-            ElevatedButton(
-              onPressed: () => {Get.back(), Get.back()},
-              style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(120, 50),
-                    backgroundColor: Color(0xff8b7ff5),
-                  ), 
-              child: Text(
-                '홈으로',
-                style: TextStyle(
-                fontSize: 20,
-                color: Theme.of(context).colorScheme.onPrimary,
-                ),
+        ),
+        const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '평균 생리주기:   ${cycleLengthAverage.toStringAsFixed(0)} 일',
+              style: const TextStyle(
+                fontSize: 19,
+                fontWeight: FontWeight.bold
               ),
             ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+        const SizedBox(height: 100),
+        ElevatedButton(
+          onPressed: () => {Get.back(), Get.back()},
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(120, 50),
+            backgroundColor: Color(0xff8b7ff5),
+          ), 
+          child: Text(
+            '홈으로',
+            style: TextStyle(
+              fontSize: 20,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
 
-  BarChartData _mainBarData() {
-  return BarChartData(
-    barTouchData: BarTouchData(
+Widget _getMonthTitles(double value, TitleMeta meta, List<double> cycleLengths) {
+  const style = TextStyle(
+    color: Colors.black,
+    fontWeight: FontWeight.bold,
+    fontSize: 15,
+  );
+  List<String> months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+  String month = months[value.toInt()];
+  return SideTitleWidget(
+    axisSide: meta.axisSide,
+    space: 16,
+    child: Text(month, style: style),
+  );
+}
+
+LineChartData _mainLineData() {
+  return LineChartData(
+    lineTouchData: const LineTouchData(
       enabled: true,
     ),
     titlesData: FlTitlesData(
@@ -95,29 +122,27 @@ class _periodCycleChartState extends State<periodCycleChart> {
         sideTitles: SideTitles(
           showTitles: true,
           reservedSize: 35,
-          getTitlesWidget: _getMonthTitles,
+          getTitlesWidget: (double value, TitleMeta meta) => _getMonthTitles(value, meta, cycleLengths), // Pass cycleLengths
         ),
-        // Add x-axis title here
-        axisNameSize: 45, // Space for the axis title
+        axisNameSize: 45,
         axisNameWidget: const Text(
-          '월 (Months)', // x-axis title
+          'Month(월)',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 15,
           ),
         ),
       ),
-      leftTitles: const AxisTitles(
+      leftTitles: AxisTitles(
         sideTitles: SideTitles(
           showTitles: true,
           reservedSize: 40,
+          getTitlesWidget: (double value, TitleMeta meta) => _getDayTitles(value, meta), // No need to pass cycleLengths
           interval: 5,
-          // getTitles: _getDayTitles,
         ),
-        // Add y-axis title here
-        axisNameSize: 19, // Space for the axis title
-        axisNameWidget: Text(
-          '일 (Days)', // y-axis title
+        axisNameSize: 19,
+        axisNameWidget: const Text(
+          'Days(일)',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 15,
@@ -132,70 +157,48 @@ class _periodCycleChartState extends State<periodCycleChart> {
       ),
     ),
     borderData: FlBorderData(show: false),
-    barGroups: _showingGroups(),
+    lineBarsData: _showingLines(),
     gridData: const FlGridData(show: false),
+    minY: 0,
+    maxY: 40,
+  );
+}
+
+Widget _getDayTitles(double value, TitleMeta meta) {
+  const style = TextStyle(
+    color: Colors.black,
+    fontWeight: FontWeight.bold,
+    fontSize: 15,
+  );
+  return SideTitleWidget(
+    axisSide: meta.axisSide,
+    space: 16,
+    child: Text(value.toInt().toString(), style: style),
   );
 }
 
 
-
-  // Generate the bar chart data based on cycleLengths
-List<BarChartGroupData> _showingGroups() {
-  return List.generate(12, (i) {
-    return _makeGroupData(i, cycleLengths[i], barColor: Color(0xff8b7ff5));
-  });
+List<LineChartBarData> _showingLines() {
+  final animation = Tween(begin: 0.0, end: 1.0).animate(_animationController);
+  List<FlSpot> spots = [];
+  for (int i = 0; i < cycleLengths.length; i++) {
+    spots.add(FlSpot(i.toDouble(), cycleLengths[i] * animation.value));
+  }
+  return [
+    LineChartBarData(
+      spots: spots,
+      isCurved: true,
+      color: const Color(0xff8b7ff5),
+      barWidth: 2.5,
+      belowBarData: BarAreaData(
+        show: true,
+        color: const Color(0xff8b7ff5).withOpacity(0.3),
+      ),
+    ),
+  ];
 }
 
-  // Function to create bar chart group data
-  BarChartGroupData _makeGroupData(
-    int x,
-    double y, {
-    Color? barColor,
-    double width = 15,
-  }) {
-    barColor ??= Colors.white;
-    return BarChartGroupData(
-      x: x,
-      barRods: [
-        BarChartRodData(
-          toY: y,
-          color: barColor,
-          width: width,
-          borderSide: BorderSide.none,
-          backDrawRodData: BackgroundBarChartRodData(
-            show: true,
-            toY: 40,
-            color: Colors.white,
-          ),
-        ),
-      ],
-    );
-  }
-
-
-
-
-  // Function to generate bottom (month) titles
-  Widget _getMonthTitles(double value, TitleMeta meta) {
-    const style = TextStyle(
-      color: Colors.black,
-      fontWeight: FontWeight.bold,
-      fontSize: 15,
-    );
-    List<String> months = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
-    String month = months[value.toInt()];
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      space: 16,
-      child: Text(month, style: style),
-    );
-  }
-
-
-
 //FUNCTIONS 
-
-
 
   Future<void> fetchDataFromFirebase() async {
     final box = GetStorage();
