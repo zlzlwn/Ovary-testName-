@@ -38,142 +38,148 @@ class MypageUpdateWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    serchInfo();
     loadingUserInfoAction();
-    return SingleChildScrollView(
-      child: Center(
-        child: GetBuilder<MypageUpdateVM>(
-          builder: (controller) {
-            return Column(
-              children: [
-                // ImageWidget(),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.width / 2,
-                  child: Center(
-                    child: imageFile == null
-                        ? CircleAvatar(
-                            backgroundImage: NetworkImage(controller.imagepath),
-                            radius: 100,
-                          )
-                        : Image.file(
-                            File(mypageUpdateVMInstance.selectedImagePath)),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      getImageFromDevice(ImageSource.gallery);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromRGBO(139, 127, 245, 1),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      fixedSize: Size(MediaQuery.of(context).size.width / 2,
-                          MediaQuery.of(context).size.height / 17),
-                    ),
-                    child: const Text(
-                      'Gallery에서 사진 불러오기',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+    serchInfo();
+    return GestureDetector(
+      onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+      child: SingleChildScrollView(
+        child: Center(
+          child: GetBuilder<MypageUpdateVM>(
+            builder: (controller) {
+              return Column(
+                children: [
+                  // ImageWidget(),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.width / 2,
+                    child: Center(
+                      child: imageFile == null
+                          ? CircleAvatar(
+                              backgroundImage: NetworkImage(controller.imagepath),
+                              radius: 100,
+                            )
+                          : Image.file(
+                              File(mypageUpdateVMInstance.selectedImagePath)),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 50, 20, 10),
-                  child: TextField(
-                    controller: emailController,
-                    readOnly: true,
-                    decoration: const InputDecoration(
-                        labelText: '이메일(수정불가)', border: OutlineInputBorder()),
-                    keyboardType: TextInputType.text,
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        getImageFromDevice(ImageSource.gallery);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromRGBO(139, 127, 245, 1),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        fixedSize: Size(MediaQuery.of(context).size.width / 2,
+                            MediaQuery.of(context).size.height / 17),
+                      ),
+                      child: const Text(
+                        'Gallery에서 사진 불러오기',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                      ),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                  child: TextField(
-                    controller: nicknameController,
-                    decoration: const InputDecoration(
-                        labelText: '닉네임을 입력하세요', border: OutlineInputBorder()),
-                    keyboardType: TextInputType.text,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 50, 20, 10),
+                    child: TextField(
+                      controller: emailController,
+                      readOnly: true,
+                      decoration: const InputDecoration(
+                          labelText: '이메일(수정불가)', border: OutlineInputBorder()),
+                      keyboardType: TextInputType.text,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                  child: TextField(
-                    onChanged: (value) {
-                      passwordCheck();
-                    },
-                    controller: passwordController1,
-                    decoration: const InputDecoration(
-                        labelText: '비밀번호를 입력 하세요', border: OutlineInputBorder()),
-                    keyboardType: TextInputType.text,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    child: TextField(
+                      controller: nicknameController,
+                      decoration: const InputDecoration(
+                          labelText: '닉네임을 입력하세요', border: OutlineInputBorder()),
+                      keyboardType: TextInputType.text,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                  child: TextField(
-                    onChanged: (value) {
-                      passwordCheck();
-                    },
-                    controller: passwordController2,
-                    decoration: const InputDecoration(
-                        labelText: '비밀번호를 다시 입력 하세요',
-                        border: OutlineInputBorder()),
-                    keyboardType: TextInputType.text,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    child: TextField(
+                      onChanged: (value) {
+                        passwordCheck();
+                      },
+                      controller: passwordController1,
+                      decoration: const InputDecoration(
+                          labelText: '비밀번호를 입력 하세요', border: OutlineInputBorder()),
+                      keyboardType: TextInputType.text,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 10, 0, 10),
-                  child: Obx(() => Row(
-                        children: [
-                          Text(
-                            signUpGetX.pwCheckResult.value,
-                            style: TextStyle(
-                              color: signUpGetX.pwCheckResult.value == '일치'
-                                  ? Colors.blue
-                                  : signUpGetX.pwCheckResult.value == '불일치'
-                                      ? Colors.red
-                                      : Colors.green,
-                              fontWeight: FontWeight.w900,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    child: TextField(
+                      onChanged: (value) {
+                        passwordCheck();
+                      },
+                      controller: passwordController2,
+                      decoration: const InputDecoration(
+                          labelText: '비밀번호를 다시 입력 하세요',
+                          border: OutlineInputBorder()),
+                      keyboardType: TextInputType.text,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(30, 10, 0, 10),
+                    child: Obx(() => Row(
+                          children: [
+                            Text(
+                              signUpGetX.pwCheckResult.value,
+                              style: TextStyle(
+                                color: signUpGetX.pwCheckResult.value == '일치'
+                                    ? Colors.blue
+                                    : signUpGetX.pwCheckResult.value == '불일치'
+                                        ? Colors.red
+                                        : Colors.green,
+                                fontWeight: FontWeight.w900,
+                              ),
                             ),
-                          ),
-                        ],
-                      )),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      checkpassword();
-                      // Get.back();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromRGBO(139, 127, 245, 1),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      fixedSize: Size(MediaQuery.of(context).size.width / 2,
-                          MediaQuery.of(context).size.height / 17),
-                    ),
-                    child: const Text(
-                      '정보수정',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                          ],
+                        )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        checkpassword();
+                        // Get.back();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromRGBO(139, 127, 245, 1),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        fixedSize: Size(MediaQuery.of(context).size.width / 2,
+                            MediaQuery.of(context).size.height / 17),
+                      ),
+                      child: const Text(
+                        '정보수정',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            );
-          },
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
   }
 
   serchInfo() {
-    nicknameController.text = mypageUpdateVM.nickname;
-    emailController.text = mypageUpdateVM.email;
+    nicknameController.text = mypageUpdateVMInstance.nickname;
+    emailController.text = mypageUpdateVMInstance.email;
+    
   }
 
   checkpassword() {
@@ -183,17 +189,17 @@ class MypageUpdateWidget extends StatelessWidget {
       mypageUpdateVM.password2 = passwordController2.text;
     }
     if (nicknameController.text == null || nicknameController.text.isEmpty) {
-      nicknameSnack();
+      mypageUpdateVM.nicknameSnack();
     } else if (passwordController1.text == null ||
         passwordController1.text.isEmpty) {
-      passwordSnack();
+      mypageUpdateVM.passwordSnack();
     } else if (passwordController2.text == null ||
         passwordController2.text.isEmpty) {
-      passwordSnack();
+      mypageUpdateVM.passwordSnack();
     } else if (imageFile == null) {
-      imageSnack();
+      mypageUpdateVM.imageSnack();
     } else {
-      updatesuccessSnack();
+      mypageUpdateVM.updatesuccessSnack();
       updateAction();
       // 프로필 이미지 업데이트 함수 호출
       // updateProfileImage(File(imageFile!.path));
@@ -327,11 +333,6 @@ class MypageUpdateWidget extends StatelessWidget {
     if (querySnapshot.docs.isNotEmpty) {
       final DocumentSnapshot document = querySnapshot.docs[0];
       final existingImageURL = document.get('profile');
-      // 기존 이미지 삭제 (있는 경우에만)
-      // if (existingImageURL != null) {
-      //   final existingImageRef = storage.refFromURL(existingImageURL);
-      //   await existingIma geRef.delete();
-      // }
       await FirebaseFirestore.instance
           .collection('user')
           .doc(document.id) // 문서 ID 사용
@@ -344,48 +345,5 @@ class MypageUpdateWidget extends StatelessWidget {
     }
   }
 
-  //이미지 없을시에 나오는 snackbar
-  imageSnack() {
-    Get.snackbar(
-      '알림',
-      '이미지를 변경해주세요.',
-      duration: const Duration(seconds: 1),
-      backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
-      colorText: const Color.fromARGB(255, 117, 103, 241),
-      snackPosition: SnackPosition.TOP,
-    );
-  }
-
-  nicknameSnack() {
-    Get.snackbar(
-      '알림',
-      '변경할 닉네임을 입력해주세요.',
-      duration: const Duration(seconds: 1),
-      backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
-      colorText: const Color.fromARGB(255, 117, 103, 241),
-      snackPosition: SnackPosition.TOP,
-    );
-  }
-
-  passwordSnack() {
-    Get.snackbar(
-      '알림',
-      '변경할 비밀번호를 입력해주세요.',
-      duration: const Duration(seconds: 1),
-      backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
-      colorText: const Color.fromARGB(255, 117, 103, 241),
-      snackPosition: SnackPosition.TOP,
-    );
-  }
-
-  updatesuccessSnack() {
-    Get.snackbar(
-      '알림',
-      '회원정보 변경에 성공했습니다!.',
-      duration: const Duration(seconds: 1),
-      backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
-      colorText: const Color.fromARGB(255, 117, 103, 241),
-      snackPosition: SnackPosition.TOP,
-    );
-  }
+ 
 }

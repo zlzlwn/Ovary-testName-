@@ -43,7 +43,7 @@ class _SimpleLoginWidgetState extends State<SimpleLoginWidget> {
   }
   //입력한 리스트값을 box에 담고 이메일을 기준으로 비밀번호를 인서트 시키기 위해 이메일이랑 패스워드값을 보냄
   void _handleSubmit() async {
-  _passwordString = _password.join().toString(); // 리스트를 문자열로 변환
+  _passwordString = _password.join().toString(); // 받은 비밀번호를 리스트를 문자열로 변환
 
   final databaseHandler = DatabaseHandler();
   print("박스 이메일값 확인");
@@ -54,7 +54,8 @@ String? storedPassword = await databaseHandler.getUserPassword(box.read('simpleE
     Get.back();
     print("로그인 성공");
     print(storedPassword);
-    box.write("email", storedPassword);
+    box.write("email", box.read('simpleEmail'));
+    print(box.read("email"));
   } else {
     _allClear();
     buttonSnack();
