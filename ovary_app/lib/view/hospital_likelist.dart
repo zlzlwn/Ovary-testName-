@@ -8,7 +8,7 @@ class HospitalLikeList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("병원 찜 목록"),
+        title: Text("병원 목록"),
       ),
       body: HospitalLikeListWidget(),
     );

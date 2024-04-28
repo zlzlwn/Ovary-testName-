@@ -25,7 +25,7 @@ class HomeDrawer extends StatelessWidget {
     //이미지를 로딩한후에 드로우어를 빌드하기위해 FutureBuilder사용! 
     return FutureBuilder(
       future: mypageUpdateVM.loadingUserInfoAction(), 
-     builder: (context, snapshot) {
+      builder: (context, snapshot) {
       //future가 다 실행되었는지 확인아는 조건문임!
   if (snapshot.connectionState == ConnectionState.waiting) {
     return CircularProgressIndicator();
@@ -57,7 +57,7 @@ class HomeDrawer extends StatelessWidget {
                 Icons.local_hospital,
                 color: Colors.black,
               ),
-              title: Text("찜 병원보기"),
+              title: Text("병원 목록"),
               onTap: () {
                 Get.to(HospitalLikeList());
               },
