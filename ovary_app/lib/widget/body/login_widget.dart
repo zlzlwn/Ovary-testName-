@@ -28,114 +28,125 @@ class LogInWidget extends StatelessWidget {
     return SingleChildScrollView(
       child: Center(
         child: GetBuilder<LoginGetX>(builder: (controller) {
-          return Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                Image.asset(
-                  'images/OneDayLogoPurple.png',
-                  width: 300,
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 20, 8, 20),
-                  child: TextField(
-                    controller: idController,
-                    decoration: const InputDecoration(
-                        labelText: '이메일을 입력 하세요', border: OutlineInputBorder()),
-                    keyboardType: TextInputType.emailAddress,
+          return GestureDetector(
+            onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  Image.asset(
+                    'images/OneDayLogoPurple.png',
+                    width: 300,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                        labelText: '비밀번호를 입력 하세요',
-                        border: OutlineInputBorder()),
-                    keyboardType: TextInputType.visiblePassword,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 20, 8, 20),
+                    child: TextField(
+                      controller: idController,
+                      decoration: const InputDecoration(
+                          labelText: '이메일을 입력 하세요', border: OutlineInputBorder()),
+                      keyboardType: TextInputType.emailAddress,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Get.to(const FindPassword());
-                        },
-                        child: const Text(
-                          '비밀번호 찾기',
-                          style: TextStyle(
-                              color: Color(0xff8b7ff5),
-                              fontWeight: FontWeight.bold),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                          labelText: '비밀번호를 입력 하세요',
+                          border: OutlineInputBorder()),
+                      keyboardType: TextInputType.visiblePassword,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(const FindPassword());
+                          },
+                          child: const Text(
+                            '비밀번호 찾기',
+                            style: TextStyle(
+                                color: Color(0xff8b7ff5),
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('아직 계정이 없으세요?'),
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(const SignUp());
+                          },
+                          child: const Text(
+                            '  회원 가입하기',
+                            style: TextStyle(
+                                color: Colors.red, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                    child: GestureDetector(
+                      onTap: () async {
+                        //sqlite에 이메일값이 있을때 간편 로그인 페이지로 else alert창 띄우기
+                        final databaseHandler = DatabaseHandler();
+                        bool hasEmail = await databaseHandler.hasEmailData();
+                         bool hasEmailInBox = box.read("simpleEmail") != null;
+                        hasEmail 
+                        //box에 이메일값이 없으면 alert창 띄우기
+                        ? hasEmailInBox
+                          ? Get.to(SimpleLogIn()) 
+                          : loginSnack()
+                        
+                        
+                        : initialLoginDialog();
+                      },
+                      child: const Text(
+                        '간편 로그인하기',
+                        style: TextStyle(
+                          color: Color(0xff8b7ff5),
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text('아직 계정이 없으세요?'),
-                      GestureDetector(
-                        onTap: () {
-                          Get.to(const SignUp());
-                        },
-                        child: const Text(
-                          '  회원 가입하기',
-                          style: TextStyle(
-                              color: Colors.red, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
+                  const SizedBox(
+                    height: 50,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
-                  child: GestureDetector(
-                    onTap: () async {
-                      final databaseHandler = DatabaseHandler();
-                      bool hasEmail = await databaseHandler.hasEmailData();
-                        print(hasEmail);
-                      hasEmail 
-                      ? Get.to(SimpleLogIn()) 
-                      : print('이메일 값이 없습니다.');
+                  ElevatedButton(
+                    onPressed: () {
+                      loginAction(controller);
                     },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xff8b7ff5),
+                        foregroundColor: Colors.white,
+                        fixedSize: Size(MediaQuery.of(context).size.width / 3.5,
+                              MediaQuery.of(context).size.height / 17),
+                    ),
+                        
                     child: const Text(
-                      '간편 로그인하기',
+                      '로그인',
                       style: TextStyle(
-                        color: Color(0xff8b7ff5),
-                        fontWeight: FontWeight.bold,
+                        fontSize: 20, fontWeight: FontWeight.bold
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    loginAction(controller);
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff8b7ff5),
-                      foregroundColor: Colors.white,
-                      fixedSize: Size(MediaQuery.of(context).size.width / 3.5,
-                            MediaQuery.of(context).size.height / 17),
-                  ),
-                      
-                  child: const Text(
-                    '로그인',
-                    style: TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         }),
@@ -155,8 +166,8 @@ class LogInWidget extends StatelessWidget {
         .where('password', isEqualTo: controller.password)
         .get();
 
-    final loginData = await loginCheck; // Future를 해결하여 데이터를 가져옵니다.
-    final list = loginData.docs; // QuerySnapshot을 List로 변환합니다.
+    final loginData = await loginCheck; // Future를 해결하여 데이터를 가져옴
+    final list = loginData.docs; // QuerySnapshot을 List로 변환
 
     // 2. 조회되는 값이 없을 때, alert창
     if (loginCheck.docs.isEmpty) {
@@ -284,6 +295,37 @@ class LogInWidget extends StatelessWidget {
           )
         )
       ]
+    );
+  }
+
+initialLoginDialog() {
+    Get.defaultDialog(
+      title: '알림',
+      middleText: '일반 로그인 후 이용 가능합니다.',
+      barrierDismissible: false,
+      backgroundColor: const Color.fromARGB(255, 194, 188, 245),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.back();
+          }, 
+          child: const Text(
+            '확인',
+          )
+        )
+      ]
+    );
+  }
+
+   //이미지 없을시에 나오는 snackbar
+  loginSnack() {
+    Get.snackbar(
+      '알림',
+      '일반 로그인을 먼저 해주세요.',
+      duration: const Duration(seconds: 1),
+      backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
+      colorText: const Color.fromARGB(255, 117, 103, 241),
+      snackPosition: SnackPosition.TOP,
     );
   }
 

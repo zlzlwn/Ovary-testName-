@@ -119,4 +119,50 @@ loadingUserInfoAction() async {
 );
 
   }
+
+  nicknameSnack() {
+    Get.snackbar(
+      '알림',
+      '니네임을 입력해주세요',
+      duration: const Duration(seconds: 1),
+      backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
+      colorText: const Color.fromARGB(255, 117, 103, 241),
+      snackPosition: SnackPosition.TOP,
+    );
+  }
+
+  passwordSnack() {
+    Get.snackbar(
+      '알림',
+      '비밀번호를 입력해주세요',
+      duration: const Duration(seconds: 1),
+      backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
+      colorText: const Color.fromARGB(255, 117, 103, 241),
+      snackPosition: SnackPosition.TOP,
+    );
+  }
+
+
+  imageSnack() {
+    Get.snackbar(
+      '알림',
+      '이미지를 입력해주세요',
+      duration: const Duration(seconds: 1),
+      backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
+      colorText: const Color.fromARGB(255, 117, 103, 241),
+      snackPosition: SnackPosition.TOP,
+    );
+  }
+
+  updatesuccessSnack() {
+    Get.snackbar(
+      '알림',
+      '회원정보 수정이 완료되었습니다',
+      duration: const Duration(seconds: 1),
+      backgroundColor: const Color.fromRGBO(245, 241, 255, 1),
+      colorText: const Color.fromARGB(255, 117, 103, 241),
+      snackPosition: SnackPosition.TOP,
+    );
+  }
+
 }
